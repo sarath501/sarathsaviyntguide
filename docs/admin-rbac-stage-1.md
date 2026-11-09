@@ -40,3 +40,12 @@ Never place service-role credentials in browser code, Git, SQL shared publicly, 
 - Role/permission changes must be implemented in protected server-side functions with explicit authorization and audit logging.
 - Existing `has_role(..., 'admin')` checks remain valid; this stage does not silently convert legacy authorization checks.
 - Super Admin is not assigned until the production owner explicitly approves the bootstrap.
+
+
+## Function caller boundary
+
+Authenticated callers may evaluate only their own privileges; requests naming
+another user return false. Trusted service-role server operations may evaluate
+a target user's privileges after independently authorizing the operation.
+Calls without an authenticated or service-role JWT role return false. The
+identity guard is enforced independently in both helper functions.
