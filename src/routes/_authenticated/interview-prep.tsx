@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { CheckCircle2, ChevronLeft, ChevronRight, ClipboardList, Lightbulb, Play, RotateCcw, Trophy } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -157,7 +158,7 @@ function InterviewPrep() {
         level: payload.level,
         score: payload.score,
         feedback: payload.feedback,
-        transcript: payload.transcript,
+        transcript: payload.transcript as unknown as Json,
       });
       if (error) throw error;
     },
