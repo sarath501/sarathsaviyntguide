@@ -385,6 +385,7 @@ export type Database = {
           correct_index: number
           created_at: string
           difficulty: string
+          exam_track: string
           explanation: string
           id: string
           is_certification: boolean
@@ -396,6 +397,7 @@ export type Database = {
           correct_index: number
           created_at?: string
           difficulty?: string
+          exam_track?: string
           explanation?: string
           id?: string
           is_certification?: boolean
