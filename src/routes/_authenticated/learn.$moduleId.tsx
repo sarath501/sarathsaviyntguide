@@ -26,8 +26,8 @@ function ModulePage() {
   const { data } = useActivity();
   const qc = useQueryClient();
   const done = new Set(data?.progress.map((p) => p.lesson_id));
-  const [activeId, setActiveId] = useState(m.lessons[0].id);
-  const lesson = m.lessons.find((l) => l.id === activeId) ?? m.lessons[0];
+  const [activeId, setActiveId] = useState(m.lessons[0]!.id);
+  const lesson = m.lessons.find((l) => l.id === activeId) ?? m.lessons[0]!;
   const [deep, setDeep] = useState<Record<string, string>>({});
   const [loadingDeep, setLoadingDeep] = useState(false);
   const ask = useServerFn(tutorChat);
@@ -38,7 +38,7 @@ function ModulePage() {
     const res = done.has(lesson.id)
       ? await supabase.from("lesson_progress").delete().eq("lesson_id", lesson.id)
       : await supabase.from("lesson_progress").insert({ user_id: u.user.id, lesson_id: lesson.id, module_id: m.id });
-    if (res.error) return toast.error(res.error.message);
+    if (res.error) { toast.error(res.error.message); return; }
     qc.invalidateQueries({ queryKey: ["activity"] });
   }
 

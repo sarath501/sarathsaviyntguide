@@ -22,8 +22,8 @@ const LEVELS = ["Junior (0-2 yrs)", "Mid-level (3-5 yrs)", "Senior (6+ yrs)", "A
 type Msg = { role: "user" | "assistant"; content: string };
 
 function Interview() {
-  const [topic, setTopic] = useState(TOPICS[0]);
-  const [level, setLevel] = useState(LEVELS[1]);
+  const [topic, setTopic] = useState<string>(TOPICS[0]!);
+  const [level, setLevel] = useState<string>(LEVELS[1]!);
   const [id, setId] = useState<string | null>(null);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
