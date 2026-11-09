@@ -8,6 +8,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin, useProfile } from "@/hooks/use-auth";
 import { Logo } from "./Logo";
+import { Button } from "./ui/button";
+import { PortalFooter } from "./IgaVisual";
 
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -56,15 +58,15 @@ export function AppShell({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="min-h-screen lg:flex">
+    <div className="learning-shell min-h-screen lg:flex">
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col gap-6 bg-navy p-4 transition-transform lg:static lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-40 flex h-dvh w-64 shrink-0 flex-col gap-6 overflow-y-auto bg-navy p-4 transition-transform lg:sticky lg:top-0 lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex items-center justify-between px-2 pt-2">
           <Logo light />
-          <button className="text-navy-muted lg:hidden" onClick={() => setOpen(false)} aria-label="Close menu">
+          <Button variant="ghost" size="icon" className="shrink-0 text-navy-muted hover:bg-sidebar-accent hover:text-navy-foreground lg:hidden" onClick={() => setOpen(false)} aria-label="Close menu">
             <X className="h-5 w-5" />
-          </button>
+          </Button>
         </div>
         {nav}
         <div className="border-t border-navy-line pt-4">
@@ -72,18 +74,19 @@ export function AppShell({ children }: { children: ReactNode }) {
             <p className="truncate text-sm font-medium text-navy-foreground">{profile?.full_name || "Learner"}</p>
             <p className="text-xs text-navy-muted">{profile?.experience_level}</p>
           </div>
-          <button onClick={signOut} className={`${linkCls} w-full`}>
+          <Button variant="ghost" onClick={signOut} className={`${linkCls} w-full justify-start`}>
             <LogOut className="h-4 w-4" /> Sign out
-          </button>
+          </Button>
         </div>
       </aside>
       {open && <div className="fixed inset-0 z-30 bg-navy/50 lg:hidden" onClick={() => setOpen(false)} />}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center gap-3 border-b bg-card px-4 py-3 lg:hidden">
-          <button onClick={() => setOpen(true)} aria-label="Open menu"><Menu className="h-5 w-5" /></button>
+        <header className="sticky top-0 z-20 flex items-center gap-3 border-b bg-card px-4 py-3 lg:hidden">
+          <Button variant="ghost" size="icon" onClick={() => setOpen(true)} aria-label="Open menu" aria-expanded={open}><Menu className="h-5 w-5" /></Button>
           <Logo />
         </header>
         <main className="mx-auto w-full max-w-6xl flex-1 p-4 md:p-8">{children}</main>
+        <PortalFooter />
       </div>
     </div>
   );
@@ -91,7 +94,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
 export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: string | undefined; action?: ReactNode }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div className="page-header mb-7 flex flex-wrap items-end justify-between gap-4">
       <div>
         <h1 className="text-2xl font-semibold md:text-3xl">{title}</h1>
         {subtitle && <p className="mt-1 text-muted-foreground">{subtitle}</p>}
