@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/AppShell";
 import { useProfile } from "@/hooks/use-auth";
 import { computeStats, useActivity } from "@/lib/stats";
 import { Progress } from "@/components/ui/progress";
-import { ALL_LESSONS, MODULES } from "@/lib/content";
+import { useCurriculum } from "@/lib/curriculum";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — Sarath IGA Learning Portal" }, { name: "description", content: "Your learning progress." }] }),
@@ -34,8 +34,11 @@ function ChartCard({ title, children, empty }: { title: string; children: React.
 function Dashboard() {
   const { data: profile } = useProfile();
   const { data, isLoading } = useActivity();
-  if (isLoading || !data) return <p className="text-muted-foreground">Loading…</p>;
-  const s = computeStats(data);
+  const { data: cur } = useCurriculum();
+  if (isLoading || !data || !cur) return <p className="text-muted-foreground">Loading…</p>;
+  const s = computeStats(data, cur);
+  const MODULES = cur.modules;
+  const ALL_LESSONS = cur.lessons;
   const recent = [
     ...data.progress.map((p) => ({ at: p.completed_at, text: `Completed “${ALL_LESSONS.find((l) => l.id === p.lesson_id)?.title ?? p.lesson_id}”` })),
     ...data.attempts.map((a) => ({ at: a.created_at, text: `${a.is_certification ? "Practice exam" : `Quiz ${MODULES.find((m) => m.id === a.module_id)?.title ?? ""}`}: ${a.score}/${a.total}` })),
@@ -43,7 +46,7 @@ function Dashboard() {
   ].sort((a, b) => +new Date(b.at) - +new Date(a.at)).slice(0, 6);
 
   const cards = [
-    { to: "/learn", icon: PlayCircle, title: "Continue Learning", text: s.next[0]?.title ?? "All lessons complete" },
+    { to: "/learn", icon: PlayCircle, title: "Continue Learning", text: (profile?.last_lesson_id && ALL_LESSONS.find((l) => l.id === profile.last_lesson_id)?.title) || s.next[0]?.title || "All lessons complete" },
     { to: "/learn", icon: BookOpen, title: "Saviynt Training", text: "11 structured modules" },
     { to: "/interview", icon: MessagesSquare, title: "Interview Preparation", text: "Adaptive AI interviewer" },
     { to: "/certification", icon: Award, title: "Certification Prep", text: "Timed practice exams" },
@@ -56,7 +59,7 @@ function Dashboard() {
       <PageHeader title={`Welcome back${profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}`} subtitle={`${profile?.experience_level ?? ""} · Keep building your IGA expertise.`} />
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <Stat icon={BookOpen} label="Modules started" value={`${s.modulesStarted}/${MODULES.length}`} hint={`${s.modulesDone} completed`} />
-        <Stat icon={Target} label="Overall progress" value={`${s.pct}%`} hint={`${s.done.size}/${ALL_LESSONS.length} lessons`} />
+        <Stat icon={Target} label="Overall progress" value={`${s.pct}%`} hint={`${s.doneCount}/${s.total} lessons`} />
         <Stat icon={ClipboardList} label="Quizzes attempted" value={data.attempts.length} hint={`Avg score ${s.avg}%`} />
         <Stat icon={Flame} label="Learning streak" value={`${s.streak} day${s.streak === 1 ? "" : "s"}`} />
         <Stat icon={Award} label="Best practice exam" value={`${s.bestCert}%`} hint="Pass mark 70%" />
@@ -84,7 +87,7 @@ function Dashboard() {
         <ChartCard title="Topic-wise assessment performance (%)" empty={!s.topic.some((t) => t.score != null)}>
           <ResponsiveContainer><BarChart data={s.topic}><CartesianGrid strokeDasharray="3 3" stroke="var(--border)" /><XAxis dataKey="module" fontSize={12} /><YAxis domain={[0, 100]} fontSize={12} /><Tooltip /><Bar dataKey="score" fill="var(--chart-3)" radius={4} /></BarChart></ResponsiveContainer>
         </ChartCard>
-        <ChartCard title="Course completion by module (%)" empty={s.done.size === 0}>
+        <ChartCard title="Course completion by module (%)" empty={s.doneCount === 0}>
           <ResponsiveContainer><BarChart data={s.completion}><CartesianGrid strokeDasharray="3 3" stroke="var(--border)" /><XAxis dataKey="module" fontSize={12} /><YAxis domain={[0, 100]} fontSize={12} /><Tooltip /><Bar dataKey="pct" fill="var(--chart-5)" radius={4} /></BarChart></ResponsiveContainer>
         </ChartCard>
         <ChartCard title="Interview performance over time" empty={s.interviewTrend.length === 0}>
@@ -97,7 +100,7 @@ function Dashboard() {
           <h3 className="mb-3 text-sm font-semibold">Recommended next lessons</h3>
           <ul className="space-y-2">
             {s.next.map((l) => (
-              <li key={l.id}><Link to="/learn/$moduleId" params={{ moduleId: l.moduleId }} className="text-sm text-primary hover:underline">{l.title}</Link></li>
+              <li key={l.id}><Link to="/lesson/$lessonId" params={{ lessonId: l.id }} className="text-sm text-primary hover:underline">{l.title}</Link></li>
             ))}
             {s.next.length === 0 && <li className="text-sm text-muted-foreground">You've completed every lesson 🎉</li>}
           </ul>
