@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ALL_LESSONS, MODULES } from "./content";
+import type { Curriculum } from "./curriculum";
 
 export function useActivity() {
   return useQuery({
@@ -20,11 +20,14 @@ export type Activity = NonNullable<ReturnType<typeof useActivity>["data"]>;
 
 const day = (d: string | Date) => new Date(d).toISOString().slice(0, 10);
 
-export function computeStats(a: Activity) {
+export function computeStats(a: Activity, curriculum: Curriculum) {
+  const MODULES = curriculum.modules;
+  const ALL_LESSONS = curriculum.lessons.map((l) => ({ ...l, moduleId: l.module_id }));
   const done = new Set(a.progress.map((p) => p.lesson_id));
-  const modulesDone = MODULES.filter((m) => m.lessons.every((l) => done.has(l.id))).length;
+  const modulesDone = MODULES.filter((m) => m.lessons.length > 0 && m.lessons.every((l) => done.has(l.id))).length;
   const modulesStarted = MODULES.filter((m) => m.lessons.some((l) => done.has(l.id))).length;
-  const pct = Math.round((done.size / ALL_LESSONS.length) * 100);
+  const doneCount = ALL_LESSONS.filter((l) => done.has(l.id)).length;
+  const pct = ALL_LESSONS.length ? Math.round((doneCount / ALL_LESSONS.length) * 100) : 0;
   const avg = a.attempts.length
     ? Math.round(a.attempts.reduce((s, x) => s + (x.score / x.total) * 100, 0) / a.attempts.length)
     : 0;
@@ -67,11 +70,11 @@ export function computeStats(a: Activity) {
 
   const completion = MODULES.map((m) => ({
     module: `M${m.num}`,
-    pct: Math.round((m.lessons.filter((l) => done.has(l.id)).length / m.lessons.length) * 100),
+    pct: m.lessons.length ? Math.round((m.lessons.filter((l) => done.has(l.id)).length / m.lessons.length) * 100) : 0,
   }));
 
   const interviewTrend = completedInterviews.map((x, k) => ({ n: `#${k + 1}`, score: x.score }));
   const next = ALL_LESSONS.filter((l) => !done.has(l.id)).slice(0, 4);
 
-  return { done, modulesDone, modulesStarted, pct, avg, bestCert, completedInterviews, streak, weekly, topic, completion, interviewTrend, next };
+  return { done, doneCount, total: ALL_LESSONS.length, modulesDone, modulesStarted, pct, avg, bestCert, completedInterviews, streak, weekly, topic, completion, interviewTrend, next };
 }

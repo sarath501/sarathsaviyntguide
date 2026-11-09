@@ -9,9 +9,10 @@ import { Markdown } from "@/components/Markdown";
 import { generatePlan } from "@/lib/ai.functions";
 import { useProfile } from "@/hooks/use-auth";
 import { computeStats, useActivity } from "@/lib/stats";
+import { useCurriculum } from "@/lib/curriculum";
 
 export const Route = createFileRoute("/_authenticated/plan")({
-  head: () => ({ meta: [{ title: "Learning Path — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "Learning Path — Sarath IGA Learning Portal" }] }),
   component: Plan,
 });
 
@@ -20,6 +21,7 @@ const GOALS = ["Crack a Saviynt interview", "Pass Saviynt IGA certification", "B
 function Plan() {
   const { data: profile } = useProfile();
   const { data } = useActivity();
+  const { data: cur } = useCurriculum();
   const [goal, setGoal] = useState<string>(GOALS[0]!);
   const [hours, setHours] = useState(8);
   const [weeks, setWeeks] = useState(6);
@@ -30,7 +32,7 @@ function Plan() {
   async function run() {
     setBusy(true);
     try {
-      const s = data ? computeStats(data) : null;
+      const s = data && cur ? computeStats(data, cur) : null;
       const scored = s?.topic.filter((t) => t.score != null) ?? [];
       const weak = scored.filter((t) => (t.score ?? 0) < 70).map((t) => t.title).join(", ");
       const strengths = scored.filter((t) => (t.score ?? 0) >= 70).map((t) => t.title).join(", ");

@@ -9,10 +9,10 @@ import { Logo } from "@/components/Logo";
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
-      { title: "Set a new password — IGA Academy AI" },
-      { name: "description", content: "Choose a new password for your IGA Academy AI account." },
-      { property: "og:title", content: "Set a new password — IGA Academy AI" },
-      { property: "og:description", content: "Choose a new password for your IGA Academy AI account." },
+      { title: "Set a new password — Sarath IGA Learning Portal" },
+      { name: "description", content: "Choose a new password for your Sarath IGA Learning Portal account." },
+      { property: "og:title", content: "Set a new password — Sarath IGA Learning Portal" },
+      { property: "og:description", content: "Choose a new password for your Sarath IGA Learning Portal account." },
     ],
   }),
   component: Reset,

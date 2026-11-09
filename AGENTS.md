@@ -29,6 +29,6 @@ use the editor.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
 
-- Learning content (modules, lessons, labs) lives in `src/lib/content.ts`; quiz questions live in the database so admins can manage them.
+- Learning content (modules, lessons with rich `content` JSON, labs, quiz questions) lives in the database and is edited from the Admin page; never hardcode the library in components. Interactive diagram definitions live in `src/lib/diagrams.ts`, referenced by `lessons.diagram_key`.
 - All AI calls go through `runAI` in `src/lib/ai.server.ts`, invoked only from authenticated server functions in `src/lib/ai.functions.ts`, so keys and prompts stay server-side.
 - Dashboard stats are computed client-side from the user's own lesson_progress, quiz_attempts and interviews rows (`src/lib/stats.ts`); never show fabricated numbers.

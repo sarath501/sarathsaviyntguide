@@ -144,3 +144,10 @@
 .prose-ai pre { background: var(--navy); color: var(--navy-foreground); padding: 0.9rem; border-radius: 8px; overflow-x: auto; margin: 0.7em 0; }
 .prose-ai pre code { background: transparent; padding: 0; color: inherit; }
 .prose-ai strong { font-weight: 600; }
+
+@keyframes flow-dash { to { stroke-dashoffset: -20; } }
+.flow-dash { stroke-dasharray: 6 4; animation: flow-dash 0.9s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .flow-dash { animation: none; } }
+.prose-ai table { width: 100%; border-collapse: collapse; margin: 0.7em 0; font-size: 0.85em; }
+.prose-ai th, .prose-ai td { border: 1px solid var(--border); padding: 0.35em 0.6em; text-align: left; }
+.prose-ai th { background: var(--muted); font-weight: 600; }

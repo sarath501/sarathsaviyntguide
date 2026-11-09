@@ -11,7 +11,7 @@ import { LogoMark } from "@/components/Logo";
 import { tutorChat } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/_authenticated/tutor")({
-  head: () => ({ meta: [{ title: "AI Tutor — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "AI Tutor — Sarath IGA Learning Portal" }] }),
   component: Tutor,
 });
 

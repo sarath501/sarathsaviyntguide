@@ -13,7 +13,7 @@ import { interviewEvaluate, interviewTurn } from "@/lib/ai.functions";
 import { useActivity } from "@/lib/stats";
 
 export const Route = createFileRoute("/_authenticated/interview")({
-  head: () => ({ meta: [{ title: "Mock Interviews — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "Mock Interviews — Sarath IGA Learning Portal" }] }),
   component: Interview,
 });
 

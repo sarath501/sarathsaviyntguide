@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/AppShell";
-import { LABS } from "@/lib/content";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,7 +12,7 @@ import { Markdown } from "@/components/Markdown";
 import { tutorChat } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/_authenticated/labs")({
-  head: () => ({ meta: [{ title: "Troubleshooting Lab — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "Troubleshooting Lab — Sarath IGA Learning Portal" }] }),
   component: Labs,
 });
 
@@ -22,9 +23,15 @@ function Labs() {
   const [review, setReview] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const ask = useServerFn(tutorChat);
+  const { data: labRows } = useQuery({
+    queryKey: ["labs"],
+    queryFn: async () => (await supabase.from("labs").select("*").order("created_at")).data ?? [],
+  });
+  const LABS = (labRows ?? []).map((l) => ({ ...l, steps: (l.steps ?? []) as string[], rootCause: l.root_cause }));
 
   async function grade(id: string) {
-    const lab = LABS.find((l) => l.id === id)!;
+    const lab = LABS.find((l) => l.id === id);
+    if (!lab) return;
     setBusy(true);
     try {
       const r = await ask({ data: { mode: "a concise coach review: what was right, what was missed, rating out of 10", messages: [{ role: "user", content: `Scenario: ${lab.symptom}\nActual root cause: ${lab.rootCause}\nCorrect fix: ${lab.fix}\n\nMy diagnosis:\n${answer[id]}\n\nReview my diagnosis.` }] } });

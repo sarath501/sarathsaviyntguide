@@ -14,10 +14,10 @@ export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): { mode?: string } => (typeof s["mode"] === "string" ? { mode: s["mode"] } : {}),
   head: () => ({
     meta: [
-      { title: "Sign in — IGA Academy AI" },
-      { name: "description", content: "Sign in or create your IGA Academy AI account." },
-      { property: "og:title", content: "Sign in — IGA Academy AI" },
-      { property: "og:description", content: "Sign in or create your IGA Academy AI account." },
+      { title: "Sign in — Sarath IGA Learning Portal" },
+      { name: "description", content: "Sign in or create your Sarath IGA Learning Portal account." },
+      { property: "og:title", content: "Sign in — Sarath IGA Learning Portal" },
+      { property: "og:description", content: "Sign in or create your Sarath IGA Learning Portal account." },
     ],
   }),
   component: AuthPage,
@@ -67,8 +67,8 @@ function AuthPage() {
       <div className="hidden flex-col justify-between bg-hero p-10 text-navy-foreground md:flex">
         <Link to="/"><Logo light /></Link>
         <div>
-          <h2 className="text-3xl font-semibold">Master Identity Governance.</h2>
-          <p className="mt-2 text-navy-muted">Build real-world IAM expertise with structured lessons and AI coaching.</p>
+          <h2 className="text-3xl font-semibold">Learn Identity Governance. Master Saviynt. Build Your IAM Career.</h2>
+          <p className="mt-2 text-navy-muted">Develop practical Identity Governance skills, master Saviynt EIC and prepare for advanced IAM engineering roles.</p>
         </div>
         <p className="text-xs text-navy-muted">Saviynt EIC · RBAC · SoD · Certifications · Connectors</p>
       </div>
@@ -76,8 +76,9 @@ function AuthPage() {
         <form onSubmit={submit} className="w-full max-w-sm space-y-4">
           <div className="md:hidden"><Logo /></div>
           <h1 className="text-2xl font-semibold">
-            {mode === "signin" ? "Welcome back" : mode === "signup" ? "Create your account" : "Reset password"}
+            {mode === "signin" ? "Welcome Back to Sarath IGA Learning Portal" : mode === "signup" ? "Start Your IAM Learning Journey" : "Reset password"}
           </h1>
+          {mode !== "forgot" && <p className="text-sm text-muted-foreground">Develop practical Identity Governance skills, master Saviynt EIC and prepare for advanced IAM engineering roles.</p>}
           {sent ? (
             <p className="rounded-md bg-accent p-4 text-sm text-accent-foreground">{sent}</p>
           ) : (

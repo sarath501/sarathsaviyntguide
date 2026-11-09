@@ -2,14 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, Award, Wrench, MessagesSquare, Bot, Database, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Logo";
-import { MODULES } from "@/lib/content";
+import { useCurriculum } from "@/lib/curriculum";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "IGA Academy AI — Master Saviynt Identity Governance" },
+      { title: "Sarath IGA Learning Portal — Master Saviynt Identity Governance" },
       { name: "description", content: "Learn Saviynt EIC, practice troubleshooting, prepare for certification and ace IAM interviews with AI." },
-      { property: "og:title", content: "IGA Academy AI — Master Saviynt Identity Governance" },
+      { property: "og:title", content: "Sarath IGA Learning Portal — Master Saviynt Identity Governance" },
       { property: "og:description", content: "Learn Saviynt EIC, practice troubleshooting, prepare for certification and ace IAM interviews with AI." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -19,15 +19,17 @@ export const Route = createFileRoute("/")({
 });
 
 const FEATURES = [
-  { icon: BookOpen, title: "11 structured modules", text: "From IAM basics to SoD, connectors and advanced IGA." },
+  { icon: BookOpen, title: "In-depth Saviynt lessons", text: "Architecture, step-by-step implementation, code, troubleshooting and interview Q&A." },
   { icon: Award, title: "Certification prep", text: "Timed practice exams with explanations for every answer." },
   { icon: Wrench, title: "Troubleshooting lab", text: "Real production incidents: diagnose, then reveal the fix." },
   { icon: MessagesSquare, title: "AI mock interviews", text: "Adaptive interviewer with scored, detailed feedback." },
   { icon: Bot, title: "AI tutor", text: "Ask anything about Saviynt — configs, SQL, architecture." },
-  { icon: Database, title: "Real progress tracking", text: "Every stat comes from your own activity." },
+  { icon: Database, title: "Interactive diagrams & SQL lab", text: "Clickable architecture and workflow diagrams, plus hands-on SQL practice." },
 ];
 
 function Landing() {
+  const { data: cur } = useCurriculum();
+  const MODULES = cur?.modules ?? [];
   return (
     <div className="min-h-screen">
       <section className="bg-hero text-navy-foreground">
@@ -44,8 +46,8 @@ function Landing() {
           <div className="grid gap-10 py-20 md:grid-cols-[1.2fr_1fr] md:py-28">
             <div>
               <p className="mb-4 inline-block rounded-full border border-navy-line px-3 py-1 text-xs text-navy-muted">Saviynt EIC · IGA · IAM</p>
-              <h1 className="text-4xl font-semibold leading-tight md:text-6xl">Master Identity Governance.</h1>
-              <p className="mt-3 text-2xl text-navy-muted md:text-3xl">Build real-world IAM expertise.</p>
+              <h1 className="text-4xl font-semibold leading-tight md:text-6xl">Learn Identity Governance.</h1>
+              <p className="mt-3 text-2xl text-navy-muted md:text-3xl">Master Saviynt. Build your IAM career.</p>
               <p className="mt-6 max-w-lg text-navy-muted">A complete learning platform for Saviynt engineers — structured lessons, hands-on troubleshooting, certification practice and AI-powered interview coaching.</p>
               <Button asChild size="lg" className="mt-8">
                 <Link to="/auth" search={{ mode: "signup" }}>Start learning free <ArrowRight className="ml-1 h-4 w-4" /></Link>
@@ -77,7 +79,7 @@ function Landing() {
           ))}
         </div>
       </section>
-      <footer className="border-t py-8 text-center text-sm text-muted-foreground">© {new Date().getFullYear()} IGA Academy AI. Not affiliated with Saviynt, Inc.</footer>
+      <footer className="border-t py-8 text-center text-sm text-muted-foreground">© {new Date().getFullYear()} Sarath IGA Learning Portal. Learn Identity Governance. Master Saviynt. Build Your IAM Career. · Not affiliated with Saviynt, Inc.</footer>
     </div>
   );
 }
