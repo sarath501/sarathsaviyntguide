@@ -83,9 +83,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "IGA Academy AI" },
+      { title: "Sarath IGA Learning Portal" },
       { name: "description", content: "AI-powered Saviynt IGA learning, certification and interview preparation." },
-      { property: "og:title", content: "IGA Academy AI" },
+      { property: "og:title", content: "Sarath IGA Learning Portal" },
       { property: "og:description", content: "AI-powered Saviynt IGA learning, certification and interview preparation." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

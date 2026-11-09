@@ -13,7 +13,7 @@ import { tutorChat } from "@/lib/ai.functions";
 import { EXERCISES, SCHEMA_DOC, SCHEMA_SQL, sameResult } from "@/lib/sql-lab";
 
 export const Route = createFileRoute("/_authenticated/sql")({
-  head: () => ({ meta: [{ title: "SQL Practice — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "SQL Practice — Sarath IGA Learning Portal" }] }),
   component: SqlLab,
 });
 

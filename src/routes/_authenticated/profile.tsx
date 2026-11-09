@@ -12,7 +12,7 @@ import { useProfile, useUser } from "@/hooks/use-auth";
 import { LEVELS } from "@/lib/content";
 
 export const Route = createFileRoute("/_authenticated/profile")({
-  head: () => ({ meta: [{ title: "Profile — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "Profile — Sarath IGA Learning Portal" }] }),
   component: Profile,
 });
 

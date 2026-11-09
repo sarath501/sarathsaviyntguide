@@ -12,7 +12,7 @@ import { useIsAdmin } from "@/hooks/use-auth";
 import { MODULES } from "@/lib/content";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "Admin — Sarath IGA Learning Portal" }] }),
   component: Admin,
 });
 

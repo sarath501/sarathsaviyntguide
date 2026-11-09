@@ -7,7 +7,7 @@ type Msg = { role: "user" | "assistant"; content: string };
 const clean = (m: Msg[]) =>
   m.slice(-30).map((x) => ({ role: x.role, content: String(x.content).slice(0, 8000) }));
 
-const TUTOR = `You are the IGA Academy AI tutor, an expert in Identity Governance and Administration, IAM and Saviynt Enterprise Identity Cloud (EIC).
+const TUTOR = `You are the Sarath IGA Learning Portal tutor, an expert in Identity Governance and Administration, IAM and Saviynt Enterprise Identity Cloud (EIC).
 Explain clearly with practical, real-world implementation examples. Use markdown headings, bullet lists and code blocks (SQL, JSON connector configs) where helpful.
 Stay accurate: if you are unsure about a specific Saviynt product detail, say so instead of inventing it. Keep answers focused.`;
 

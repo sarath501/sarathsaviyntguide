@@ -5,7 +5,7 @@ import { moduleById } from "@/lib/content";
 import { QuizRunner, type Q } from "@/components/Quiz";
 
 export const Route = createFileRoute("/_authenticated/quiz/$moduleId")({
-  head: () => ({ meta: [{ title: "Module quiz — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "Module quiz — Sarath IGA Learning Portal" }] }),
   component: QuizPage,
 });
 

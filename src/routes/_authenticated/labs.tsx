@@ -11,7 +11,7 @@ import { Markdown } from "@/components/Markdown";
 import { tutorChat } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/_authenticated/labs")({
-  head: () => ({ meta: [{ title: "Troubleshooting Lab — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "Troubleshooting Lab — Sarath IGA Learning Portal" }] }),
   component: Labs,
 });
 

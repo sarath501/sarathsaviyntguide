@@ -14,10 +14,10 @@ export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): { mode?: string } => (typeof s["mode"] === "string" ? { mode: s["mode"] } : {}),
   head: () => ({
     meta: [
-      { title: "Sign in — IGA Academy AI" },
-      { name: "description", content: "Sign in or create your IGA Academy AI account." },
-      { property: "og:title", content: "Sign in — IGA Academy AI" },
-      { property: "og:description", content: "Sign in or create your IGA Academy AI account." },
+      { title: "Sign in — Sarath IGA Learning Portal" },
+      { name: "description", content: "Sign in or create your Sarath IGA Learning Portal account." },
+      { property: "og:title", content: "Sign in — Sarath IGA Learning Portal" },
+      { property: "og:description", content: "Sign in or create your Sarath IGA Learning Portal account." },
     ],
   }),
   component: AuthPage,

@@ -11,7 +11,7 @@ import { useProfile } from "@/hooks/use-auth";
 import { computeStats, useActivity } from "@/lib/stats";
 
 export const Route = createFileRoute("/_authenticated/plan")({
-  head: () => ({ meta: [{ title: "Learning Path — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "Learning Path — Sarath IGA Learning Portal" }] }),
   component: Plan,
 });
 

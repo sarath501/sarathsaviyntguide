@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/learn/$moduleId")({
     if (!m) throw notFound();
     return { module: m };
   },
-  head: ({ loaderData }) => ({ meta: [{ title: `${loaderData?.module.title ?? "Module"} — IGA Academy AI` }] }),
+  head: ({ loaderData }) => ({ meta: [{ title: `${loaderData?.module.title ?? "Module"} — Sarath IGA Learning Portal` }] }),
   component: ModulePage,
 });
 

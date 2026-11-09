@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/_authenticated/learn/")({
-  head: () => ({ meta: [{ title: "Learning Center — IGA Academy AI" }, { name: "description", content: "Saviynt IGA modules." }] }),
+  head: () => ({ meta: [{ title: "Learning Center — Sarath IGA Learning Portal" }, { name: "description", content: "Saviynt IGA modules." }] }),
   component: Learn,
 });
 

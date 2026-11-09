@@ -7,9 +7,9 @@ import { MODULES } from "@/lib/content";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "IGA Academy AI — Master Saviynt Identity Governance" },
+      { title: "Sarath IGA Learning Portal — Master Saviynt Identity Governance" },
       { name: "description", content: "Learn Saviynt EIC, practice troubleshooting, prepare for certification and ace IAM interviews with AI." },
-      { property: "og:title", content: "IGA Academy AI — Master Saviynt Identity Governance" },
+      { property: "og:title", content: "Sarath IGA Learning Portal — Master Saviynt Identity Governance" },
       { property: "og:description", content: "Learn Saviynt EIC, practice troubleshooting, prepare for certification and ace IAM interviews with AI." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -77,7 +77,7 @@ function Landing() {
           ))}
         </div>
       </section>
-      <footer className="border-t py-8 text-center text-sm text-muted-foreground">© {new Date().getFullYear()} IGA Academy AI. Not affiliated with Saviynt, Inc.</footer>
+      <footer className="border-t py-8 text-center text-sm text-muted-foreground">© {new Date().getFullYear()} Sarath IGA Learning Portal. Not affiliated with Saviynt, Inc.</footer>
     </div>
   );
 }

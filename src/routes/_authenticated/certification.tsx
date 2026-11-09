@@ -8,7 +8,7 @@ import { QuizRunner, type Q } from "@/components/Quiz";
 import { useActivity } from "@/lib/stats";
 
 export const Route = createFileRoute("/_authenticated/certification")({
-  head: () => ({ meta: [{ title: "Certification Prep — IGA Academy AI" }] }),
+  head: () => ({ meta: [{ title: "Certification Prep — Sarath IGA Learning Portal" }] }),
   component: Cert,
 });
 

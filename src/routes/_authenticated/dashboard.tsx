@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { ALL_LESSONS, MODULES } from "@/lib/content";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — IGA Academy AI" }, { name: "description", content: "Your learning progress." }] }),
+  head: () => ({ meta: [{ title: "Dashboard — Sarath IGA Learning Portal" }, { name: "description", content: "Your learning progress." }] }),
   component: Dashboard,
 });
 
