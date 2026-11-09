@@ -12,6 +12,7 @@ const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/learn", label: "Learning Center", icon: BookOpen },
   { to: "/certification", label: "Certification Prep", icon: Award },
+  { to: "/connectors", label: "Connectors Learning Center", icon: Plug },
   { to: "/labs", label: "Troubleshooting Lab", icon: Wrench },
   { to: "/sql", label: "SQL Practice", icon: Database },
   { to: "/interview", label: "Mock Interviews", icon: MessagesSquare },

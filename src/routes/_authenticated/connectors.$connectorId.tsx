@@ -33,7 +33,7 @@ function ConnectorPage() {
   const { connectorId } = Route.useParams();
   const { data: list, isLoading } = useConnectors();
   const { data: prog } = useConnectorProgress();
-  const { data: user } = useUser();
+  const { user } = useUser();
   const qc = useQueryClient();
   const [tab, setTab] = useState<SectionKey>("intro");
   const c = list?.find((x) => x.id === connectorId);
