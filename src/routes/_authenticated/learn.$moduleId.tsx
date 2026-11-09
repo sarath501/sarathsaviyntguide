@@ -78,7 +78,7 @@ function ModulePage() {
             <Button onClick={toggle} variant={done.has(lesson.id) ? "outline" : "default"}>{done.has(lesson.id) ? "Mark as not complete" : "Mark as complete"}</Button>
             <Button variant="secondary" onClick={deepDive} disabled={loadingDeep}><Bot className="mr-1 h-4 w-4" />{loadingDeep ? "Generating…" : "AI deep dive"}</Button>
           </div>
-          {deep[lesson.id] && <div className="mt-6 border-t pt-4"><Markdown text={deep[lesson.id]} /></div>}
+          {deep[lesson.id] && <div className="mt-6 border-t pt-4"><Markdown text={deep[lesson.id] ?? ""} /></div>}
         </article>
       </div>
     </div>

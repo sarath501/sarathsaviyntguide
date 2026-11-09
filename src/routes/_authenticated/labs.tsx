@@ -56,7 +56,7 @@ function Labs() {
                   <Button disabled={busy || !answer[l.id]?.trim()} onClick={() => grade(l.id)}>{busy ? "Reviewing…" : "Get AI feedback"}</Button>
                   <Button variant="outline" onClick={() => setRevealed((r) => ({ ...r, [l.id]: true }))}>Reveal solution</Button>
                 </div>
-                {review[l.id] && <div className="rounded-lg bg-muted p-4"><Markdown text={review[l.id]} /></div>}
+                {review[l.id] && <div className="rounded-lg bg-muted p-4"><Markdown text={review[l.id] ?? ""} /></div>}
                 {revealed[l.id] && (
                   <div className="space-y-3 text-sm">
                     <div><p className="font-semibold">Investigation steps</p><ol className="mt-1 list-decimal space-y-1 pl-5">{l.steps.map((s) => <li key={s}>{s}</li>)}</ol></div>
