@@ -17,6 +17,7 @@ import { DIAGRAMS } from "@/lib/diagrams";
 import { generateConnectorContent, generateLessonContent } from "@/lib/ai.functions";
 import { CONNECTOR_CATEGORIES, useConnectors, type Connector } from "@/lib/connectors";
 import { getAdminUserAnalytics } from "@/lib/admin.functions";
+import { AdminAnalytics } from "@/components/AdminAnalytics";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — Sarath IGA Learning Portal" }] }),
@@ -56,36 +57,7 @@ function Admin() {
   );
 }
 
-function Overview() {
-  const { data: d } = useQuery({
-    queryKey: ["admin-stats"],
-    queryFn: async () => {
-      const [u, a, i] = await Promise.all([
-        supabase.from("profiles").select("id,full_name,experience_level,created_at").order("created_at", { ascending: false }),
-        supabase.from("quiz_attempts").select("score,total"),
-        supabase.from("interviews").select("id", { count: "exact", head: true }),
-      ]);
-      return { users: u.data ?? [], attempts: a.data ?? [], interviews: i.count ?? 0 };
-    },
-  });
-  const avg = d?.attempts.length ? Math.round(d.attempts.reduce((s, x) => s + (x.score / x.total) * 100, 0) / d.attempts.length) : 0;
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        {[["Users", d?.users.length ?? 0], ["Quiz attempts", d?.attempts.length ?? 0], ["Avg quiz score", `${avg}%`], ["Interviews", d?.interviews ?? 0]].map(([l, v]) => (
-          <div key={l as string} className="rounded-xl border bg-card p-4 shadow-card"><p className="text-xs text-muted-foreground">{l}</p><p className="mt-1 font-display text-2xl font-semibold">{v}</p></div>
-        ))}
-      </div>
-      <div className={card}>
-        <h2 className="mb-3 font-semibold">Users</h2>
-        <ul className="divide-y">{d?.users.map((u) => (
-          <li key={u.id} className="flex justify-between gap-2 py-2 text-sm"><span>{u.full_name || "—"}</span><span className="text-muted-foreground">{u.experience_level}</span><span className="text-muted-foreground">{new Date(u.created_at).toLocaleDateString()}</span></li>
-        ))}</ul>
-      </div>
-    </div>
-  );
-}
-
+function Overview() { return <AdminAnalytics />; }
 
 function UsersAdmin() {
   const loadUsers = useServerFn(getAdminUserAnalytics);
