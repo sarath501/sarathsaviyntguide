@@ -61,3 +61,26 @@ export const generatePlan = createServerFn({ method: "POST" })
     const text = await runAI(sys, [{ role: "user", content: prompt }]);
     return { text };
   });
+
+export const generateLessonContent = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { lessonId: string; guidance?: string | undefined }) => d)
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    if (!isAdmin) throw new Error("Forbidden");
+    const { LESSON_SYSTEM } = await import("./lesson-prompt");
+    const { data: lesson, error } = await context.supabase.from("lessons").select("id,title,summary,module_id").eq("id", data.lessonId).single();
+    if (error || !lesson) throw new Error("Lesson not found");
+    const { data: mod } = await context.supabase.from("modules").select("num,title").eq("id", lesson.module_id).single();
+    const prompt = `Module ${mod?.num}: ${mod?.title}\nLesson: ${lesson.title}\nLesson summary: ${lesson.summary}\n${data.guidance ? `Extra guidance from the instructor: ${data.guidance}\n` : ""}Write the full lesson JSON.`;
+    const text = (await runAI(LESSON_SYSTEM, [{ role: "user", content: prompt }])).trim();
+    let content: unknown;
+    try {
+      content = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+    } catch {
+      throw new Error("The AI returned content in an unexpected format — please try again.");
+    }
+    const { error: upErr } = await context.supabase.from("lessons").update({ content: content as never, updated_at: new Date().toISOString() }).eq("id", lesson.id);
+    if (upErr) throw new Error(upErr.message);
+    return { ok: true };
+  });
