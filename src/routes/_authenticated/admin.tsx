@@ -68,6 +68,11 @@ function UsersAdmin() {
   });
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
+  const [experience, setExperience] = useState("all");
+  const [activity, setActivity] = useState("all");
+  const [sort, setSort] = useState("newest");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const users = data?.users ?? [];
   const filtered = users.filter((user) => {
@@ -77,8 +82,23 @@ function UsersAdmin() {
       user.fullName.toLowerCase().includes(term) ||
       user.email.toLowerCase().includes(term) ||
       user.id.toLowerCase().includes(term);
-    return matchesSearch && (status === "all" || user.status === status);
+    const matchesStatus = status === "all" || user.status === status;
+    const matchesExperience = experience === "all" || user.experienceLevel === experience;
+    const lastActivity = user.lastActivityAt ? Date.parse(user.lastActivityAt) : 0;
+    const activeRecently = lastActivity >= Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const matchesActivity = activity === "all" || (activity === "active" ? activeRecently : !activeRecently);
+    return matchesSearch && matchesStatus && matchesExperience && matchesActivity;
+  }).sort((a, b) => {
+    if (sort === "oldest") return Date.parse(a.registeredAt) - Date.parse(b.registeredAt);
+    if (sort === "name") return a.fullName.localeCompare(b.fullName);
+    if (sort === "last-login") return Date.parse(b.lastLoginAt ?? "") - Date.parse(a.lastLoginAt ?? "");
+    if (sort === "most-lessons") return b.lessonsCompleted - a.lessonsCompleted;
+    return Date.parse(b.registeredAt) - Date.parse(a.registeredAt);
   });
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const pageUsers = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const experienceOptions = [...new Set(users.map((user) => user.experienceLevel).filter(Boolean))].sort();
   const selected = users.find((user) => user.id === selectedId);
   const activeCount = users.filter((user) => user.status === "Verified").length;
   const pendingCount = users.filter((user) => user.status === "Pending verification").length;
@@ -119,21 +139,22 @@ function UsersAdmin() {
           </Button>
         </div>
 
-        <div className="mb-4 flex flex-col gap-2 sm:flex-row">
-          <div className="relative flex-1">
+        <div className="mb-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
+          <div className="relative sm:col-span-2 xl:col-span-2">
             <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              className="pl-9"
-              placeholder="Search by name, email or user ID"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-            />
+            <Input className="pl-9" placeholder="Search by name, email or user ID" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} />
           </div>
-          <select className={sel + " sm:max-w-56"} value={status} onChange={(event) => setStatus(event.target.value)}>
-            <option value="all">All account statuses</option>
-            <option value="Active">Active</option>
-            <option value="Pending verification">Pending verification</option>
-            <option value="Suspended">Suspended</option>
+          <select className={sel} value={status} onChange={(event) => { setStatus(event.target.value); setPage(1); }}>
+            <option value="all">All account statuses</option><option value="Verified">Verified</option><option value="Pending verification">Pending verification</option><option value="Suspended">Suspended</option>
+          </select>
+          <select className={sel} value={experience} onChange={(event) => { setExperience(event.target.value); setPage(1); }}>
+            <option value="all">All experience levels</option>{experienceOptions.map((level) => <option key={level} value={level}>{level}</option>)}
+          </select>
+          <select className={sel} value={activity} onChange={(event) => { setActivity(event.target.value); setPage(1); }}>
+            <option value="all">All activity</option><option value="active">Active in last 30 days</option><option value="inactive">No activity in 30 days</option>
+          </select>
+          <select className={sel} value={sort} onChange={(event) => { setSort(event.target.value); setPage(1); }}>
+            <option value="newest">Newest registrations</option><option value="oldest">Oldest registrations</option><option value="name">Name A–Z</option><option value="last-login">Recently signed in</option><option value="most-lessons">Most lessons completed</option>
           </select>
         </div>
 
@@ -161,7 +182,7 @@ function UsersAdmin() {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {filtered.map((user) => (
+                {pageUsers.map((user) => (
                   <tr key={user.id} className="hover:bg-muted/40">
                     <td className="px-3 py-3">
                       <p className="font-medium">{user.fullName || "Unnamed user"}</p>
@@ -190,9 +211,15 @@ function UsersAdmin() {
             </table>
           </div>
         )}
-        <p className="mt-3 text-xs text-muted-foreground">
-          Showing {filtered.length} of {users.length} registered users. Data refreshes when you reopen this tab or select Refresh.
-        </p>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t pt-3">
+          <p className="text-xs text-muted-foreground">Showing {filtered.length ? (currentPage - 1) * pageSize + 1 : 0}–{Math.min(currentPage * pageSize, filtered.length)} of {filtered.length} matching users ({users.length} total).</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <select aria-label="Rows per page" className="h-8 rounded-md border bg-card px-2 text-xs" value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setPage(1); }}><option value={10}>10 per page</option><option value={25}>25 per page</option><option value={50}>50 per page</option></select>
+            <Button size="sm" variant="outline" disabled={currentPage <= 1} onClick={() => setPage((value) => Math.max(1, value - 1))}>Previous</Button>
+            <span className="text-xs tabular-nums">Page {currentPage} of {totalPages}</span>
+            <Button size="sm" variant="outline" disabled={currentPage >= totalPages} onClick={() => setPage((value) => Math.min(totalPages, value + 1))}>Next</Button>
+          </div>
+        </div>
       </div>
 
       {selected && (
