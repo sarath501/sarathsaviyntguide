@@ -13,7 +13,7 @@ Stay accurate: if you are unsure about a specific Saviynt product detail, say so
 
 export const tutorChat = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { messages: Msg[]; mode?: string }) => d)
+  .inputValidator((d: { messages: Msg[]; mode?: string | undefined }) => d)
   .handler(async ({ data }) => {
     const extra = data.mode ? `\nAnswer style requested: ${data.mode}.` : "";
     const text = await runAI(TUTOR + extra, clean(data.messages));

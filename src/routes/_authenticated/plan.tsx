@@ -20,7 +20,7 @@ const GOALS = ["Crack a Saviynt interview", "Pass Saviynt IGA certification", "B
 function Plan() {
   const { data: profile } = useProfile();
   const { data } = useActivity();
-  const [goal, setGoal] = useState(GOALS[0]);
+  const [goal, setGoal] = useState<string>(GOALS[0]!);
   const [hours, setHours] = useState(8);
   const [weeks, setWeeks] = useState(6);
   const [plan, setPlan] = useState("");

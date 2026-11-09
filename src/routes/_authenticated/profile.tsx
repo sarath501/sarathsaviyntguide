@@ -21,7 +21,7 @@ function Profile() {
   const { data: profile } = useProfile();
   const qc = useQueryClient();
   const [name, setName] = useState("");
-  const [level, setLevel] = useState(LEVELS[0]);
+  const [level, setLevel] = useState<string>(LEVELS[0]!);
   const [bio, setBio] = useState("");
   const [cur, setCur] = useState("");
   const [pw, setPw] = useState("");
@@ -37,7 +37,7 @@ function Profile() {
   async function save(e: React.FormEvent) {
     e.preventDefault();
     const { error } = await supabase.from("profiles").update({ full_name: name, experience_level: level, bio }).eq("id", user!.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Profile saved");
     qc.invalidateQueries({ queryKey: ["profile"] });
   }
@@ -45,7 +45,7 @@ function Profile() {
   async function changePw(e: React.FormEvent) {
     e.preventDefault();
     const { error } = await supabase.auth.updateUser({ password: pw, current_password: cur } as { password: string });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Password changed");
     setPw("");
     setCur("");
@@ -53,7 +53,7 @@ function Profile() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <PageHeader title="Profile & settings" subtitle={user?.email} />
+      <PageHeader title="Profile & settings" subtitle={user?.email ?? ""} />
       <form onSubmit={save} className="space-y-4 rounded-xl border bg-card p-6 shadow-card">
         <h2 className="font-semibold">Profile</h2>
         <div className="space-y-1.5"><Label>Full name</Label><Input value={name} onChange={(e) => setName(e.target.value)} /></div>

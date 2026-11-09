@@ -11,7 +11,7 @@ import { LEVELS } from "@/lib/content";
 
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { mode?: string } => (typeof s.mode === "string" ? { mode: s.mode } : {}),
+  validateSearch: (s: Record<string, unknown>): { mode?: string } => (typeof s["mode"] === "string" ? { mode: s["mode"] } : {}),
   head: () => ({
     meta: [
       { title: "Sign in — IGA Academy AI" },
@@ -29,7 +29,7 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [level, setLevel] = useState(LEVELS[0]);
+  const [level, setLevel] = useState<string>(LEVELS[0]!);
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState<string | null>(null);
   const navigate = useNavigate();
