@@ -44,7 +44,8 @@ export async function runAI(system: string, messages: ModelMessage[]): Promise<s
   let failure: unknown;
   const result = streamText({
     model: provider.responses(MODEL),
-    messages: [{ role: "system", content: system }, ...messages],
+    instructions: system,
+    messages,
     maxRetries: 0,
     onError: ({ error }) => {
       failure = error;
