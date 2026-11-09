@@ -18,18 +18,18 @@ const EXAMS = [
   {
     id: "professional",
     title: "Saviynt IGA Professional",
-    subtitle: "Professional-level practice exam",
-    count: 12,
-    minutes: 25,
+    subtitle: "Full-length Professional practice exam",
+    count: 50,
+    minutes: 75,
     level: "Core IGA implementation and operational knowledge",
     topics: "Identity lifecycle, application onboarding, connectors, access requests, certifications, SoD and operations",
   },
   {
     id: "advanced",
     title: "Saviynt IGA Advanced",
-    subtitle: "Advanced implementation and troubleshooting exam",
-    count: 15,
-    minutes: 35,
+    subtitle: "Full-length Advanced implementation and troubleshooting exam",
+    count: 50,
+    minutes: 90,
     level: "Scenario-based design, troubleshooting and governance decisions",
     topics: "Complex correlation, REST/JDBC/SCIM, provisioning failures, role engineering, SoD, scale, cutover and audit evidence",
   },
@@ -72,7 +72,7 @@ function Cert() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Saviynt IGA Mock Exams" subtitle="Separate Professional and Advanced practice tracks with timed, randomized questions and explanations." />
+      <PageHeader title="Saviynt IGA Mock Exams" subtitle="Dedicated 50-question Professional and Advanced practice banks with timed, randomized questions and explanations." />
       <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm">
         <div className="flex items-center gap-2 font-semibold"><ShieldCheck className="h-4 w-4" />Independent exam preparation</div>
         <p className="mt-1 text-muted-foreground">These are original practice questions based on common Saviynt IGA implementation and governance concepts. They are not official Saviynt exam questions, exam dumps, or a guarantee of certification exam coverage.</p>
