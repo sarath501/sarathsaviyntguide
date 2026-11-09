@@ -152,7 +152,7 @@ export const getAdminUserAnalytics = createServerFn({ method: "GET" })
           registeredAt: authUser.created_at,
           lastLoginAt: authUser.last_sign_in_at ?? null,
           emailConfirmedAt,
-          status: isSuspended ? "Suspended" : emailConfirmedAt ? "Active" : "Pending verification",
+          status: isSuspended ? "Suspended" : emailConfirmedAt ? "Verified" : "Pending verification",
           lessonsCompleted: stats?.lessonsCompleted ?? 0,
           quizAttempts: quizScores.length,
           averageQuizScore,
