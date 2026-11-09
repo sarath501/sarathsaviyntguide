@@ -144,9 +144,9 @@ export const getAdminUserAnalytics = createServerFn({ method: "GET" })
           id: authUser.id,
           email: authUser.email ?? "",
           fullName:
-            profile?.full_name ??
-            String(authUser.user_metadata?.full_name ?? "") ??
-            authUser.email ??
+            profile?.full_name ||
+            String(authUser.user_metadata?.full_name ?? "") ||
+            authUser.email ||
             "Unnamed user",
           experienceLevel: profile?.experience_level ?? "Not specified",
           registeredAt: authUser.created_at,
