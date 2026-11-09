@@ -13,6 +13,8 @@ import {
   ExternalLink,
   GraduationCap,
   Code2,
+  Mail,
+  PhoneCall,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Logo";
@@ -211,6 +213,16 @@ function Landing() {
               >
                 <Linkedin className="h-4 w-4" /> View LinkedIn profile <ExternalLink className="h-3.5 w-3.5" />
               </a>
+              <div className="mt-5 border-t pt-4">
+                <p className="text-sm font-medium">Need help with the portal?</p>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">If you face any issue while using the learning portal, please contact me.</p>
+                <a href="mailto:avalasarath01@gmail.com" className="mt-3 flex items-center gap-2 text-sm text-primary hover:underline">
+                  <Mail className="h-4 w-4" /> avalasarath01@gmail.com
+                </a>
+                <a href="tel:+919606032995" className="mt-2 flex items-center gap-2 text-sm text-primary hover:underline">
+                  <PhoneCall className="h-4 w-4" /> +91 9606032995
+                </a>
+              </div>
             </div>
           </div>
 
