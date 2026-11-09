@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookmarks: {
+        Row: {
+          created_at: string
+          id: string
+          lesson_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lesson_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       interviews: {
         Row: {
           created_at: string
@@ -47,6 +68,45 @@ export type Database = {
         }
         Relationships: []
       }
+      labs: {
+        Row: {
+          area: string
+          created_at: string
+          difficulty: string
+          fix: string
+          id: string
+          published: boolean
+          root_cause: string
+          steps: Json
+          symptom: string
+          title: string
+        }
+        Insert: {
+          area?: string
+          created_at?: string
+          difficulty?: string
+          fix?: string
+          id?: string
+          published?: boolean
+          root_cause?: string
+          steps?: Json
+          symptom: string
+          title: string
+        }
+        Update: {
+          area?: string
+          created_at?: string
+          difficulty?: string
+          fix?: string
+          id?: string
+          published?: boolean
+          root_cause?: string
+          steps?: Json
+          symptom?: string
+          title?: string
+        }
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           completed_at: string
@@ -71,6 +131,89 @@ export type Database = {
         }
         Relationships: []
       }
+      lessons: {
+        Row: {
+          content: Json
+          created_at: string
+          diagram_image_url: string | null
+          diagram_key: string | null
+          id: string
+          module_id: string
+          points: Json
+          position: number
+          published: boolean
+          summary: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          diagram_image_url?: string | null
+          diagram_key?: string | null
+          id: string
+          module_id: string
+          points?: Json
+          position?: number
+          published?: boolean
+          summary?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          diagram_image_url?: string | null
+          diagram_key?: string | null
+          id?: string
+          module_id?: string
+          points?: Json
+          position?: number
+          published?: boolean
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      modules: {
+        Row: {
+          created_at: string
+          id: string
+          level: string
+          num: number
+          published: boolean
+          summary: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          level?: string
+          num: number
+          published?: boolean
+          summary?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level?: string
+          num?: number
+          published?: boolean
+          summary?: string
+          title?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -79,6 +222,7 @@ export type Database = {
           experience_level: string
           full_name: string | null
           id: string
+          last_lesson_id: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -87,6 +231,7 @@ export type Database = {
           experience_level?: string
           full_name?: string | null
           id: string
+          last_lesson_id?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -95,6 +240,7 @@ export type Database = {
           experience_level?: string
           full_name?: string | null
           id?: string
+          last_lesson_id?: string | null
         }
         Relationships: []
       }
