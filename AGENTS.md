@@ -33,3 +33,4 @@ use the editor.
 - All AI calls go through `runAI` in `src/lib/ai.server.ts`, invoked only from authenticated server functions in `src/lib/ai.functions.ts`, so keys and prompts stay server-side.
 - Dashboard stats are computed client-side from the user's own lesson_progress, quiz_attempts and interviews rows (`src/lib/stats.ts`); never show fabricated numbers.
 - Connector guides live in `public.connectors` (one row per connector, all teaching sections in the `content` JSONB, shape typed in `src/lib/connectors.ts`) with per-user `connector_progress` and `connector_bookmarks`; one JSONB document keeps admin editing and AI authoring (`src/lib/connector-prompt.ts`) simple instead of ~15 child tables.
+- SQL learner execution must use a separate fictional-data-only PostgreSQL database through the Neon gateway and a dedicated restricted reader connection, never the portal database or the owner connection; isolation and least privilege protect portal accounts and content.
