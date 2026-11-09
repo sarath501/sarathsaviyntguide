@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import {
-  LayoutDashboard, BookOpen, Award, Wrench, Database, MessagesSquare, Bot, Route as RouteIcon, User, Shield, LogOut, Menu, X,
+  LayoutDashboard, BookOpen, Award, Wrench, Database, MessagesSquare, Route as RouteIcon, User, Shield, LogOut, Menu, X,
   Plug, NotebookPen, ChartNoAxesCombined, Medal, Users, BriefcaseBusiness, GraduationCap,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,7 +20,6 @@ const NAV = [
   { to: "/sql", label: "SQL Practice", icon: Database },
   { to: "/interview", label: "AI Mock Interviews", icon: MessagesSquare },
   { to: "/interview-prep", label: "Interview Question Bank", icon: GraduationCap },
-  { to: "/tutor", label: "AI Tutor", icon: Bot },
   { to: "/plan", label: "Learning Path", icon: RouteIcon },
   { to: "/skills", label: "My Skills", icon: ChartNoAxesCombined },
   { to: "/certificates", label: "Certificates", icon: Medal },
