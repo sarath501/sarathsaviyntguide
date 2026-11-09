@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import {
   LayoutDashboard, BookOpen, Award, Wrench, Database, MessagesSquare, Bot, Route as RouteIcon, User, Shield, LogOut, Menu, X,
+  Plug,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin, useProfile } from "@/hooks/use-auth";
