@@ -34,11 +34,13 @@ export const getAdminUserAnalytics = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     // Verify the caller's role using their authenticated session before using
     // the service-role client. Never trust a role or user ID supplied by the browser.
-    const { data: isAdmin, error: roleError } = await context.supabase.rpc("has_role", {
+    const { data: canViewAnalytics, error: permissionError } = await context.supabase.rpc("has_permission", {
       _user_id: context.userId,
-      _role: "admin",
+      _permission_key: "analytics.view",
     });
-    if (roleError || !isAdmin) throw new Error("Forbidden: administrator access required");
+    if (permissionError || !canViewAnalytics) {
+      throw new Error("Forbidden: analytics.view permission required");
+    }
 
     // This privileged client is imported only inside the server handler.
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
