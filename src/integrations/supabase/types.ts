@@ -436,6 +436,24 @@ export type Database = {
         }
         Relationships: []
       }
+      learner_notes: {
+        Row: { id: string; user_id: string; title: string; body: string; lesson_id: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; user_id: string; title?: string; body?: string; lesson_id?: string | null; created_at?: string; updated_at?: string }
+        Update: { id?: string; user_id?: string; title?: string; body?: string; lesson_id?: string | null; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
+      community_topics: {
+        Row: { id: string; user_id: string; title: string; body: string; category: string; status: string; created_at: string; updated_at: string }
+        Insert: { id?: string; user_id: string; title: string; body: string; category?: string; status?: string; created_at?: string; updated_at?: string }
+        Update: { id?: string; user_id?: string; title?: string; body?: string; category?: string; status?: string; created_at?: string; updated_at?: string }
+        Relationships: []
+      }
+      community_replies: {
+        Row: { id: string; topic_id: string; user_id: string; body: string; created_at: string }
+        Insert: { id?: string; topic_id: string; user_id: string; body: string; created_at?: string }
+        Update: { id?: string; topic_id?: string; user_id?: string; body?: string; created_at?: string }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
