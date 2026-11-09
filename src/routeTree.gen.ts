@@ -20,6 +20,7 @@ import { Route as AuthenticatedInterviewRouteImport } from './routes/_authentica
 import { Route as AuthenticatedLabsRouteImport } from './routes/_authenticated/labs'
 import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/plan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedSqlRouteImport } from './routes/_authenticated/sql'
 import { Route as AuthenticatedTutorRouteImport } from './routes/_authenticated/tutor'
 import { Route as AuthenticatedLearnIndexRouteImport } from './routes/_authenticated/learn.index'
 import { Route as AuthenticatedLearnModuleIdRouteImport } from './routes/_authenticated/learn.$moduleId'
@@ -80,6 +81,11 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSqlRoute = AuthenticatedSqlRouteImport.update({
+  id: '/sql',
+  path: '/sql',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTutorRoute = AuthenticatedTutorRouteImport.update({
   id: '/tutor',
   path: '/tutor',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/labs': typeof AuthenticatedLabsRoute
   '/plan': typeof AuthenticatedPlanRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/sql': typeof AuthenticatedSqlRoute
   '/tutor': typeof AuthenticatedTutorRoute
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/labs': typeof AuthenticatedLabsRoute
   '/plan': typeof AuthenticatedPlanRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/sql': typeof AuthenticatedSqlRoute
   '/tutor': typeof AuthenticatedTutorRoute
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/_authenticated/labs': typeof AuthenticatedLabsRoute
   '/_authenticated/plan': typeof AuthenticatedPlanRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/sql': typeof AuthenticatedSqlRoute
   '/_authenticated/tutor': typeof AuthenticatedTutorRoute
   '/_authenticated/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/_authenticated/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
     | '/labs'
     | '/plan'
     | '/profile'
+    | '/sql'
     | '/tutor'
     | '/learn/$moduleId'
     | '/quiz/$moduleId'
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/labs'
     | '/plan'
     | '/profile'
+    | '/sql'
     | '/tutor'
     | '/learn/$moduleId'
     | '/quiz/$moduleId'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/_authenticated/labs'
     | '/_authenticated/plan'
     | '/_authenticated/profile'
+    | '/_authenticated/sql'
     | '/_authenticated/tutor'
     | '/_authenticated/learn/$moduleId'
     | '/_authenticated/quiz/$moduleId'
@@ -291,6 +303,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/sql': {
+      id: '/_authenticated/sql'
+      path: '/sql'
+      fullPath: '/sql'
+      preLoaderRoute: typeof AuthenticatedSqlRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/tutor': {
       id: '/_authenticated/tutor'
       path: '/tutor'
@@ -330,6 +349,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedLabsRoute: typeof AuthenticatedLabsRoute
   AuthenticatedPlanRoute: typeof AuthenticatedPlanRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedSqlRoute: typeof AuthenticatedSqlRoute
   AuthenticatedTutorRoute: typeof AuthenticatedTutorRoute
   AuthenticatedLearnModuleIdRoute: typeof AuthenticatedLearnModuleIdRoute
   AuthenticatedQuizModuleIdRoute: typeof AuthenticatedQuizModuleIdRoute
@@ -344,6 +364,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedLabsRoute: AuthenticatedLabsRoute,
   AuthenticatedPlanRoute: AuthenticatedPlanRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedSqlRoute: AuthenticatedSqlRoute,
   AuthenticatedTutorRoute: AuthenticatedTutorRoute,
   AuthenticatedLearnModuleIdRoute: AuthenticatedLearnModuleIdRoute,
   AuthenticatedQuizModuleIdRoute: AuthenticatedQuizModuleIdRoute,

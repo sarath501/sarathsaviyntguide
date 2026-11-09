@@ -47,7 +47,7 @@ function Dashboard() {
     { to: "/learn", icon: BookOpen, title: "Saviynt Training", text: "11 structured modules" },
     { to: "/interview", icon: MessagesSquare, title: "Interview Preparation", text: "Adaptive AI interviewer" },
     { to: "/certification", icon: Award, title: "Certification Prep", text: "Timed practice exams" },
-    { to: "/learn", icon: Database, title: "SQL Practice", text: "Module 9: Analytics & SQL" },
+    { to: "/sql", icon: Database, title: "SQL Practice", text: "Hands-on queries with feedback" },
     { to: "/tutor", icon: Bot, title: "AI Tutor", text: "Ask anything about Saviynt" },
   ] as const;
 
