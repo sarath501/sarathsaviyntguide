@@ -20,9 +20,9 @@ export type Activity = NonNullable<ReturnType<typeof useActivity>["data"]>;
 
 const day = (d: string | Date) => new Date(d).toISOString().slice(0, 10);
 
-export function computeStats(a: Activity, cur: Curriculum) {
-  const MODULES = cur.modules;
-  const ALL_LESSONS = cur.lessons.map((l) => ({ ...l, moduleId: l.module_id }));
+export function computeStats(a: Activity, curriculum: Curriculum) {
+  const MODULES = curriculum.modules;
+  const ALL_LESSONS = curriculum.lessons.map((l) => ({ ...l, moduleId: l.module_id }));
   const done = new Set(a.progress.map((p) => p.lesson_id));
   const modulesDone = MODULES.filter((m) => m.lessons.length > 0 && m.lessons.every((l) => done.has(l.id))).length;
   const modulesStarted = MODULES.filter((m) => m.lessons.some((l) => done.has(l.id))).length;

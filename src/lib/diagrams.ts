@@ -1,6 +1,6 @@
 // Diagram definitions for the interactive lesson diagrams.
 export type FlowNode = { id: string; label: string; detail: string; lane?: string };
-export type FlowDef = { kind: "flow"; title: string; lanes?: { id: string; label: string }[]; nodes: FlowNode[]; legend?: string };
+export type FlowDef = { kind: "flow"; title: string; lanes?: { id: string; label: string }[]; nodes: FlowNode[]; legend?: string | undefined };
 export type ArchDef = { kind: "architecture"; title: string };
 export type ConnectorDef = {
   kind: "connector";
