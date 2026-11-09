@@ -68,14 +68,20 @@ language sql
 stable
 security definer
 set search_path = public
-as $$
-  select exists (
-    select 1
-    from public.user_roles
-    where user_id = _user_id
-      and role = 'super_admin'::public.app_role
-  );
-$$;
+as $
+  select case
+    -- Authenticated callers may only inspect their own privileges. Trusted
+    -- service-role server operations may evaluate another user's privileges.
+    when auth.role() = 'authenticated' and auth.uid() is distinct from _user_id then false
+    when auth.role() not in ('authenticated', 'service_role') then false
+    else exists (
+      select 1
+      from public.user_roles
+      where user_id = _user_id
+        and role = 'super_admin'::public.app_role
+    )
+  end;
+$;
 
 create or replace function public.has_permission(_user_id uuid, _permission_key text)
 returns boolean
@@ -83,17 +89,23 @@ language sql
 stable
 security definer
 set search_path = public
-as $$
-  select
-    public.is_super_admin(_user_id)
-    or exists (
-      select 1
-      from public.user_roles ur
-      join public.role_permissions rp on rp.role = ur.role
-      where ur.user_id = _user_id
-        and rp.permission_key = _permission_key
-    );
-$$;
+as $
+  select case
+    -- Keep this guard here as well: callers can invoke has_permission directly
+    -- without first passing through is_super_admin.
+    when auth.role() = 'authenticated' and auth.uid() is distinct from _user_id then false
+    when auth.role() not in ('authenticated', 'service_role') then false
+    else
+      public.is_super_admin(_user_id)
+      or exists (
+        select 1
+        from public.user_roles ur
+        join public.role_permissions rp on rp.role = ur.role
+        where ur.user_id = _user_id
+          and rp.permission_key = _permission_key
+      )
+  end;
+$;
 
 revoke all on function public.is_super_admin(uuid) from public;
 revoke all on function public.has_permission(uuid, text) from public;
