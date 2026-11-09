@@ -41,6 +41,7 @@ function Labs() {
   const [showSolution, setShowSolution] = useState<Record<string, boolean>>({});
   const [practiceOpen, setPracticeOpen] = useState<string | null>(null);
   const [practiceAnswers, setPracticeAnswers] = useState<Record<string, string>>({});
+  const [diagnosisDraft, setDiagnosisDraft] = useState<Record<string, string>>({});
   const queryClient = useQueryClient();
 
   const { data: labRows = [], isLoading } = useQuery({
@@ -135,9 +136,9 @@ function Labs() {
                   <Button variant="ghost" size="sm" onClick={() => update(lab, { completed_steps: [], diagnosis: "" })}><RotateCcw className="mr-2 h-4 w-4" />Reset progress</Button>
                 </div>
                 {showHint[lab.id] && <div className="rounded-lg bg-muted p-3 text-sm"><p className="mb-1 font-medium">Investigation hint</p>{hintFor(lab.area)}</div>}
-                <div><label className="mb-2 block text-sm font-medium" htmlFor={`diagnosis-${lab.id}`}>Your diagnosis and remediation plan</label><Textarea id={`diagnosis-${lab.id}`} rows={5} placeholder="Document the evidence you would collect, likely root cause, corrective action and validation steps…" value={saved.diagnosis} onChange={(event) => update(lab, { diagnosis: event.target.value })} /></div>
+                <div><label className="mb-2 block text-sm font-medium" htmlFor={`diagnosis-${lab.id}`}>Your diagnosis and remediation plan</label><Textarea id={`diagnosis-${lab.id}`} rows={5} placeholder="Document the evidence you would collect, likely root cause, corrective action and validation steps…" value={diagnosisDraft[lab.id] ?? saved.diagnosis} onChange={(event) => setDiagnosisDraft((state) => ({ ...state, [lab.id]: event.target.value }))} /></div>
                 {showSolution[lab.id] && <div className="space-y-2 rounded-lg border border-primary/20 bg-primary/5 p-4 text-sm"><p><strong>Root cause:</strong> {lab.root_cause}</p><p><strong>Recommended fix:</strong> {lab.fix}</p></div>}
-                <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-3"><div className="text-sm"><span className="font-semibold">Score: {saved.score}/100</span><span className="ml-2 text-muted-foreground">{saved.completed ? "Lab completed" : "Complete checklist + write an 80-character diagnosis to finish"}</span></div><Button size="sm" onClick={() => update(lab, {})} disabled={saveProgress.isPending}>Save progress</Button></div>
+                <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-3"><div className="text-sm"><span className="font-semibold">Score: {saved.score}/100</span><span className="ml-2 text-muted-foreground">{saved.completed ? "Lab completed" : "Complete checklist + write an 80-character diagnosis to finish"}</span></div><Button size="sm" onClick={() => { update(lab, { diagnosis: diagnosisDraft[lab.id] ?? saved.diagnosis }); setDiagnosisDraft((state) => { const next = { ...state }; delete next[lab.id]; return next; }); }} disabled={saveProgress.isPending}>Save progress</Button></div>
               </div>}
             </article>
           );
