@@ -48,7 +48,7 @@ function ConnectorPage() {
     if (!user || !c) return;
     const sections = Array.from(new Set([...done, key]));
     const { error } = await supabase.from("connector_progress").upsert({ user_id: user.id, connector_id: c.id, sections_done: sections, updated_at: new Date().toISOString(), ...extra }, { onConflict: "user_id,connector_id" });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["connector-progress"] });
   }
   async function toggleSave() {
@@ -56,7 +56,7 @@ function ConnectorPage() {
     const r = saved
       ? await supabase.from("connector_bookmarks").delete().eq("user_id", user.id).eq("connector_id", c.id)
       : await supabase.from("connector_bookmarks").insert({ user_id: user.id, connector_id: c.id });
-    if (r.error) return toast.error(r.error.message);
+    if (r.error) { toast.error(r.error.message); return; }
     qc.invalidateQueries({ queryKey: ["connector-progress"] });
   }
 

@@ -442,7 +442,7 @@ function ConnectorEditor({ c, onDeleted }: { c: Connector | undefined; onDeleted
   async function saveMeta() { if (!err((await supabase.from("connectors").update({ ...meta, updated_at: new Date().toISOString() }).eq("id", c!.id)).error)) { toast.success("Saved"); refresh(); } }
   async function saveSection() {
     let parsed: unknown;
-    try { parsed = JSON.parse(json); } catch { return toast.error("Invalid JSON"); }
+    try { parsed = JSON.parse(json); } catch { toast.error("Invalid JSON"); return; }
     const content = { ...c!.content, [section]: parsed };
     if (!err((await supabase.from("connectors").update({ content: content as never, updated_at: new Date().toISOString() }).eq("id", c!.id)).error)) { toast.success("Section saved"); refresh(); }
   }

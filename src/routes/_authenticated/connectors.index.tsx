@@ -87,7 +87,7 @@ function Card({ c, pct, saved }: { c: Connector; pct: number; saved: boolean }) 
       <p className="mb-3 flex-1 text-sm text-muted-foreground">{c.summary}</p>
       <div className="mb-3 flex flex-wrap gap-1.5">
         <Badge variant="secondary">{c.difficulty}</Badge>
-        <Badge variant="outline" className="max-w-full truncate">{c.support_type.split("(")[0].trim()}</Badge>
+        <Badge variant="outline" className="max-w-full truncate">{(c.support_type.split("(")[0] ?? "").trim()}</Badge>
         {!ready && <Badge variant="outline">Content being written</Badge>}
       </div>
       {(c.content?.useCases ?? []).length > 0 && <p className="mb-3 line-clamp-2 text-xs text-muted-foreground">Use cases: {c.content.useCases!.slice(0, 3).join(" · ")}</p>}
