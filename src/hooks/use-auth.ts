@@ -35,8 +35,13 @@ export function useIsAdmin() {
     queryKey: ["is-admin", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase.rpc("has_role", { _user_id: user!.id, _role: "admin" });
-      return !!data;
+      const [{ data: isAdmin, error: adminError }, { data: isSuperAdmin, error: superAdminError }] =
+        await Promise.all([
+          supabase.rpc("has_role", { _user_id: user!.id, _role: "admin" }),
+          supabase.rpc("is_super_admin", { _user_id: user!.id }),
+        ]);
+      if (adminError && superAdminError) throw adminError;
+      return !!isAdmin || !!isSuperAdmin;
     },
   });
 }
