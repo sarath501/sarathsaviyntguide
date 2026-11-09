@@ -19,6 +19,7 @@ import { CONNECTOR_CATEGORIES, useConnectors, type Connector } from "@/lib/conne
 import { getAdminUserAnalytics } from "@/lib/admin.functions";
 import { AdminAnalytics } from "@/components/AdminAnalytics";
 import { AdminReports } from "@/components/AdminReports";
+import { AdminNotifications } from "@/components/AdminNotifications";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — Sarath IGA Learning Portal" }] }),
@@ -41,6 +42,7 @@ function Admin() {
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="modules">Modules</TabsTrigger>
           <TabsTrigger value="lessons">Lessons</TabsTrigger>
           <TabsTrigger value="questions">Questions</TabsTrigger>
@@ -50,6 +52,7 @@ function Admin() {
         <TabsContent value="overview"><Overview /></TabsContent>
         <TabsContent value="users"><UsersAdmin /></TabsContent>
         <TabsContent value="reports"><AdminReports /></TabsContent>
+        <TabsContent value="notifications"><AdminNotifications /></TabsContent>
         <TabsContent value="modules"><Modules /></TabsContent>
         <TabsContent value="lessons"><Lessons /></TabsContent>
         <TabsContent value="questions"><Questions /></TabsContent>
