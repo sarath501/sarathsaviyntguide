@@ -47,7 +47,7 @@ function Dashboard() {
     { to: "/learn", icon: BookOpen, title: "Saviynt Training", text: "11 structured modules" },
     { to: "/interview", icon: MessagesSquare, title: "Interview Preparation", text: "Adaptive AI interviewer" },
     { to: "/certification", icon: Award, title: "Certification Prep", text: "Timed practice exams" },
-    { to: "/learn/$moduleId", params: { moduleId: "m9" }, icon: Database, title: "SQL Practice", text: "Analytics & SQL module" },
+    { to: "/learn", icon: Database, title: "SQL Practice", text: "Module 9: Analytics & SQL" },
     { to: "/tutor", icon: Bot, title: "AI Tutor", text: "Ask anything about Saviynt" },
   ] as const;
 
@@ -70,7 +70,7 @@ function Dashboard() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((c) => (
-          <Link key={c.title} to={c.to} params={"params" in c ? c.params : undefined} className="card-lift flex items-start gap-3 rounded-xl border bg-card p-4 shadow-card">
+          <Link key={c.title} to={c.to} className="card-lift flex items-start gap-3 rounded-xl border bg-card p-4 shadow-card">
             <span className="rounded-lg bg-accent p-2 text-accent-foreground"><c.icon className="h-5 w-5" /></span>
             <span><span className="block font-medium">{c.title}</span><span className="text-sm text-muted-foreground">{c.text}</span></span>
           </Link>

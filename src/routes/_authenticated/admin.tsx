@@ -48,14 +48,14 @@ function AdminInner() {
   async function add(e: React.FormEvent) {
     e.preventDefault();
     const { error } = await supabase.from("quiz_questions").insert({ module_id: moduleId, question, options: opts, correct_index: correct, explanation: expl, is_certification: cert });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Question added");
     setQuestion(""); setOpts(["", "", "", ""]); setExpl("");
     qc.invalidateQueries({ queryKey: ["admin-stats"] });
   }
   async function del(id: string) {
     const { error } = await supabase.from("quiz_questions").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["admin-stats"] });
   }
 

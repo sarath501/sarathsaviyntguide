@@ -11,7 +11,7 @@ import { LEVELS } from "@/lib/content";
 
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>) => ({ mode: (s.mode as string | undefined) ?? undefined }),
+  validateSearch: (s: Record<string, unknown>): { mode?: string } => (typeof s.mode === "string" ? { mode: s.mode } : {}),
   head: () => ({
     meta: [
       { title: "Sign in — IGA Academy AI" },

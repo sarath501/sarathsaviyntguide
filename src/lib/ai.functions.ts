@@ -41,7 +41,7 @@ Return the first line exactly as "SCORE: <0-100>". Then markdown sections: **Str
     const transcript = data.messages.map((m) => `${m.role === "assistant" ? "Interviewer" : "Candidate"}: ${m.content}`).join("\n\n");
     const text = await runAI(sys, [{ role: "user", content: transcript.slice(0, 30000) }]);
     const match = text.match(/SCORE:\s*(\d{1,3})/i);
-    const score = match ? Math.min(100, parseInt(match[1], 10)) : null;
+    const score = match?.[1] ? Math.min(100, parseInt(match[1], 10)) : null;
     const feedback = text.replace(/^.*SCORE:.*\n?/i, "").trim();
     const { error } = await context.supabase
       .from("interviews")
