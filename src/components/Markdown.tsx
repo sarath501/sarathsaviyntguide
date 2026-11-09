@@ -36,6 +36,21 @@ export function Markdown({ text }: { text: string }) {
       out.push(<ol key={out.length}>{items.map((t, k) => <li key={k}>{inline(t)}</li>)}</ol>);
       continue;
     }
+    if (/^\s*\|.*\|\s*$/.test(line)) {
+      const rows: string[][] = [];
+      while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i] ?? "")) {
+        const r = (lines[i++] ?? "").trim().slice(1, -1).split("|").map((c) => c.trim());
+        if (!r.every((c) => /^:?-{2,}:?$/.test(c))) rows.push(r);
+      }
+      const [head, ...body] = rows;
+      out.push(
+        <table key={out.length}>
+          {head && <thead><tr>{head.map((c, k) => <th key={k}>{inline(c)}</th>)}</tr></thead>}
+          <tbody>{body.map((r, j) => <tr key={j}>{r.map((c, k) => <td key={k}>{inline(c)}</td>)}</tr>)}</tbody>
+        </table>,
+      );
+      continue;
+    }
     const h = line.match(/^(#{1,4})\s+(.*)/);
     if (h) {
       const lvl = (h[1] ?? "").length;

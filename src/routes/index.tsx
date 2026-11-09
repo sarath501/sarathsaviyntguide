@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, Award, Wrench, MessagesSquare, Bot, Database, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Logo";
-import { MODULES } from "@/lib/content";
+import { useCurriculum } from "@/lib/curriculum";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,15 +19,17 @@ export const Route = createFileRoute("/")({
 });
 
 const FEATURES = [
-  { icon: BookOpen, title: "11 structured modules", text: "From IAM basics to SoD, connectors and advanced IGA." },
+  { icon: BookOpen, title: "In-depth Saviynt lessons", text: "Architecture, step-by-step implementation, code, troubleshooting and interview Q&A." },
   { icon: Award, title: "Certification prep", text: "Timed practice exams with explanations for every answer." },
   { icon: Wrench, title: "Troubleshooting lab", text: "Real production incidents: diagnose, then reveal the fix." },
   { icon: MessagesSquare, title: "AI mock interviews", text: "Adaptive interviewer with scored, detailed feedback." },
   { icon: Bot, title: "AI tutor", text: "Ask anything about Saviynt — configs, SQL, architecture." },
-  { icon: Database, title: "Real progress tracking", text: "Every stat comes from your own activity." },
+  { icon: Database, title: "Interactive diagrams & SQL lab", text: "Clickable architecture and workflow diagrams, plus hands-on SQL practice." },
 ];
 
 function Landing() {
+  const { data: cur } = useCurriculum();
+  const MODULES = cur?.modules ?? [];
   return (
     <div className="min-h-screen">
       <section className="bg-hero text-navy-foreground">
@@ -77,7 +79,7 @@ function Landing() {
           ))}
         </div>
       </section>
-      <footer className="border-t py-8 text-center text-sm text-muted-foreground">© {new Date().getFullYear()} Sarath IGA Learning Portal. Not affiliated with Saviynt, Inc.</footer>
+      <footer className="border-t py-8 text-center text-sm text-muted-foreground">© {new Date().getFullYear()} Sarath IGA Learning Portal. Learn Identity Governance. Master Saviynt. Build Your IAM Career. · Not affiliated with Saviynt, Inc.</footer>
     </div>
   );
 }

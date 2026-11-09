@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { moduleById } from "@/lib/content";
+import { useCurriculum } from "@/lib/curriculum";
 import { QuizRunner, type Q } from "@/components/Quiz";
 
 export const Route = createFileRoute("/_authenticated/quiz/$moduleId")({
@@ -11,7 +11,8 @@ export const Route = createFileRoute("/_authenticated/quiz/$moduleId")({
 
 function QuizPage() {
   const { moduleId } = Route.useParams();
-  const m = moduleById(moduleId);
+  const { data: cur } = useCurriculum();
+  const m = cur?.modules.find((x) => x.id === moduleId);
   const { data, isLoading } = useQuery({
     queryKey: ["questions", moduleId],
     queryFn: async () => {
