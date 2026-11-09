@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Trash2, Plus, Sparkles as Wand, Upload, Eye, EyeOff } from "lucide-react";
+import { Trash2, Plus, Sparkles as Wand, Upload, Eye, EyeOff, Search, RefreshCw, Users, Mail, CalendarDays, Clock, BookOpen, ClipboardCheck, MessageSquare, Plug } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import { useCurriculum, type LessonContent } from "@/lib/curriculum";
 import { DIAGRAMS } from "@/lib/diagrams";
 import { generateConnectorContent, generateLessonContent } from "@/lib/ai.functions";
 import { CONNECTOR_CATEGORIES, useConnectors, type Connector } from "@/lib/connectors";
+import { getAdminUserAnalytics } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — Sarath IGA Learning Portal" }] }),
@@ -36,6 +37,7 @@ function Admin() {
       <Tabs defaultValue="overview">
         <TabsList className="mb-4 flex-wrap">
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="modules">Modules</TabsTrigger>
           <TabsTrigger value="lessons">Lessons</TabsTrigger>
           <TabsTrigger value="questions">Questions</TabsTrigger>
@@ -43,6 +45,7 @@ function Admin() {
           <TabsTrigger value="connectors">Connectors</TabsTrigger>
         </TabsList>
         <TabsContent value="overview"><Overview /></TabsContent>
+        <TabsContent value="users"><UsersAdmin /></TabsContent>
         <TabsContent value="modules"><Modules /></TabsContent>
         <TabsContent value="lessons"><Lessons /></TabsContent>
         <TabsContent value="questions"><Questions /></TabsContent>
@@ -79,6 +82,181 @@ function Overview() {
           <li key={u.id} className="flex justify-between gap-2 py-2 text-sm"><span>{u.full_name || "—"}</span><span className="text-muted-foreground">{u.experience_level}</span><span className="text-muted-foreground">{new Date(u.created_at).toLocaleDateString()}</span></li>
         ))}</ul>
       </div>
+    </div>
+  );
+}
+
+
+function UsersAdmin() {
+  const loadUsers = useServerFn(getAdminUserAnalytics);
+  const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
+    queryKey: ["admin-user-analytics"],
+    queryFn: () => loadUsers(),
+    staleTime: 30_000,
+  });
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("all");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const users = data?.users ?? [];
+  const filtered = users.filter((user) => {
+    const term = search.trim().toLowerCase();
+    const matchesSearch =
+      !term ||
+      user.fullName.toLowerCase().includes(term) ||
+      user.email.toLowerCase().includes(term) ||
+      user.id.toLowerCase().includes(term);
+    return matchesSearch && (status === "all" || user.status === status);
+  });
+  const selected = users.find((user) => user.id === selectedId);
+  const activeCount = users.filter((user) => user.status === "Verified").length;
+  const pendingCount = users.filter((user) => user.status === "Pending verification").length;
+  const suspendedCount = users.filter((user) => user.status === "Suspended").length;
+  const formatDate = (value: string | null) =>
+    value ? new Date(value).toLocaleString() : "Never";
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+        {[
+          { label: "Registered users", value: users.length, icon: Users },
+          { label: "Verified accounts", value: activeCount, icon: BookOpen },
+          { label: "Pending verification", value: pendingCount, icon: Mail },
+          { label: "Suspended accounts", value: suspendedCount, icon: Clock },
+        ].map((item) => (
+          <div key={item.label} className="rounded-xl border bg-card p-4 shadow-card">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs text-muted-foreground">{item.label}</p>
+              <item.icon className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <p className="mt-2 font-display text-2xl font-semibold">{isLoading ? "…" : item.value}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className={card}>
+        <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="font-semibold">Registered users</h2>
+            <p className="text-xs text-muted-foreground">
+              Individual registration, sign-in and learning activity statistics.
+            </p>
+          </div>
+          <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
+            <RefreshCw className={`mr-2 h-4 w-4 ${isFetching ? "animate-spin" : ""}`} />
+            Refresh
+          </Button>
+        </div>
+
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row">
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              className="pl-9"
+              placeholder="Search by name, email or user ID"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+          </div>
+          <select className={sel + " sm:max-w-56"} value={status} onChange={(event) => setStatus(event.target.value)}>
+            <option value="all">All account statuses</option>
+            <option value="Active">Active</option>
+            <option value="Pending verification">Pending verification</option>
+            <option value="Suspended">Suspended</option>
+          </select>
+        </div>
+
+        {isLoading ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">Loading registered users…</p>
+        ) : isError ? (
+          <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
+            {(error as Error)?.message || "Unable to load user analytics."}
+          </div>
+        ) : filtered.length === 0 ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">No users match your search.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[900px] text-left text-sm">
+              <thead>
+                <tr className="border-b text-xs text-muted-foreground">
+                  <th className="px-3 py-3 font-medium">User</th>
+                  <th className="px-3 py-3 font-medium">Registered</th>
+                  <th className="px-3 py-3 font-medium">Last login</th>
+                  <th className="px-3 py-3 text-center font-medium">Lessons</th>
+                  <th className="px-3 py-3 text-center font-medium">Quizzes</th>
+                  <th className="px-3 py-3 text-center font-medium">Interviews</th>
+                  <th className="px-3 py-3 font-medium">Status</th>
+                  <th className="px-3 py-3 text-right font-medium">Details</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {filtered.map((user) => (
+                  <tr key={user.id} className="hover:bg-muted/40">
+                    <td className="px-3 py-3">
+                      <p className="font-medium">{user.fullName || "Unnamed user"}</p>
+                      <p className="text-xs text-muted-foreground">{user.email || "No email available"}</p>
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3 text-xs text-muted-foreground">
+                      {new Date(user.registeredAt).toLocaleDateString()}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3 text-xs text-muted-foreground">
+                      {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleString() : "Never"}
+                    </td>
+                    <td className="px-3 py-3 text-center tabular-nums">{user.lessonsCompleted}</td>
+                    <td className="px-3 py-3 text-center tabular-nums">{user.quizAttempts}</td>
+                    <td className="px-3 py-3 text-center tabular-nums">{user.interviews}</td>
+                    <td className="px-3 py-3">
+                      <Badge variant={user.status === "Verified" ? "default" : "secondary"}>{user.status}</Badge>
+                    </td>
+                    <td className="px-3 py-3 text-right">
+                      <Button size="sm" variant="outline" onClick={() => setSelectedId(selectedId === user.id ? null : user.id)}>
+                        {selectedId === user.id ? "Close" : "View"}
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <p className="mt-3 text-xs text-muted-foreground">
+          Showing {filtered.length} of {users.length} registered users. Data refreshes when you reopen this tab or select Refresh.
+        </p>
+      </div>
+
+      {selected && (
+        <div className={card + " space-y-4"}>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-semibold">{selected.fullName || "Unnamed user"}</h2>
+              <p className="text-sm text-muted-foreground">{selected.email}</p>
+              <p className="mt-1 font-mono text-xs text-muted-foreground">{selected.id}</p>
+            </div>
+            <Badge variant={selected.status === "Active" ? "default" : "secondary"}>{selected.status}</Badge>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {[
+              { label: "Experience level", value: selected.experienceLevel },
+              { label: "Registered", value: formatDate(selected.registeredAt) },
+              { label: "Last login", value: formatDate(selected.lastLoginAt) },
+              { label: "Last learning activity", value: formatDate(selected.lastActivityAt) },
+              { label: "Email verified", value: selected.emailConfirmedAt ? "Yes" : "No" },
+              { label: "Lessons completed", value: selected.lessonsCompleted },
+              { label: "Quiz attempts", value: selected.quizAttempts },
+              { label: "Average quiz score", value: selected.averageQuizScore === null ? "No attempts" : selected.averageQuizScore + "%" },
+              { label: "Mock interviews", value: selected.interviews },
+              { label: "Connectors started", value: selected.connectorsStarted },
+            ].map((item) => (
+              <div key={item.label} className="rounded-lg bg-muted/50 p-3">
+                <p className="text-xs text-muted-foreground">{item.label}</p>
+                <p className="mt-1 break-words text-sm font-semibold">{item.value}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Last activity is calculated from recorded lesson completions, quiz attempts, interviews and connector progress. Page views and a full historical login timeline are not currently recorded.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
