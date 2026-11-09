@@ -13,9 +13,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCertificationRouteImport } from './routes/_authenticated/certification'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedInterviewRouteImport } from './routes/_authenticated/interview'
 import { Route as AuthenticatedLabsRouteImport } from './routes/_authenticated/labs'
+import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/plan'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedTutorRouteImport } from './routes/_authenticated/tutor'
 import { Route as AuthenticatedLearnIndexRouteImport } from './routes/_authenticated/learn.index'
 import { Route as AuthenticatedLearnModuleIdRouteImport } from './routes/_authenticated/learn.$moduleId'
 import { Route as AuthenticatedQuizModuleIdRouteImport } from './routes/_authenticated/quiz.$moduleId'
@@ -39,6 +44,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCertificationRoute =
   AuthenticatedCertificationRouteImport.update({
     id: '/certification',
@@ -50,9 +60,29 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedInterviewRoute = AuthenticatedInterviewRouteImport.update({
+  id: '/interview',
+  path: '/interview',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedLabsRoute = AuthenticatedLabsRouteImport.update({
   id: '/labs',
   path: '/labs',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPlanRoute = AuthenticatedPlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTutorRoute = AuthenticatedTutorRouteImport.update({
+  id: '/tutor',
+  path: '/tutor',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedLearnIndexRoute = AuthenticatedLearnIndexRouteImport.update({
@@ -77,9 +107,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/certification': typeof AuthenticatedCertificationRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/interview': typeof AuthenticatedInterviewRoute
   '/labs': typeof AuthenticatedLabsRoute
+  '/plan': typeof AuthenticatedPlanRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/tutor': typeof AuthenticatedTutorRoute
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/learn/': typeof AuthenticatedLearnIndexRoute
@@ -88,9 +123,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/certification': typeof AuthenticatedCertificationRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/interview': typeof AuthenticatedInterviewRoute
   '/labs': typeof AuthenticatedLabsRoute
+  '/plan': typeof AuthenticatedPlanRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/tutor': typeof AuthenticatedTutorRoute
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/learn': typeof AuthenticatedLearnIndexRoute
@@ -101,9 +141,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/certification': typeof AuthenticatedCertificationRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/interview': typeof AuthenticatedInterviewRoute
   '/_authenticated/labs': typeof AuthenticatedLabsRoute
+  '/_authenticated/plan': typeof AuthenticatedPlanRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/tutor': typeof AuthenticatedTutorRoute
   '/_authenticated/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/_authenticated/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
   '/_authenticated/learn/': typeof AuthenticatedLearnIndexRoute
@@ -114,9 +159,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
+    | '/admin'
     | '/certification'
     | '/dashboard'
+    | '/interview'
     | '/labs'
+    | '/plan'
+    | '/profile'
+    | '/tutor'
     | '/learn/$moduleId'
     | '/quiz/$moduleId'
     | '/learn/'
@@ -125,9 +175,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
+    | '/admin'
     | '/certification'
     | '/dashboard'
+    | '/interview'
     | '/labs'
+    | '/plan'
+    | '/profile'
+    | '/tutor'
     | '/learn/$moduleId'
     | '/quiz/$moduleId'
     | '/learn'
@@ -137,9 +192,14 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/reset-password'
+    | '/_authenticated/admin'
     | '/_authenticated/certification'
     | '/_authenticated/dashboard'
+    | '/_authenticated/interview'
     | '/_authenticated/labs'
+    | '/_authenticated/plan'
+    | '/_authenticated/profile'
+    | '/_authenticated/tutor'
     | '/_authenticated/learn/$moduleId'
     | '/_authenticated/quiz/$moduleId'
     | '/_authenticated/learn/'
@@ -182,6 +242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/certification': {
       id: '/_authenticated/certification'
       path: '/certification'
@@ -196,11 +263,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/interview': {
+      id: '/_authenticated/interview'
+      path: '/interview'
+      fullPath: '/interview'
+      preLoaderRoute: typeof AuthenticatedInterviewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/labs': {
       id: '/_authenticated/labs'
       path: '/labs'
       fullPath: '/labs'
       preLoaderRoute: typeof AuthenticatedLabsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/plan': {
+      id: '/_authenticated/plan'
+      path: '/plan'
+      fullPath: '/plan'
+      preLoaderRoute: typeof AuthenticatedPlanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tutor': {
+      id: '/_authenticated/tutor'
+      path: '/tutor'
+      fullPath: '/tutor'
+      preLoaderRoute: typeof AuthenticatedTutorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/learn/': {
@@ -228,18 +323,28 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedCertificationRoute: typeof AuthenticatedCertificationRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedInterviewRoute: typeof AuthenticatedInterviewRoute
   AuthenticatedLabsRoute: typeof AuthenticatedLabsRoute
+  AuthenticatedPlanRoute: typeof AuthenticatedPlanRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedTutorRoute: typeof AuthenticatedTutorRoute
   AuthenticatedLearnModuleIdRoute: typeof AuthenticatedLearnModuleIdRoute
   AuthenticatedQuizModuleIdRoute: typeof AuthenticatedQuizModuleIdRoute
   AuthenticatedLearnIndexRoute: typeof AuthenticatedLearnIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedCertificationRoute: AuthenticatedCertificationRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedInterviewRoute: AuthenticatedInterviewRoute,
   AuthenticatedLabsRoute: AuthenticatedLabsRoute,
+  AuthenticatedPlanRoute: AuthenticatedPlanRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedTutorRoute: AuthenticatedTutorRoute,
   AuthenticatedLearnModuleIdRoute: AuthenticatedLearnModuleIdRoute,
   AuthenticatedQuizModuleIdRoute: AuthenticatedQuizModuleIdRoute,
   AuthenticatedLearnIndexRoute: AuthenticatedLearnIndexRoute,
