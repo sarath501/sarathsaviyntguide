@@ -58,8 +58,14 @@ export async function runAI(system: string, messages: ModelMessage[]): Promise<s
       },
     },
   });
-  const text = await result.text;
+  let text = "";
+  try {
+    text = await result.text;
+  } catch (e) {
+    failure ??= e;
+  }
   if (failure) {
+    console.error("AI error", failure);
     const e = failure as { message?: string };
     throw new Error(e.message ?? "AI request failed");
   }
