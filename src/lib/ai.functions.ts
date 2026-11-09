@@ -84,3 +84,28 @@ export const generateLessonContent = createServerFn({ method: "POST" })
     if (upErr) throw new Error(upErr.message);
     return { ok: true };
   });
+
+export const generateConnectorContent = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { connectorId: string; guidance?: string | undefined }) => d)
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    if (!isAdmin) throw new Error("Forbidden");
+    const { CONNECTOR_SYSTEM_A, CONNECTOR_SYSTEM_B, connectorPrompt, parseJson } = await import("./connector-prompt");
+    const { data: c, error } = await context.supabase.from("connectors").select("name,category,support_type,summary").eq("id", data.connectorId).single();
+    if (error || !c) throw new Error("Connector not found");
+    const prompt = connectorPrompt(c, data.guidance);
+    const [a, b] = await Promise.all([
+      runAI(CONNECTOR_SYSTEM_A, [{ role: "user", content: prompt }]),
+      runAI(CONNECTOR_SYSTEM_B, [{ role: "user", content: prompt }]),
+    ]);
+    let content: Record<string, unknown>;
+    try {
+      content = { ...parseJson(a), ...parseJson(b) };
+    } catch {
+      throw new Error("The AI returned content in an unexpected format — please try again.");
+    }
+    const { error: upErr } = await context.supabase.from("connectors").update({ content: content as never, updated_at: new Date().toISOString() }).eq("id", data.connectorId);
+    if (upErr) throw new Error(upErr.message);
+    return { ok: true };
+  });
