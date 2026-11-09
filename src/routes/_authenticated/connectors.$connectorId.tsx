@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ArrowLeft, Bookmark, CheckCircle2, Circle, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { useUser } from "@/hooks/use-auth";
 import { Markdown } from "@/components/Markdown";
 import { ConnectorDiagram } from "@/components/ConnectorDiagram";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +33,7 @@ function ConnectorPage() {
   const { connectorId } = Route.useParams();
   const { data: list, isLoading } = useConnectors();
   const { data: prog } = useConnectorProgress();
-  const { user } = useAuth();
+  const { data: user } = useUser();
   const qc = useQueryClient();
   const [tab, setTab] = useState<SectionKey>("intro");
   const c = list?.find((x) => x.id === connectorId);
