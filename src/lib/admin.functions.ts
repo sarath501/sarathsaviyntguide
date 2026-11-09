@@ -32,15 +32,12 @@ type ConnectorProgressRow = { user_id: string; updated_at: string };
 export const getAdminUserAnalytics = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    // Verify the caller's granular permission using their authenticated session
-    // before using the service-role client. Never trust a browser-supplied role or user ID.
-    const { data: canViewAnalytics, error: permissionError } = await context.supabase.rpc("has_permission", {
+    // Verify the caller's existing administrator role using their authenticated session.
+    const { data: isAdmin, error: roleError } = await context.supabase.rpc("has_role", {
       _user_id: context.userId,
-      _permission_key: "analytics.view",
+      _role: "admin",
     });
-    if (permissionError || !canViewAnalytics) {
-      throw new Error("Forbidden: analytics.view permission required");
-    }
+    if (roleError || !isAdmin) throw new Error("Forbidden: administrator access required");
 
     // This privileged client is imported only inside the server handler.
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
