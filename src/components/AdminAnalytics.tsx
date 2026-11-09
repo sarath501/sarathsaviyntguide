@@ -51,8 +51,11 @@ export function AdminAnalytics() {
           <section className={card}>
             <h3 className="mb-3 font-semibold">Learning content inventory</h3>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">{[
-              ["Modules", totals?.modules ?? 0, BookOpen], ["Lessons", totals?.lessons ?? 0, BookOpen], ["Labs", totals?.labs ?? 0, FlaskConical], ["Connectors", totals?.connectors ?? 0, Plug],
-            ].map(([label, value, Icon]) => <div key={String(label)} className="rounded-lg bg-muted/40 p-4"><div className="flex items-center gap-2 text-sm text-muted-foreground"><Icon className="h-4 w-4" />{label}</div><p className="mt-2 text-xl font-semibold">{value as number}</p></div>)}</div>
+              { label: "Modules", value: totals?.modules ?? 0, icon: BookOpen },
+              { label: "Lessons", value: totals?.lessons ?? 0, icon: BookOpen },
+              { label: "Labs", value: totals?.labs ?? 0, icon: FlaskConical },
+              { label: "Connectors", value: totals?.connectors ?? 0, icon: Plug },
+            ].map((item) => <div key={item.label} className="rounded-lg bg-muted/40 p-4"><div className="flex items-center gap-2 text-sm text-muted-foreground"><item.icon className="h-4 w-4" />{item.label}</div><p className="mt-2 text-xl font-semibold">{item.value}</p></div>)}</div>
           </section>
           <p className="text-xs text-muted-foreground">Active learner = a distinct user with a recorded lesson completion, quiz attempt, interview, or connector-progress update in the last 30 days. Quiz pass rate uses a 70% threshold. Lab inventory is shown; individual lab completion is not yet tracked.</p>
           <p className="text-xs text-muted-foreground">Last refreshed: {data?.generatedAt ? new Date(data.generatedAt).toLocaleString() : "—"}</p>
