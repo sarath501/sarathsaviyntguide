@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/Logo";
+import { LEVELS } from "@/lib/content";
 
-export const LEVELS = ["Beginner", "IAM Analyst", "Saviynt Developer", "Saviynt Consultant", "Senior IGA Engineer", "IAM Architect", "Interview Candidate"];
+
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>) => ({ mode: (s.mode as string | undefined) ?? undefined }),
