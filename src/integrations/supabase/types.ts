@@ -237,6 +237,12 @@ export type Database = {
         }
         Relationships: []
       }
+      lab_progress: {
+        Row: { completed: boolean; completed_steps: Json; diagnosis: string; id: string; lab_id: string; score: number; updated_at: string; user_id: string }
+        Insert: { completed?: boolean; completed_steps?: Json; diagnosis?: string; id?: string; lab_id: string; score?: number; updated_at?: string; user_id: string }
+        Update: { completed?: boolean; completed_steps?: Json; diagnosis?: string; id?: string; lab_id?: string; score?: number; updated_at?: string; user_id?: string }
+        Relationships: []
+      }
       lessons: {
         Row: {
           content: Json
