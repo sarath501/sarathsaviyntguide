@@ -14,7 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { useIsAdmin } from "@/hooks/use-auth";
 import { useCurriculum, type LessonContent } from "@/lib/curriculum";
 import { DIAGRAMS } from "@/lib/diagrams";
-import { generateLessonContent } from "@/lib/ai.functions";
+import { generateConnectorContent, generateLessonContent } from "@/lib/ai.functions";
+import { CONNECTOR_CATEGORIES, useConnectors, type Connector } from "@/lib/connectors";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — Sarath IGA Learning Portal" }] }),
@@ -39,12 +40,14 @@ function Admin() {
           <TabsTrigger value="lessons">Lessons</TabsTrigger>
           <TabsTrigger value="questions">Questions</TabsTrigger>
           <TabsTrigger value="labs">Labs</TabsTrigger>
+          <TabsTrigger value="connectors">Connectors</TabsTrigger>
         </TabsList>
         <TabsContent value="overview"><Overview /></TabsContent>
         <TabsContent value="modules"><Modules /></TabsContent>
         <TabsContent value="lessons"><Lessons /></TabsContent>
         <TabsContent value="questions"><Questions /></TabsContent>
         <TabsContent value="labs"><Labs /></TabsContent>
+        <TabsContent value="connectors"><ConnectorsAdmin /></TabsContent>
       </Tabs>
     </div>
   );
@@ -384,6 +387,103 @@ function Labs() {
             </span>
           </li>
         ))}</ul>
+      </div>
+    </div>
+  );
+}
+
+const CONNECTOR_KEYS = ["overview", "supportNote", "useCases", "architecture", "parameters", "security", "permissions", "endpoint", "imports", "provisioning", "scheduling", "troubleshooting", "scenarios", "lab", "interview", "compare"] as const;
+
+function ConnectorsAdmin() {
+  const qc = useQueryClient();
+  const { data: list = [] } = useConnectors();
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState<string>(CONNECTOR_CATEGORIES[0]);
+  async function add(e: React.FormEvent) {
+    e.preventDefault();
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    if (!slug) return;
+    if (err((await supabase.from("connectors").insert({ id: slug, name, category, position: list.length + 1 })).error)) return;
+    setName(""); qc.invalidateQueries({ queryKey: ["connectors"] }); setId(slug);
+  }
+  return (
+    <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+      <div className={card}>
+        <form onSubmit={add} className="mb-4 space-y-2">
+          <Input placeholder="New connector name" value={name} onChange={(e) => setName(e.target.value)} />
+          <select className={sel} value={category} onChange={(e) => setCategory(e.target.value)}>{CONNECTOR_CATEGORIES.map((c) => <option key={c}>{c}</option>)}</select>
+          <Button type="submit" size="sm" className="w-full"><Plus className="mr-1 h-4 w-4" />Add connector</Button>
+        </form>
+        <ul className="max-h-[600px] space-y-1 overflow-auto text-sm">
+          {list.map((c) => (
+            <li key={c.id}><button onClick={() => setId(c.id)} className={`flex w-full items-center justify-between rounded px-2 py-1.5 text-left ${id === c.id ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}>
+              <span className="truncate">{c.name}</span>{!c.content?.overview ? <span className="text-xs opacity-70">empty</span> : !c.published && <EyeOff className="h-3 w-3" />}
+            </button></li>
+          ))}
+        </ul>
+      </div>
+      {id ? <ConnectorEditor key={id} c={list.find((x) => x.id === id)} onDeleted={() => setId("")} /> : <p className="text-muted-foreground">Select a connector to edit.</p>}
+    </div>
+  );
+}
+
+function ConnectorEditor({ c, onDeleted }: { c: Connector | undefined; onDeleted: () => void }) {
+  const qc = useQueryClient();
+  const gen = useServerFn(generateConnectorContent);
+  const [meta, setMeta] = useState(() => ({ name: c?.name ?? "", category: c?.category ?? "", support_type: c?.support_type ?? "", difficulty: c?.difficulty ?? "", summary: c?.summary ?? "" }));
+  const [section, setSection] = useState<(typeof CONNECTOR_KEYS)[number]>("parameters");
+  const [json, setJson] = useState(() => JSON.stringify(c?.content?.[section] ?? null, null, 2));
+  const [guidance, setGuidance] = useState("");
+  const [busy, setBusy] = useState(false);
+  if (!c) return null;
+  const refresh = () => qc.invalidateQueries({ queryKey: ["connectors"] });
+  function pickSection(s: (typeof CONNECTOR_KEYS)[number]) { setSection(s); setJson(JSON.stringify(c!.content?.[s] ?? null, null, 2)); }
+  async function saveMeta() { if (!err((await supabase.from("connectors").update({ ...meta, updated_at: new Date().toISOString() }).eq("id", c!.id)).error)) { toast.success("Saved"); refresh(); } }
+  async function saveSection() {
+    let parsed: unknown;
+    try { parsed = JSON.parse(json); } catch { toast.error("Invalid JSON"); return; }
+    const content = { ...c!.content, [section]: parsed };
+    if (!err((await supabase.from("connectors").update({ content: content as never, updated_at: new Date().toISOString() }).eq("id", c!.id)).error)) { toast.success("Section saved"); refresh(); }
+  }
+  async function togglePublish() { if (!err((await supabase.from("connectors").update({ published: !c!.published }).eq("id", c!.id)).error)) refresh(); }
+  async function del() { if (confirm("Delete this connector and its learner progress?") && !err((await supabase.from("connectors").delete().eq("id", c!.id)).error)) { refresh(); onDeleted(); } }
+  async function aiGenerate() {
+    if (c!.content?.overview && !confirm("Replace all content with a new AI-written version?")) return;
+    setBusy(true);
+    try { await gen({ data: { connectorId: c!.id, guidance: guidance || undefined } }); toast.success("Content generated — review before publishing"); await refresh(); }
+    catch (e) { toast.error((e as Error).message); } finally { setBusy(false); }
+  }
+  return (
+    <div className="space-y-4">
+      <div className={card}>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-semibold">{c.name}</h2>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" onClick={togglePublish}>{c.published ? <><Eye className="mr-1 h-4 w-4" />Published</> : <><EyeOff className="mr-1 h-4 w-4" />Unpublished</>}</Button>
+            <Button size="sm" variant="ghost" onClick={del} aria-label="Delete connector"><Trash2 className="h-4 w-4" /></Button>
+          </div>
+        </div>
+        <div className="grid gap-2 md:grid-cols-2">
+          <Input value={meta.name} onChange={(e) => setMeta({ ...meta, name: e.target.value })} placeholder="Name" />
+          <select className={sel} value={meta.category} onChange={(e) => setMeta({ ...meta, category: e.target.value })}>{CONNECTOR_CATEGORIES.map((x) => <option key={x}>{x}</option>)}</select>
+          <Input value={meta.support_type} onChange={(e) => setMeta({ ...meta, support_type: e.target.value })} placeholder="How Saviynt integrates (dedicated connector, REST, JDBC…)" />
+          <select className={sel} value={meta.difficulty} onChange={(e) => setMeta({ ...meta, difficulty: e.target.value })}>{["Beginner", "Intermediate", "Advanced", "Very high"].map((x) => <option key={x}>{x}</option>)}</select>
+        </div>
+        <Textarea className="mt-2" rows={2} value={meta.summary} onChange={(e) => setMeta({ ...meta, summary: e.target.value })} placeholder="Summary" />
+        <Button size="sm" className="mt-2" onClick={saveMeta}>Save details</Button>
+      </div>
+      <div className={card}>
+        <h3 className="mb-2 font-semibold">AI authoring</h3>
+        <Textarea rows={2} value={guidance} onChange={(e) => setGuidance(e.target.value)} placeholder="Optional guidance, e.g. focus on LDAPS and group nesting" />
+        <Button size="sm" className="mt-2" onClick={aiGenerate} disabled={busy}><Wand className="mr-1 h-4 w-4" />{busy ? "Writing (1–3 min)…" : "Generate full guide"}</Button>
+      </div>
+      <div className={card}>
+        <h3 className="mb-2 font-semibold">Edit a section</h3>
+        <p className="mb-2 text-xs text-muted-foreground">Architecture diagram, parameters, security, permissions, endpoint guide, import jobs, provisioning, troubleshooting, scenarios, lab exercises and interview questions are each editable here.</p>
+        <select className={sel} value={section} onChange={(e) => pickSection(e.target.value as (typeof CONNECTOR_KEYS)[number])}>{CONNECTOR_KEYS.map((k) => <option key={k}>{k}</option>)}</select>
+        <Textarea rows={18} className="mt-2 font-mono text-xs" value={json} onChange={(e) => setJson(e.target.value)} />
+        <Button size="sm" className="mt-2" onClick={saveSection}>Save section</Button>
       </div>
     </div>
   );

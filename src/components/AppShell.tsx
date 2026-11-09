@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import {
   LayoutDashboard, BookOpen, Award, Wrench, Database, MessagesSquare, Bot, Route as RouteIcon, User, Shield, LogOut, Menu, X,
+  Plug,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin, useProfile } from "@/hooks/use-auth";
@@ -12,6 +13,7 @@ const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/learn", label: "Learning Center", icon: BookOpen },
   { to: "/certification", label: "Certification Prep", icon: Award },
+  { to: "/connectors", label: "Connectors Learning Center", icon: Plug },
   { to: "/labs", label: "Troubleshooting Lab", icon: Wrench },
   { to: "/sql", label: "SQL Practice", icon: Database },
   { to: "/interview", label: "Mock Interviews", icon: MessagesSquare },

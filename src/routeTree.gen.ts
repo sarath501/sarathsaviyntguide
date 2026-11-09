@@ -22,6 +22,8 @@ import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/p
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedSqlRouteImport } from './routes/_authenticated/sql'
 import { Route as AuthenticatedTutorRouteImport } from './routes/_authenticated/tutor'
+import { Route as AuthenticatedConnectorsIndexRouteImport } from './routes/_authenticated/connectors.index'
+import { Route as AuthenticatedConnectorsConnectorIdRouteImport } from './routes/_authenticated/connectors.$connectorId'
 import { Route as AuthenticatedLearnIndexRouteImport } from './routes/_authenticated/learn.index'
 import { Route as AuthenticatedLearnModuleIdRouteImport } from './routes/_authenticated/learn.$moduleId'
 import { Route as AuthenticatedLessonLessonIdRouteImport } from './routes/_authenticated/lesson.$lessonId'
@@ -92,6 +94,18 @@ const AuthenticatedTutorRoute = AuthenticatedTutorRouteImport.update({
   path: '/tutor',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedConnectorsIndexRoute =
+  AuthenticatedConnectorsIndexRouteImport.update({
+    id: '/connectors/',
+    path: '/connectors/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedConnectorsConnectorIdRoute =
+  AuthenticatedConnectorsConnectorIdRouteImport.update({
+    id: '/connectors/$connectorId',
+    path: '/connectors/$connectorId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLearnIndexRoute = AuthenticatedLearnIndexRouteImport.update({
   id: '/learn/',
   path: '/learn/',
@@ -129,9 +143,11 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/sql': typeof AuthenticatedSqlRoute
   '/tutor': typeof AuthenticatedTutorRoute
+  '/connectors/$connectorId': typeof AuthenticatedConnectorsConnectorIdRoute
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
+  '/connectors/': typeof AuthenticatedConnectorsIndexRoute
   '/learn/': typeof AuthenticatedLearnIndexRoute
 }
 export interface FileRoutesByTo {
@@ -147,9 +163,11 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/sql': typeof AuthenticatedSqlRoute
   '/tutor': typeof AuthenticatedTutorRoute
+  '/connectors/$connectorId': typeof AuthenticatedConnectorsConnectorIdRoute
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
+  '/connectors': typeof AuthenticatedConnectorsIndexRoute
   '/learn': typeof AuthenticatedLearnIndexRoute
 }
 export interface FileRoutesById {
@@ -167,9 +185,11 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/sql': typeof AuthenticatedSqlRoute
   '/_authenticated/tutor': typeof AuthenticatedTutorRoute
+  '/_authenticated/connectors/$connectorId': typeof AuthenticatedConnectorsConnectorIdRoute
   '/_authenticated/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/_authenticated/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
   '/_authenticated/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
+  '/_authenticated/connectors/': typeof AuthenticatedConnectorsIndexRoute
   '/_authenticated/learn/': typeof AuthenticatedLearnIndexRoute
 }
 export interface FileRouteTypes {
@@ -187,9 +207,11 @@ export interface FileRouteTypes {
     | '/profile'
     | '/sql'
     | '/tutor'
+    | '/connectors/$connectorId'
     | '/learn/$moduleId'
     | '/lesson/$lessonId'
     | '/quiz/$moduleId'
+    | '/connectors/'
     | '/learn/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -205,9 +227,11 @@ export interface FileRouteTypes {
     | '/profile'
     | '/sql'
     | '/tutor'
+    | '/connectors/$connectorId'
     | '/learn/$moduleId'
     | '/lesson/$lessonId'
     | '/quiz/$moduleId'
+    | '/connectors'
     | '/learn'
   id:
     | '__root__'
@@ -224,9 +248,11 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/_authenticated/sql'
     | '/_authenticated/tutor'
+    | '/_authenticated/connectors/$connectorId'
     | '/_authenticated/learn/$moduleId'
     | '/_authenticated/lesson/$lessonId'
     | '/_authenticated/quiz/$moduleId'
+    | '/_authenticated/connectors/'
     | '/_authenticated/learn/'
   fileRoutesById: FileRoutesById
 }
@@ -330,6 +356,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTutorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/connectors/': {
+      id: '/_authenticated/connectors/'
+      path: '/connectors'
+      fullPath: '/connectors/'
+      preLoaderRoute: typeof AuthenticatedConnectorsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/connectors/$connectorId': {
+      id: '/_authenticated/connectors/$connectorId'
+      path: '/connectors/$connectorId'
+      fullPath: '/connectors/$connectorId'
+      preLoaderRoute: typeof AuthenticatedConnectorsConnectorIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/learn/': {
       id: '/_authenticated/learn/'
       path: '/learn'
@@ -371,9 +411,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSqlRoute: typeof AuthenticatedSqlRoute
   AuthenticatedTutorRoute: typeof AuthenticatedTutorRoute
+  AuthenticatedConnectorsConnectorIdRoute: typeof AuthenticatedConnectorsConnectorIdRoute
   AuthenticatedLearnModuleIdRoute: typeof AuthenticatedLearnModuleIdRoute
   AuthenticatedLessonLessonIdRoute: typeof AuthenticatedLessonLessonIdRoute
   AuthenticatedQuizModuleIdRoute: typeof AuthenticatedQuizModuleIdRoute
+  AuthenticatedConnectorsIndexRoute: typeof AuthenticatedConnectorsIndexRoute
   AuthenticatedLearnIndexRoute: typeof AuthenticatedLearnIndexRoute
 }
 
@@ -387,9 +429,12 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSqlRoute: AuthenticatedSqlRoute,
   AuthenticatedTutorRoute: AuthenticatedTutorRoute,
+  AuthenticatedConnectorsConnectorIdRoute:
+    AuthenticatedConnectorsConnectorIdRoute,
   AuthenticatedLearnModuleIdRoute: AuthenticatedLearnModuleIdRoute,
   AuthenticatedLessonLessonIdRoute: AuthenticatedLessonLessonIdRoute,
   AuthenticatedQuizModuleIdRoute: AuthenticatedQuizModuleIdRoute,
+  AuthenticatedConnectorsIndexRoute: AuthenticatedConnectorsIndexRoute,
   AuthenticatedLearnIndexRoute: AuthenticatedLearnIndexRoute,
 }
 

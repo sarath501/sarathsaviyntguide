@@ -35,6 +35,112 @@ export type Database = {
         }
         Relationships: []
       }
+      connector_bookmarks: {
+        Row: {
+          connector_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          connector_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          connector_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connector_bookmarks_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "connectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      connector_progress: {
+        Row: {
+          connector_id: string
+          id: string
+          lab_done: boolean
+          sections_done: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          connector_id: string
+          id?: string
+          lab_done?: boolean
+          sections_done?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          connector_id?: string
+          id?: string
+          lab_done?: boolean
+          sections_done?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connector_progress_connector_id_fkey"
+            columns: ["connector_id"]
+            isOneToOne: false
+            referencedRelation: "connectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      connectors: {
+        Row: {
+          category: string
+          content: Json
+          created_at: string
+          difficulty: string
+          id: string
+          name: string
+          position: number
+          published: boolean
+          summary: string
+          support_type: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          content?: Json
+          created_at?: string
+          difficulty?: string
+          id: string
+          name: string
+          position?: number
+          published?: boolean
+          summary?: string
+          support_type?: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          content?: Json
+          created_at?: string
+          difficulty?: string
+          id?: string
+          name?: string
+          position?: number
+          published?: boolean
+          summary?: string
+          support_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       interviews: {
         Row: {
           created_at: string
