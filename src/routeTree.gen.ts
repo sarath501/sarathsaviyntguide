@@ -22,6 +22,7 @@ import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/p
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedSqlRouteImport } from './routes/_authenticated/sql'
 import { Route as AuthenticatedTutorRouteImport } from './routes/_authenticated/tutor'
+import { Route as AuthenticatedConnectorsIndexRouteImport } from './routes/_authenticated/connectors.index'
 import { Route as AuthenticatedLearnIndexRouteImport } from './routes/_authenticated/learn.index'
 import { Route as AuthenticatedLearnModuleIdRouteImport } from './routes/_authenticated/learn.$moduleId'
 import { Route as AuthenticatedLessonLessonIdRouteImport } from './routes/_authenticated/lesson.$lessonId'
@@ -92,6 +93,12 @@ const AuthenticatedTutorRoute = AuthenticatedTutorRouteImport.update({
   path: '/tutor',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedConnectorsIndexRoute =
+  AuthenticatedConnectorsIndexRouteImport.update({
+    id: '/connectors/',
+    path: '/connectors/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLearnIndexRoute = AuthenticatedLearnIndexRouteImport.update({
   id: '/learn/',
   path: '/learn/',
@@ -132,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
+  '/connectors/': typeof AuthenticatedConnectorsIndexRoute
   '/learn/': typeof AuthenticatedLearnIndexRoute
 }
 export interface FileRoutesByTo {
@@ -150,6 +158,7 @@ export interface FileRoutesByTo {
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
   '/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
+  '/connectors': typeof AuthenticatedConnectorsIndexRoute
   '/learn': typeof AuthenticatedLearnIndexRoute
 }
 export interface FileRoutesById {
@@ -170,6 +179,7 @@ export interface FileRoutesById {
   '/_authenticated/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/_authenticated/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
   '/_authenticated/quiz/$moduleId': typeof AuthenticatedQuizModuleIdRoute
+  '/_authenticated/connectors/': typeof AuthenticatedConnectorsIndexRoute
   '/_authenticated/learn/': typeof AuthenticatedLearnIndexRoute
 }
 export interface FileRouteTypes {
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
     | '/learn/$moduleId'
     | '/lesson/$lessonId'
     | '/quiz/$moduleId'
+    | '/connectors/'
     | '/learn/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -208,6 +219,7 @@ export interface FileRouteTypes {
     | '/learn/$moduleId'
     | '/lesson/$lessonId'
     | '/quiz/$moduleId'
+    | '/connectors'
     | '/learn'
   id:
     | '__root__'
@@ -227,6 +239,7 @@ export interface FileRouteTypes {
     | '/_authenticated/learn/$moduleId'
     | '/_authenticated/lesson/$lessonId'
     | '/_authenticated/quiz/$moduleId'
+    | '/_authenticated/connectors/'
     | '/_authenticated/learn/'
   fileRoutesById: FileRoutesById
 }
@@ -330,6 +343,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTutorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/connectors/': {
+      id: '/_authenticated/connectors/'
+      path: '/connectors'
+      fullPath: '/connectors/'
+      preLoaderRoute: typeof AuthenticatedConnectorsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/learn/': {
       id: '/_authenticated/learn/'
       path: '/learn'
@@ -374,6 +394,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedLearnModuleIdRoute: typeof AuthenticatedLearnModuleIdRoute
   AuthenticatedLessonLessonIdRoute: typeof AuthenticatedLessonLessonIdRoute
   AuthenticatedQuizModuleIdRoute: typeof AuthenticatedQuizModuleIdRoute
+  AuthenticatedConnectorsIndexRoute: typeof AuthenticatedConnectorsIndexRoute
   AuthenticatedLearnIndexRoute: typeof AuthenticatedLearnIndexRoute
 }
 
@@ -390,6 +411,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedLearnModuleIdRoute: AuthenticatedLearnModuleIdRoute,
   AuthenticatedLessonLessonIdRoute: AuthenticatedLessonLessonIdRoute,
   AuthenticatedQuizModuleIdRoute: AuthenticatedQuizModuleIdRoute,
+  AuthenticatedConnectorsIndexRoute: AuthenticatedConnectorsIndexRoute,
   AuthenticatedLearnIndexRoute: AuthenticatedLearnIndexRoute,
 }
 
