@@ -93,7 +93,7 @@ function Modules() {
     toast.success("Module added");
     refresh();
   }
-  async function update(id: string, patch: Record<string, unknown>) {
+  async function update(id: string, patch: { title?: string; published?: boolean }) {
     if (!err((await supabase.from("modules").update(patch).eq("id", id)).error)) refresh();
   }
   async function del(id: string) {
@@ -354,7 +354,7 @@ function Labs() {
     setF({ title: "", area: "", difficulty: "Intermediate", symptom: "", steps: "", root_cause: "", fix: "" });
     qc.invalidateQueries({ queryKey: ["labs"] });
   }
-  async function update(id: string, patch: Record<string, unknown>) {
+  async function update(id: string, patch: { title?: string; published?: boolean }) {
     if (!err((await supabase.from("labs").update(patch).eq("id", id)).error)) qc.invalidateQueries({ queryKey: ["labs"] });
   }
   async function del(id: string) {
