@@ -44,8 +44,8 @@ function Landing() {
           <div className="grid gap-10 py-20 md:grid-cols-[1.2fr_1fr] md:py-28">
             <div>
               <p className="mb-4 inline-block rounded-full border border-navy-line px-3 py-1 text-xs text-navy-muted">Saviynt EIC · IGA · IAM</p>
-              <h1 className="text-4xl font-semibold leading-tight md:text-6xl">Master Identity Governance.</h1>
-              <p className="mt-3 text-2xl text-navy-muted md:text-3xl">Build real-world IAM expertise.</p>
+              <h1 className="text-4xl font-semibold leading-tight md:text-6xl">Learn Identity Governance.</h1>
+              <p className="mt-3 text-2xl text-navy-muted md:text-3xl">Master Saviynt. Build your IAM career.</p>
               <p className="mt-6 max-w-lg text-navy-muted">A complete learning platform for Saviynt engineers — structured lessons, hands-on troubleshooting, certification practice and AI-powered interview coaching.</p>
               <Button asChild size="lg" className="mt-8">
                 <Link to="/auth" search={{ mode: "signup" }}>Start learning free <ArrowRight className="ml-1 h-4 w-4" /></Link>

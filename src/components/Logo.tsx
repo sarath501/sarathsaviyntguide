@@ -18,8 +18,11 @@ export function Logo({ light = false }: { light?: boolean }) {
   return (
     <span className="flex items-center gap-2">
       <LogoMark />
-      <span className={`font-display text-lg font-semibold ${light ? "text-navy-foreground" : "text-foreground"}`}>
-        IGA Academy <span className="text-primary">AI</span>
+      <span className="flex flex-col leading-none">
+        <span className={`font-display text-base font-semibold ${light ? "text-navy-foreground" : "text-foreground"}`}>
+          Sarath <span className="text-primary">IGA</span>
+        </span>
+        <span className={`text-[10px] uppercase tracking-[0.18em] ${light ? "text-navy-muted" : "text-muted-foreground"}`}>Learning Portal</span>
       </span>
     </span>
   );
