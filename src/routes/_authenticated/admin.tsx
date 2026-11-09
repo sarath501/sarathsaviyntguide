@@ -108,7 +108,7 @@ function UsersAdmin() {
     return matchesSearch && (status === "all" || user.status === status);
   });
   const selected = users.find((user) => user.id === selectedId);
-  const activeCount = users.filter((user) => user.status === "Active").length;
+  const activeCount = users.filter((user) => user.status === "Verified").length;
   const pendingCount = users.filter((user) => user.status === "Pending verification").length;
   const suspendedCount = users.filter((user) => user.status === "Suspended").length;
   const formatDate = (value: string | null) =>
@@ -119,7 +119,7 @@ function UsersAdmin() {
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         {[
           { label: "Registered users", value: users.length, icon: Users },
-          { label: "Active accounts", value: activeCount, icon: BookOpen },
+          { label: "Verified accounts", value: activeCount, icon: BookOpen },
           { label: "Pending verification", value: pendingCount, icon: Mail },
           { label: "Suspended accounts", value: suspendedCount, icon: Clock },
         ].map((item) => (
@@ -205,7 +205,7 @@ function UsersAdmin() {
                     <td className="px-3 py-3 text-center tabular-nums">{user.quizAttempts}</td>
                     <td className="px-3 py-3 text-center tabular-nums">{user.interviews}</td>
                     <td className="px-3 py-3">
-                      <Badge variant={user.status === "Active" ? "default" : "secondary"}>{user.status}</Badge>
+                      <Badge variant={user.status === "Verified" ? "default" : "secondary"}>{user.status}</Badge>
                     </td>
                     <td className="px-3 py-3 text-right">
                       <Button size="sm" variant="outline" onClick={() => setSelectedId(selectedId === user.id ? null : user.id)}>
