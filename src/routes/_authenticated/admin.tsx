@@ -18,6 +18,7 @@ import { generateConnectorContent, generateLessonContent } from "@/lib/ai.functi
 import { CONNECTOR_CATEGORIES, useConnectors, type Connector } from "@/lib/connectors";
 import { getAdminUserAnalytics } from "@/lib/admin.functions";
 import { AdminAnalytics } from "@/components/AdminAnalytics";
+import { AdminReports } from "@/components/AdminReports";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — Sarath IGA Learning Portal" }] }),
@@ -39,6 +40,7 @@ function Admin() {
         <TabsList className="mb-4 flex-wrap">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
           <TabsTrigger value="modules">Modules</TabsTrigger>
           <TabsTrigger value="lessons">Lessons</TabsTrigger>
           <TabsTrigger value="questions">Questions</TabsTrigger>
@@ -47,6 +49,7 @@ function Admin() {
         </TabsList>
         <TabsContent value="overview"><Overview /></TabsContent>
         <TabsContent value="users"><UsersAdmin /></TabsContent>
+        <TabsContent value="reports"><AdminReports /></TabsContent>
         <TabsContent value="modules"><Modules /></TabsContent>
         <TabsContent value="lessons"><Lessons /></TabsContent>
         <TabsContent value="questions"><Questions /></TabsContent>
