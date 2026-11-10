@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { CheckCircle2, ChevronDown, ChevronUp, Lightbulb, RotateCcw, Trophy } from "lucide-react";
+import { CheckCircle2, ChevronDown, ChevronUp, Lightbulb, RotateCcw, Trophy, Search, Filter, Server, ShieldAlert } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { PageHeader } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
@@ -35,13 +36,125 @@ const PRACTICE = [
   { title: "Troubleshooting: account aggregation is incomplete", area: "Incident Triage", prompt: "An aggregation job completes successfully but only a fraction of expected accounts appear. List the first five checks and the evidence you would collect.", hint: "Compare source-side count with fetched, processed, rejected and correlated counts; inspect filters, pagination, permissions, delta watermark and connector logs." },
 ];
 
-function Labs() {
+
+type KnowledgeEntry = {
+  id: string; connector: string; category: string; title: string; symptom: string;
+  causes: string[]; checks: string[]; resolution: string[]; validation: string[];
+};
+
+const TROUBLESHOOTING_GUIDE: KnowledgeEntry[] = [
+  {
+    id: "ad-connection-timeout", connector: "Active Directory", category: "Connectivity",
+    title: "AD connector connection timeout",
+    symptom: "Aggregation or provisioning fails with a socket timeout, connection timeout or unreachable LDAP/LDAPS host.",
+    causes: ["DNS resolves to an unreachable address or the configured host is incorrect", "Firewall, routing or security-group rules block the LDAP/LDAPS port", "The domain controller or network path is unavailable"],
+    checks: ["Resolve the configured hostname from the connector runtime network", "Test TCP reachability to the configured LDAP/LDAPS port (commonly 389/636; confirm tenant configuration)", "Check firewall flow logs, routing and domain-controller availability", "Confirm the configured host, port and TLS mode match the directory design"],
+    resolution: ["Restore the network path and allow only the required source-to-destination ports", "Correct the hostname or port if the endpoint configuration is wrong", "For LDAPS, validate the certificate chain and hostname; do not disable TLS validation as a workaround"],
+    validation: ["Run connection validation from the same runtime path", "Run a small, scoped aggregation and confirm expected records are returned", "Review connector logs for a clean bind and completed search"]
+  },
+  {
+    id: "ad-invalid-credentials", connector: "Active Directory", category: "Authentication",
+    title: "AD bind fails with invalid credentials or insufficient access",
+    symptom: "The connector reaches the domain controller but bind or directory searches fail with an authentication or access-denied response.",
+    causes: ["Service-account password is expired, rotated or entered incorrectly", "Bind identity format is incorrect for the directory", "The service account lacks permissions for the requested search or update operation"],
+    checks: ["Confirm the bind identity format expected by the connector (DN, UPN or domain\\user)", "Verify credential rotation and secret-vault synchronization without exposing the password", "Review directory ACLs for the exact OU and attributes involved", "Separate read/search permission failures from write/provisioning permission failures"],
+    resolution: ["Update the managed secret through the approved credential process", "Correct the bind identity format", "Grant least-privilege directory permissions for the required operations and OUs"],
+    validation: ["Retest bind and a read-only search", "Test a controlled operation in a non-production OU", "Confirm no credentials are present in logs or diagnosis notes"]
+  },
+  {
+    id: "sap-hana-connection-reset", connector: "SAP HANA", category: "Connectivity",
+    title: "SAP HANA JDBC connection reset",
+    symptom: "A JDBC connection attempt fails with a connection reset or the peer closes the connection.",
+    causes: ["Network path, firewall or listener availability issue", "Incorrect host, instance-specific port or JDBC URL", "TLS or database-side connection policy rejects the client"],
+    checks: ["Verify DNS and TCP reachability to the approved HANA host and port", "Confirm the JDBC URL, tenant/database target and port against the DBA-provided connection details", "Check HANA service availability and database-side connection logs at the same timestamp", "Review TLS requirements and JDBC driver compatibility"],
+    resolution: ["Restore network access or correct the endpoint details with the database/network owners", "Use the supported JDBC driver and connection properties for the target HANA version", "Align TLS configuration with the database security policy"],
+    validation: ["Retest from the connector execution environment", "Run a least-privilege read-only query", "Re-run the relevant Saviynt job and compare timestamps with HANA-side logs"]
+  },
+  {
+    id: "sap-hana-password-sync", connector: "SAP HANA", category: "Password Sync",
+    title: "SAP HANA password change fails",
+    symptom: "Password synchronization fails even though the endpoint is reachable, often with a JDBC SQL or password-policy error.",
+    causes: ["Password-change statement or connector JSON is malformed", "The generated password violates HANA password policy", "The target account is locked, inactive or not permitted to change its password"],
+    checks: ["Capture the exact database error and identify whether it is SQL syntax, policy, account state or authorization", "Validate the password-change statement and JSON escaping using the connector's documented format", "Check target account status and password policy with the HANA administrator", "Test special-character handling securely without placing real passwords in tickets or logs"],
+    resolution: ["Correct the statement and JSON escaping for the configured connector version", "Generate a password that complies with the target policy", "Resolve account state or grant only the required password-change privilege"],
+    validation: ["Test with a designated non-production account", "Confirm the target accepts the new credential through an approved secure test", "Verify the Saviynt task status and ensure secrets are masked"]
+  },
+  {
+    id: "jdbc-aggregation-incomplete", connector: "JDBC", category: "Aggregation",
+    title: "JDBC aggregation returns fewer records than expected",
+    symptom: "The job completes but only a subset of source records is imported.",
+    causes: ["Query filters or delta watermark exclude records", "Pagination or fetch-size handling is incomplete", "The service account cannot read all required rows", "A join or result-set mapping removes or rejects records"],
+    checks: ["Compare source count, query count, fetched count, processed count and rejected count", "Run the configured query directly with the same service account and parameters", "Inspect delta attributes, date/time zones and last-successful watermark", "Check pagination, ordering and stable unique keys", "Review attribute mapping and rejected-record details"],
+    resolution: ["Correct the filter or delta watermark only after confirming the intended scope", "Implement deterministic pagination using a stable sort key where required", "Grant least-privilege SELECT access to the required views/tables", "Correct result-set aliases and correlation mapping"],
+    validation: ["Reconcile counts for a controlled sample", "Run a full or scoped aggregation as appropriate", "Confirm repeat runs do not create duplicate or missing accounts"]
+  },
+  {
+    id: "rest-401-403", connector: "REST", category: "Authentication",
+    title: "REST connector returns HTTP 401 or 403",
+    symptom: "API calls fail with 401 Unauthorized or 403 Forbidden.",
+    causes: ["Token is expired, malformed or issued for the wrong audience", "Required API scope or role is missing", "Authorization header or token prefix is incorrect", "The API client is restricted by source IP or policy"],
+    checks: ["Inspect status code and sanitized response body; never paste bearer tokens into tickets", "Verify token endpoint, grant type, audience, expiry and clock skew", "Compare required API scopes/roles with the client registration", "Check header format and any source-IP allowlist"],
+    resolution: ["Correct token acquisition and refresh handling", "Request only the documented scopes/roles needed by the integration", "Correct authorization header construction and approved network allowlisting"],
+    validation: ["Call a low-risk read endpoint with a fresh token", "Confirm expected status and response schema", "Re-run aggregation or provisioning and inspect sanitized logs"]
+  },
+  {
+    id: "rest-pagination", connector: "REST", category: "Aggregation",
+    title: "REST aggregation misses records across pages",
+    symptom: "Only the first page or an inconsistent subset of API records is aggregated.",
+    causes: ["Next-page link, cursor or offset is not followed", "Pagination parameters or page-size limits are incorrect", "The source changes while offset pagination is running", "Rate limiting interrupts later pages"],
+    checks: ["Inspect response envelope for next link, cursor, total count or continuation token", "Confirm the connector pagination configuration matches the API contract", "Check HTTP status and retry-after headers for throttling", "Compare page counts and verify a stable ordering/cursor"],
+    resolution: ["Configure the documented pagination mechanism and termination condition", "Use cursor-based pagination where the API supports it", "Apply bounded retries and backoff for rate limits without creating duplicate pages"],
+    validation: ["Test a dataset spanning multiple pages", "Reconcile unique IDs against the source count", "Confirm repeated runs do not skip or duplicate records"]
+  },
+  {
+    id: "scim-409", connector: "SCIM", category: "Provisioning",
+    title: "SCIM provisioning returns HTTP 409 conflict",
+    symptom: "Create or update requests fail with a conflict response, often because a unique attribute already exists.",
+    causes: ["A user with the same userName or other unique attribute already exists", "The connector is using the wrong create-versus-update operation", "The correlation key does not match the target resource"],
+    checks: ["Read the sanitized SCIM errorType and detail fields", "Search the target using the unique attribute and inspect the existing resource ID", "Verify correlation and attribute normalization, including case and whitespace", "Check whether the request is POST, PUT or PATCH as intended"],
+    resolution: ["Correct the correlation mapping so existing resources are updated rather than recreated", "Resolve genuine duplicate identities through the target application's approved process", "Use the SCIM resource ID for subsequent updates"],
+    validation: ["Repeat a controlled create/update test", "Confirm exactly one target resource exists for the identity", "Verify returned resource ID and final attribute values"]
+  },
+  {
+    id: "sftp-timeout", connector: "SFTP", category: "Connectivity",
+    title: "SFTP connection times out",
+    symptom: "File transfer fails with a connection timeout or an SSH connection exception.",
+    causes: ["DNS or route to the SFTP host is unavailable", "Firewall blocks the configured SSH port", "The SFTP service is down or restricted by source IP"],
+    checks: ["Resolve the SFTP hostname from the connector runtime", "Test TCP reachability to the configured SSH port (commonly 22, but confirm the endpoint)", "Confirm source IP allowlisting and server availability with the SFTP owner", "Check whether the timeout occurs before SSH handshake or during file transfer"],
+    resolution: ["Restore the network path and approved source-IP allowlisting", "Correct the hostname or port using the service owner's details", "Coordinate server-side capacity or timeout changes with the SFTP owner"],
+    validation: ["Establish an SSH/SFTP session from the same runtime network", "List the approved remote directory", "Transfer a harmless test file and confirm the expected pickup/archive behaviour"]
+  },
+  {
+    id: "workday-incomplete", connector: "Workday", category: "Data Mapping",
+    title: "Workday worker attributes are missing or stale",
+    symptom: "Worker aggregation succeeds but selected attributes are blank, outdated or mapped to the wrong Saviynt fields.",
+    causes: ["The integration user lacks access to the required Workday domains or fields", "The report/API response omits optional or secured fields", "JSON/XML path or attribute mapping does not match the actual response", "Effective-date or pagination behaviour excludes the expected worker data"],
+    checks: ["Inspect a sanitized source response for one affected worker", "Compare source field names and paths with Saviynt attribute mappings", "Verify integration-system security permissions for the required domains", "Check effective dates, worker status filters and pagination"],
+    resolution: ["Grant the integration user only the required domain permissions", "Correct response paths and target attribute mappings", "Align effective-date and worker-selection filters with the integration design"],
+    validation: ["Aggregate a small approved worker sample", "Compare source and Saviynt values field by field", "Confirm a subsequent change is reflected as expected"]
+  }
+];
+
+\nfunction Labs() {
   const [open, setOpen] = useState<string | null>(null);
   const [showHint, setShowHint] = useState<Record<string, boolean>>({});
   const [showSolution, setShowSolution] = useState<Record<string, boolean>>({});
   const [practiceOpen, setPracticeOpen] = useState<string | null>(null);
   const [practiceAnswers, setPracticeAnswers] = useState<Record<string, string>>({});
   const [diagnosisDraft, setDiagnosisDraft] = useState<Record<string, string>>({});
+  const [guideSearch, setGuideSearch] = useState("");
+  const [guideCategory, setGuideCategory] = useState("All");
+  const [expandedGuide, setExpandedGuide] = useState<string | null>(null);
+
+  const guideCategories = useMemo(() => ["All", ...Array.from(new Set(TROUBLESHOOTING_GUIDE.map((entry) => entry.connector)))], []);
+  const filteredGuide = useMemo(() => {
+    const term = guideSearch.trim().toLowerCase();
+    return TROUBLESHOOTING_GUIDE.filter((entry) => {
+      const matchesCategory = guideCategory === "All" || entry.connector === guideCategory;
+      const searchable = [entry.connector, entry.category, entry.title, entry.symptom, ...entry.causes, ...entry.checks, ...entry.resolution].join(" ").toLowerCase();
+      return matchesCategory && (!term || searchable.includes(term));
+    });
+  }, [guideSearch, guideCategory]);
   const queryClient = useQueryClient();
 
   const { data: labRows = [], isLoading } = useQuery({
@@ -106,12 +219,50 @@ function Labs() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Interactive Saviynt Hands-on Labs" subtitle="Practise implementation, connector configuration and production-style incident diagnosis. Progress is saved to your learner account." />
+      <PageHeader title="Saviynt Troubleshooting Center" subtitle="Search connector incidents, follow diagnostic playbooks and practise with hands-on scenarios. Your lab progress remains saved to your learner account." />
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="rounded-xl border bg-card p-4"><p className="text-sm text-muted-foreground">Available scenarios</p><p className="mt-1 text-2xl font-semibold">{labs.length}</p></div>
         <div className="rounded-xl border bg-card p-4"><p className="text-sm text-muted-foreground">Completed labs</p><p className="mt-1 text-2xl font-semibold">{completedCount}</p></div>
         <div className="rounded-xl border bg-card p-4"><p className="text-sm text-muted-foreground">Accumulated score</p><p className="mt-1 text-2xl font-semibold">{totalScore}</p></div>
       </div>
+
+      <section className="space-y-4">
+        <div className="flex items-start gap-3">
+          <div className="rounded-xl bg-primary/10 p-3 text-primary"><ShieldAlert className="h-6 w-6" /></div>
+          <div><h2 className="text-xl font-semibold">Saviynt Connector Troubleshooting Center</h2><p className="text-sm text-muted-foreground">Search common integration incidents, isolate the failing layer and follow evidence-based diagnostic and validation steps.</p></div>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border bg-card p-4"><p className="text-xs text-muted-foreground">Knowledge articles</p><p className="mt-1 text-2xl font-semibold">{TROUBLESHOOTING_GUIDE.length}</p></div>
+          <div className="rounded-xl border bg-card p-4"><p className="text-xs text-muted-foreground">Connector types</p><p className="mt-1 text-2xl font-semibold">{guideCategories.length - 1}</p></div>
+          <div className="rounded-xl border bg-card p-4"><p className="text-xs text-muted-foreground">Guided investigation labs</p><p className="mt-1 text-2xl font-semibold">{labs.length}</p></div>
+        </div>
+        <div className="rounded-xl border bg-card p-4">
+          <div className="flex flex-col gap-3 md:flex-row">
+            <div className="relative min-w-0 flex-1"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><Input value={guideSearch} onChange={(event) => setGuideSearch(event.target.value)} placeholder="Search error, connector, symptom or root cause…" className="pl-9" aria-label="Search troubleshooting knowledge base" /></div>
+            <div className="flex items-center gap-2"><Filter className="h-4 w-4 text-muted-foreground" /><select className="h-10 min-w-44 rounded-md border bg-background px-3 text-sm" value={guideCategory} onChange={(event) => setGuideCategory(event.target.value)} aria-label="Filter troubleshooting by connector">{guideCategories.map((category) => <option key={category} value={category}>{category === "All" ? "All connectors" : category}</option>)}</select></div>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">{filteredGuide.length} of {TROUBLESHOOTING_GUIDE.length} troubleshooting articles</p>
+        </div>
+        <div className="space-y-3">
+          {filteredGuide.map((entry) => {
+            const expanded = expandedGuide === entry.id;
+            return <article key={entry.id} className="rounded-xl border bg-card p-4 shadow-card">
+              <button className="flex w-full items-start justify-between gap-3 text-left" onClick={() => setExpandedGuide(expanded ? null : entry.id)} aria-expanded={expanded}>
+                <span className="min-w-0"><span className="flex flex-wrap items-center gap-2"><span className="font-semibold">{entry.title}</span><Badge variant="secondary">{entry.connector}</Badge><Badge variant="outline">{entry.category}</Badge></span><span className="mt-2 block text-sm text-muted-foreground">{entry.symptom}</span></span>
+                {expanded ? <ChevronUp className="mt-1 h-4 w-4 shrink-0" /> : <ChevronDown className="mt-1 h-4 w-4 shrink-0" />}
+              </button>
+              {expanded && <div className="mt-4 grid gap-4 border-t pt-4 lg:grid-cols-2">
+                <div><h3 className="mb-2 text-sm font-semibold">Likely root causes</h3><ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">{entry.causes.map((item) => <li key={item}>{item}</li>)}</ul>
+                  <h3 className="mb-2 mt-4 text-sm font-semibold">Diagnostic checks</h3><ol className="list-decimal space-y-1 pl-5 text-sm">{entry.checks.map((item) => <li key={item}>{item}</li>)}</ol></div>
+                <div><h3 className="mb-2 text-sm font-semibold">Recommended remediation</h3><ol className="list-decimal space-y-1 pl-5 text-sm">{entry.resolution.map((item) => <li key={item}>{item}</li>)}</ol>
+                  <h3 className="mb-2 mt-4 text-sm font-semibold">Resolution validation</h3><ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">{entry.validation.map((item) => <li key={item}>{item}</li>)}</ul></div>
+              </div>}
+            </article>;
+          })}
+          {filteredGuide.length === 0 && <div className="rounded-xl border border-dashed p-8 text-center"><Search className="mx-auto h-6 w-6 text-muted-foreground" /><p className="mt-2 font-medium">No matching troubleshooting articles</p><p className="mt-1 text-sm text-muted-foreground">Try a different error message or select All connectors.</p><Button className="mt-3" variant="outline" size="sm" onClick={() => { setGuideSearch(""); setGuideCategory("All"); }}>Clear filters</Button></div>}
+        </div>
+        <div className="flex items-start gap-2 rounded-lg border p-3 text-xs text-muted-foreground"><Server className="h-4 w-4 shrink-0" />Diagnostic guidance is version- and environment-dependent. Confirm connector-specific settings against your Saviynt tenant, target-system documentation and change process. Never share credentials, tokens or confidential production data.</div>
+      </section>
 
       <section className="space-y-3">
         <div><h2 className="text-lg font-semibold">Guided troubleshooting scenarios</h2><p className="text-sm text-muted-foreground">Complete the investigation checklist and document your diagnosis to earn a score.</p></div>

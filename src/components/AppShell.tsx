@@ -19,7 +19,7 @@ const NAV = [
   { to: "/learn", label: "Learning Center", icon: BookOpen, description: "Saviynt modules, lessons and IGA concepts" },
   { to: "/certification", label: "Certification Prep", icon: Award, description: "Professional and Advanced practice exams" },
   { to: "/connectors", label: "Connectors Learning Center", icon: Plug, description: "Connector guides, integrations and comparison" },
-  { to: "/labs", label: "Troubleshooting Lab", icon: Wrench, description: "Hands-on troubleshooting scenarios and labs" },
+  { to: "/labs", label: "Troubleshooting Center", icon: Wrench, description: "Connector error library, diagnostic guides and hands-on labs" },
   { to: "/sql", label: "SQL Practice", icon: Database, description: "SQL exercises and analytics practice" },
   { to: "/interview", label: "AI Mock Interviews", icon: MessagesSquare, description: "Mock interview practice" },
   { to: "/interview-prep", label: "Interview Question Bank", icon: GraduationCap, description: "Technical, scenario and managerial questions" },
