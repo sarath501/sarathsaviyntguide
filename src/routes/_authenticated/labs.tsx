@@ -219,12 +219,50 @@ const TROUBLESHOOTING_GUIDE: KnowledgeEntry[] = [
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Interactive Saviynt Hands-on Labs" subtitle="Practise implementation, connector configuration and production-style incident diagnosis. Progress is saved to your learner account." />
+      <PageHeader title="Saviynt Troubleshooting Center" subtitle="Search connector incidents, follow diagnostic playbooks and practise with hands-on scenarios. Your lab progress remains saved to your learner account." />
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="rounded-xl border bg-card p-4"><p className="text-sm text-muted-foreground">Available scenarios</p><p className="mt-1 text-2xl font-semibold">{labs.length}</p></div>
         <div className="rounded-xl border bg-card p-4"><p className="text-sm text-muted-foreground">Completed labs</p><p className="mt-1 text-2xl font-semibold">{completedCount}</p></div>
         <div className="rounded-xl border bg-card p-4"><p className="text-sm text-muted-foreground">Accumulated score</p><p className="mt-1 text-2xl font-semibold">{totalScore}</p></div>
       </div>
+
+      <section className="space-y-4">
+        <div className="flex items-start gap-3">
+          <div className="rounded-xl bg-primary/10 p-3 text-primary"><ShieldAlert className="h-6 w-6" /></div>
+          <div><h2 className="text-xl font-semibold">Saviynt Connector Troubleshooting Center</h2><p className="text-sm text-muted-foreground">Search common integration incidents, isolate the failing layer and follow evidence-based diagnostic and validation steps.</p></div>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border bg-card p-4"><p className="text-xs text-muted-foreground">Knowledge articles</p><p className="mt-1 text-2xl font-semibold">{TROUBLESHOOTING_GUIDE.length}</p></div>
+          <div className="rounded-xl border bg-card p-4"><p className="text-xs text-muted-foreground">Connector types</p><p className="mt-1 text-2xl font-semibold">{guideCategories.length - 1}</p></div>
+          <div className="rounded-xl border bg-card p-4"><p className="text-xs text-muted-foreground">Guided investigation labs</p><p className="mt-1 text-2xl font-semibold">{labs.length}</p></div>
+        </div>
+        <div className="rounded-xl border bg-card p-4">
+          <div className="flex flex-col gap-3 md:flex-row">
+            <div className="relative min-w-0 flex-1"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><Input value={guideSearch} onChange={(event) => setGuideSearch(event.target.value)} placeholder="Search error, connector, symptom or root cause…" className="pl-9" aria-label="Search troubleshooting knowledge base" /></div>
+            <div className="flex items-center gap-2"><Filter className="h-4 w-4 text-muted-foreground" /><select className="h-10 min-w-44 rounded-md border bg-background px-3 text-sm" value={guideCategory} onChange={(event) => setGuideCategory(event.target.value)} aria-label="Filter troubleshooting by connector">{guideCategories.map((category) => <option key={category} value={category}>{category === "All" ? "All connectors" : category}</option>)}</select></div>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">{filteredGuide.length} of {TROUBLESHOOTING_GUIDE.length} troubleshooting articles</p>
+        </div>
+        <div className="space-y-3">
+          {filteredGuide.map((entry) => {
+            const expanded = expandedGuide === entry.id;
+            return <article key={entry.id} className="rounded-xl border bg-card p-4 shadow-card">
+              <button className="flex w-full items-start justify-between gap-3 text-left" onClick={() => setExpandedGuide(expanded ? null : entry.id)} aria-expanded={expanded}>
+                <span className="min-w-0"><span className="flex flex-wrap items-center gap-2"><span className="font-semibold">{entry.title}</span><Badge variant="secondary">{entry.connector}</Badge><Badge variant="outline">{entry.category}</Badge></span><span className="mt-2 block text-sm text-muted-foreground">{entry.symptom}</span></span>
+                {expanded ? <ChevronUp className="mt-1 h-4 w-4 shrink-0" /> : <ChevronDown className="mt-1 h-4 w-4 shrink-0" />}
+              </button>
+              {expanded && <div className="mt-4 grid gap-4 border-t pt-4 lg:grid-cols-2">
+                <div><h3 className="mb-2 text-sm font-semibold">Likely root causes</h3><ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">{entry.causes.map((item) => <li key={item}>{item}</li>)}</ul>
+                  <h3 className="mb-2 mt-4 text-sm font-semibold">Diagnostic checks</h3><ol className="list-decimal space-y-1 pl-5 text-sm">{entry.checks.map((item) => <li key={item}>{item}</li>)}</ol></div>
+                <div><h3 className="mb-2 text-sm font-semibold">Recommended remediation</h3><ol className="list-decimal space-y-1 pl-5 text-sm">{entry.resolution.map((item) => <li key={item}>{item}</li>)}</ol>
+                  <h3 className="mb-2 mt-4 text-sm font-semibold">Resolution validation</h3><ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">{entry.validation.map((item) => <li key={item}>{item}</li>)}</ul></div>
+              </div>}
+            </article>;
+          })}
+          {filteredGuide.length === 0 && <div className="rounded-xl border border-dashed p-8 text-center"><Search className="mx-auto h-6 w-6 text-muted-foreground" /><p className="mt-2 font-medium">No matching troubleshooting articles</p><p className="mt-1 text-sm text-muted-foreground">Try a different error message or select All connectors.</p><Button className="mt-3" variant="outline" size="sm" onClick={() => { setGuideSearch(""); setGuideCategory("All"); }}>Clear filters</Button></div>}
+        </div>
+        <div className="flex items-start gap-2 rounded-lg border p-3 text-xs text-muted-foreground"><Server className="h-4 w-4 shrink-0" />Diagnostic guidance is version- and environment-dependent. Confirm connector-specific settings against your Saviynt tenant, target-system documentation and change process. Never share credentials, tokens or confidential production data.</div>
+      </section>
 
       <section className="space-y-3">
         <div><h2 className="text-lg font-semibold">Guided troubleshooting scenarios</h2><p className="text-sm text-muted-foreground">Complete the investigation checklist and document your diagnosis to earn a score.</p></div>
