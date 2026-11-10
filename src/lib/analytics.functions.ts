@@ -27,6 +27,7 @@ export const getAdminPlatformAnalytics = createServerFn({ method: "GET" })
     if (roleError || !isAdmin) throw new Error("Forbidden: administrator access required");
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const [profiles, lessons, quizzes, interviews, connectors, modulesCount, lessonCount, labsCount, connectorCount] =
       await Promise.all([
         readAll<{ id: string; created_at: string }>((from, to) =>
           supabaseAdmin.from("profiles").select("id,created_at").range(from, to)),
