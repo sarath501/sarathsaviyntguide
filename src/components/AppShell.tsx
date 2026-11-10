@@ -39,6 +39,7 @@ const NAV = [
   { to: "/profile", label: "Profile", icon: User, description: "Your account and preferences" },
 ] as const;
 
+type SearchResult = { key: string; title: string; detail: string; group: string; to: (typeof NAV)[number]["to"] | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
 type SearchResult = { key: string; title: string; detail: string; group: string; to: "/dashboard" | "/learn" | "/certification" | "/implementation-simulator" | "/rules-center" | "/identity-lifecycle" | "/email-templates" | "/workflow-designer" | "/connectors" | "/connector-studio" | "/labs" | "/sql" | "/interview" | "/interview-prep" | "/plan" | "/skills" | "/certificates" | "/workspace" | "/community" | "/career" | "/profile" | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
 
 

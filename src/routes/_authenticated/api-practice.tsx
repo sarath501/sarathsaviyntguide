@@ -4,7 +4,17 @@ import { PageHeader } from "@/components/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, CheckCircle2, Code2, Copy, FlaskConical, KeyRound, Play, RotateCcw, Search, ShieldAlert } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/api-practice")({ component: ApiPracticeLab });
+export const Route = createFileRoute("/_authenticated/api-practice")({
+  head: () => ({ meta: [
+    { title: "API Practice Lab | Sarath IGA Learning Portal" },
+    { name: "description", content: "Practise illustrative IGA API requests and troubleshoot HTTP errors safely." },
+    { property: "og:title", content: "API Practice Lab | Sarath IGA Learning Portal" },
+    { property: "og:description", content: "Practise illustrative IGA API requests and troubleshoot HTTP errors safely." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
+  component: ApiPracticeLab,
+});
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 type Endpoint = { id: string; title: string; method: Method; path: string; purpose: string; auth: string; params: string; body: string; response: string; notes: string[]; category: string };
@@ -50,11 +60,11 @@ function ApiPracticeLab() {
   const [tab,setTab] = useState<"explore"|"workbench"|"exercises"|"errors"|"concepts">("explore");
   const [search,setSearch] = useState("");
   const [category,setCategory] = useState("All");
-  const [endpointId,setEndpointId] = useState(ENDPOINTS[0].id);
+  const [endpointId,setEndpointId] = useState(ENDPOINTS[0]?.id ?? "");
   const [method,setMethod] = useState<Method>("GET");
-  const [path,setPath] = useState(ENDPOINTS[0].path);
-  const [params,setParams] = useState(ENDPOINTS[0].params);
-  const [body,setBody] = useState(ENDPOINTS[0].body);
+  const [path,setPath] = useState(ENDPOINTS[0]?.path ?? "");
+  const [params,setParams] = useState(ENDPOINTS[0]?.params ?? "");
+  const [body,setBody] = useState(ENDPOINTS[0]?.body ?? "");
   const [auth,setAuth] = useState("Bearer <your-token>");
   const [contentType,setContentType] = useState("application/json");
   const [result,setResult] = useState<{code:number;status:string;body:string;message:string}|null>(null);
@@ -74,6 +84,7 @@ function ApiPracticeLab() {
     setEndpointId(id);setMethod(item.method);setPath(item.path);setParams(item.params);setBody(item.body);setResult(null);
   }
   function runSimulation() {
+    if (!endpoint) return;
     if(!path.trim()||!path.startsWith("/")) {setResult({code:400,status:"Bad Request",body:'{"error":"Path must start with /"}',message:"Check the request path."});return;}
     if(method!=="GET"&&body.trim()) {
       try { JSON.parse(body); } catch { setResult({code:400,status:"Bad Request",body:'{"error":"Invalid JSON body"}',message:"The request body is not valid JSON."});return; }
@@ -84,9 +95,10 @@ function ApiPracticeLab() {
     setResult({code,status:code===200?"OK":code===202?"Accepted":"Method Not Allowed",body:response,message:code===405?"Choose the method shown in the endpoint catalogue.":code===202?"Simulated request accepted; this is not a real Saviynt operation.":"Simulated response returned from fictional training data."});
   }
   function loadExercise(index:number) {
-    const item=EXERCISES[index];setExerciseIndex(index);setAnswer("");setFeedback("");loadEndpoint(item.endpoint);setTab("workbench");
+    const item=EXERCISES[index];if(!item)return;setExerciseIndex(index);setAnswer("");setFeedback("");loadEndpoint(item.endpoint);setTab("workbench");
   }
   function checkExercise() {
+    if (!exercise) return;
     const target=exercise.expected.toLowerCase();
     const value=answer.trim().toLowerCase();
     const isCorrect=value.includes(target) || (exercise.id===9 && (value.includes("token")||value.includes("expiry")||value.includes("authentication"))) || (exercise.id===10 && value.includes("offset")&&value.includes("10"));
@@ -97,6 +109,8 @@ function ApiPracticeLab() {
     const text=`${method} ${path}\nAuthorization: ${auth}\nContent-Type: ${contentType}\n\nQuery parameters:\n${params}\n\n${body}`;
     navigator.clipboard?.writeText(text).catch(()=>{});
   }
+
+  if (!endpoint || !exercise || !error) return <PageHeader title="Saviynt API & Postman Practice Lab" subtitle="Practice content is unavailable." />;
 
   return <div className="space-y-6">
     <PageHeader title="Saviynt API & Postman Practice Lab" subtitle="Learn REST API fundamentals, explore illustrative Saviynt API patterns, build requests, solve exercises and diagnose HTTP errors."/>
