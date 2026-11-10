@@ -16,8 +16,6 @@ type DatedUser = { user_id: string; created_at: string };
 type LessonRow = { user_id: string; completed_at: string };
 type QuizRow = { user_id: string; score: number; total: number; created_at: string };
 type ConnectorRow = { user_id: string; updated_at: string };
-type ModuleViewRow = { id: string; user_id: string; module_id: string; module_title: string; opened_at: string };
-type ProfileNameRow = { id: string; full_name: string | null };
 
 export const getAdminPlatformAnalytics = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -29,7 +27,6 @@ export const getAdminPlatformAnalytics = createServerFn({ method: "GET" })
     if (roleError || !isAdmin) throw new Error("Forbidden: administrator access required");
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const [profiles, lessons, quizzes, interviews, connectors, moduleViews, userProfiles, modulesCount, lessonCount, labsCount, connectorCount] =
       await Promise.all([
         readAll<{ id: string; created_at: string }>((from, to) =>
           supabaseAdmin.from("profiles").select("id,created_at").range(from, to)),
@@ -41,10 +38,6 @@ export const getAdminPlatformAnalytics = createServerFn({ method: "GET" })
           supabaseAdmin.from("interviews").select("user_id,created_at").range(from, to)),
         readAll<ConnectorRow>((from, to) =>
           supabaseAdmin.from("connector_progress").select("user_id,updated_at").range(from, to)),
-        readAll<ModuleViewRow>((from, to) =>
-          supabaseAdmin.from("module_views").select("id,user_id,module_id,module_title,opened_at").order("opened_at", { ascending: false }).range(from, to)),
-        readAll<ProfileNameRow>((from, to) =>
-          supabaseAdmin.from("profiles").select("id,full_name").range(from, to)),
         supabaseAdmin.from("modules").select("*", { count: "exact", head: true }),
         supabaseAdmin.from("lessons").select("*", { count: "exact", head: true }),
         supabaseAdmin.from("labs").select("*", { count: "exact", head: true }),
@@ -84,27 +77,8 @@ export const getAdminPlatformAnalytics = createServerFn({ method: "GET" })
       if (result.error) throw new Error(result.error.message);
     }
 
-    const authUsers: { id: string; email?: string }[] = [];
-    for (let page = 1; ; page += 1) {
-      const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 1000 });
-      if (error) throw new Error(`Unable to load learner email addresses: ${error.message}`);
-      authUsers.push(...data.users);
-      if (data.users.length < 1000) break;
-    }
-    const profileById = new Map(userProfiles.map((profile) => [profile.id, profile]));
-    const authById = new Map(authUsers.map((authUser) => [authUser.id, authUser]));
-
     return {
       generatedAt: now.toISOString(),
-      recentModuleViews: moduleViews.slice(0, 250).map((view) => ({
-        id: view.id,
-        userId: view.user_id,
-        learnerName: profileById.get(view.user_id)?.full_name || authById.get(view.user_id)?.email || "Learner",
-        email: authById.get(view.user_id)?.email ?? "—",
-        moduleId: view.module_id,
-        moduleTitle: view.module_title,
-        openedAt: view.opened_at,
-      })),
       totals: {
         registeredUsers: profiles.length,
         activeLearners30d: activeUsers.size,

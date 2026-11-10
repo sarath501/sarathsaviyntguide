@@ -412,30 +412,6 @@ export type Database = {
           },
         ]
       }
-      module_views: {
-        Row: {
-          id: string
-          user_id: string
-          module_id: string
-          module_title: string
-          opened_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          module_id: string
-          module_title: string
-          opened_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          module_id?: string
-          module_title?: string
-          opened_at?: string
-        }
-        Relationships: []
-      }
       modules: {
         Row: {
           created_at: string
