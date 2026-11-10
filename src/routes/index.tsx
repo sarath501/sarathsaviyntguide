@@ -6,7 +6,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Logo";
-import { useCurriculum } from "@/lib/curriculum";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/avala-sarath-782241263/";
 const PROFILE_IMAGE = "/sarath-profile.jpg";
@@ -41,9 +40,6 @@ const TOPICS = [
 ];
 
 function Landing() {
-  const { data: curriculum } = useCurriculum();
-  const modules = curriculum?.modules ?? [];
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-30 border-b bg-background/90 backdrop-blur-xl">
@@ -133,34 +129,6 @@ function Landing() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-20">
-          <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr]">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Learning roadmap</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">A clear path through Saviynt IGA</h2>
-              <p className="mt-4 leading-7 text-muted-foreground">Move from platform fundamentals to implementation concepts, integrations and governance practice.</p>
-              <Button asChild className="mt-6"><Link to="/auth" search={{ mode: "signup" }}>Access all modules <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
-            </div>
-            <div className="rounded-2xl border bg-card p-5 shadow-sm md:p-7">
-              <div className="flex items-center justify-between gap-3 border-b pb-4">
-                <div><p className="font-semibold">Curriculum overview</p><p className="mt-1 text-xs text-muted-foreground">Structured learning modules</p></div>
-                <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">{modules.length || "—"} modules</span>
-              </div>
-              {modules.length ? (
-                <ol className="mt-4 divide-y">
-                  {modules.slice(0, 7).map((module) => (
-                    <li key={module.id} className="flex items-center gap-4 py-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-muted text-xs font-semibold">{module.num}</span>
-                      <span className="min-w-0 flex-1 text-sm font-medium">{module.title}</span>
-                      <ArrowRight className="h-4 w-4 text-muted-foreground" />
-                    </li>
-                  ))}
-                </ol>
-              ) : <p className="py-8 text-sm text-muted-foreground">Sign in to explore the complete learning roadmap.</p>}
-            </div>
-          </div>
-        </section>
-
         <section id="about" className="border-y bg-muted/25">
           <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-[0.85fr_1.15fr] md:px-8 md:py-20">
             <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
@@ -194,6 +162,16 @@ function Landing() {
           </div>
         </section>
       </main>
+
+        <section className="border-t bg-muted/25">
+          <div className="mx-auto max-w-4xl px-5 py-10 text-center md:px-8">
+            <p className="text-sm font-medium">A quick note for learners</p>
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+              Create an account using your email address and verify your email to unlock access to the full learning resources.
+              If you find this page useful, please share it with others who are learning IAM and Saviynt.
+            </p>
+          </div>
+        </section>
 
       <footer className="border-t">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-center text-xs text-muted-foreground md:flex-row md:items-center md:justify-between md:px-8 md:text-left">
