@@ -237,12 +237,6 @@ export type Database = {
         }
         Relationships: []
       }
-      lab_progress: {
-        Row: { completed: boolean; completed_steps: Json; diagnosis: string; id: string; lab_id: string; score: number; updated_at: string; user_id: string }
-        Insert: { completed?: boolean; completed_steps?: Json; diagnosis?: string; id?: string; lab_id: string; score?: number; updated_at?: string; user_id: string }
-        Update: { completed?: boolean; completed_steps?: Json; diagnosis?: string; id?: string; lab_id?: string; score?: number; updated_at?: string; user_id?: string }
-        Relationships: []
-      }
       lessons: {
         Row: {
           content: Json
@@ -323,6 +317,42 @@ export type Database = {
           published?: boolean
           summary?: string
           title?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          message: string
+          read_at: string | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          message: string
+          read_at?: string | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          message?: string
+          read_at?: string | null
+          title?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -415,6 +445,7 @@ export type Database = {
           correct_index?: number
           created_at?: string
           difficulty?: string
+          exam_track?: string
           explanation?: string
           id?: string
           is_certification?: boolean
