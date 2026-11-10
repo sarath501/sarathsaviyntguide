@@ -1,7 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { LayoutDashboard, BookOpen, Award, Wrench, Database, MessagesSquare, Route as RouteIcon, User, Shield, LogOut, Menu, X, Plug, NotebookPen, ChartNoAxesCombined, Medal, Users, BriefcaseBusiness, GraduationCap, Search, ArrowRight, Command, CalendarDays, BookText, ClipboardCheck, ChevronDown, ChevronRight, Workflow, } from "lucide-react";
+import { LayoutDashboard, BookOpen, Award, Wrench, Database, MessagesSquare, Route as RouteIcon, User, Shield, LogOut, Menu, X, Plug, NotebookPen, ChartNoAxesCombined, Medal, Users, BriefcaseBusiness, GraduationCap, Search, ArrowRight, Command, CalendarDays, BookText, ClipboardCheck, ChevronDown, ChevronRight, Workflow, GitBranch, } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin, useProfile } from "@/hooks/use-auth";
 import { useCurriculum } from "@/lib/curriculum";
@@ -19,6 +19,7 @@ const NAV = [
   { to: "/certification", label: "Certification Prep", icon: Award, description: "Professional and Advanced practice exams" },
   { to: "/access-review", label: "Access Review Simulator", icon: ClipboardCheck, description: "Practice access certification and reviewer decisions" },
   { to: "/implementation-simulator", label: "Implementation Simulator", icon: Workflow, description: "Practise an end-to-end Saviynt EIC implementation project" },
+  { to: "/workflow-designer", label: "Workflow Design Simulator", icon: GitBranch, description: "Design IGA triggers, policy checks, approvals and fulfillment flows" },
   { to: "/connectors", label: "Connectors Learning Center", icon: Plug, description: "Connector guides, integrations and comparison" },
   { to: "/labs", label: "Troubleshooting Center", icon: Wrench, description: "Connector error library, diagnostic guides and hands-on labs" },
   { to: "/sql", label: "SQL Practice", icon: Database, description: "SQL exercises and analytics practice" },
@@ -33,7 +34,7 @@ const NAV = [
   { to: "/profile", label: "Profile", icon: User, description: "Your account and preferences" },
 ] as const;
 
-type SearchResult = { key: string; title: string; detail: string; group: string; to: "/dashboard" | "/learn" | "/certification" | "/implementation-simulator" | "/connectors" | "/labs" | "/sql" | "/interview" | "/interview-prep" | "/plan" | "/skills" | "/certificates" | "/workspace" | "/community" | "/career" | "/profile" | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
+type SearchResult = { key: string; title: string; detail: string; group: string; to: "/dashboard" | "/learn" | "/certification" | "/implementation-simulator" | "/workflow-designer" | "/connectors" | "/labs" | "/sql" | "/interview" | "/interview-prep" | "/plan" | "/skills" | "/certificates" | "/workspace" | "/community" | "/career" | "/profile" | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
 
 function GlobalSearch({ onNavigate }: { onNavigate: () => void }) {
   const [query, setQuery] = useState("");
@@ -138,7 +139,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const groups = [
     { title: "Overview", hint: "Your home", icon: LayoutDashboard, items: NAV.filter(n => ["/dashboard", "/activity"].includes(n.to)) },
     { title: "Learn & Explore", hint: "Build your knowledge", icon: BookOpen, items: NAV.filter(n => ["/learn", "/glossary", "/connectors", "/labs", "/sql"].includes(n.to)) },
-    { title: "Practice & Assess", hint: "Test your skills", icon: ClipboardCheck, items: NAV.filter(n => ["/certification", "/access-review", "/implementation-simulator", "/interview", "/interview-prep"].includes(n.to)) },
+    { title: "Practice & Assess", hint: "Test your skills", icon: ClipboardCheck, items: NAV.filter(n => ["/certification", "/access-review", "/implementation-simulator", "/workflow-designer", "/interview", "/interview-prep"].includes(n.to)) },
     { title: "Growth & Career", hint: "Track your progress", icon: Award, items: NAV.filter(n => ["/plan", "/skills", "/certificates", "/career"].includes(n.to)) },
     { title: "My Space", hint: "Your personal area", icon: Users, items: NAV.filter(n => ["/workspace", "/community", "/profile"].includes(n.to)) },
   ];
