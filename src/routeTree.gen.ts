@@ -16,12 +16,15 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAccessReviewRouteImport } from './routes/_authenticated/access-review'
 import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedApiPracticeRouteImport } from './routes/_authenticated/api-practice'
 import { Route as AuthenticatedCareerRouteImport } from './routes/_authenticated/career'
 import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authenticated/certificates'
 import { Route as AuthenticatedCertificationRouteImport } from './routes/_authenticated/certification'
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated/community'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedEmailTemplatesRouteImport } from './routes/_authenticated/email-templates'
 import { Route as AuthenticatedGlossaryRouteImport } from './routes/_authenticated/glossary'
+import { Route as AuthenticatedIdentityLifecycleRouteImport } from './routes/_authenticated/identity-lifecycle'
 import { Route as AuthenticatedImplementationSimulatorRouteImport } from './routes/_authenticated/implementation-simulator'
 import { Route as AuthenticatedInterviewRouteImport } from './routes/_authenticated/interview'
 import { Route as AuthenticatedInterviewPrepRouteImport } from './routes/_authenticated/interview-prep'
@@ -76,6 +79,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedApiPracticeRoute =
+  AuthenticatedApiPracticeRouteImport.update({
+    id: '/api-practice',
+    path: '/api-practice',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedCareerRoute = AuthenticatedCareerRouteImport.update({
   id: '/career',
   path: '/career',
@@ -103,11 +112,23 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEmailTemplatesRoute =
+  AuthenticatedEmailTemplatesRouteImport.update({
+    id: '/email-templates',
+    path: '/email-templates',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedGlossaryRoute = AuthenticatedGlossaryRouteImport.update({
   id: '/glossary',
   path: '/glossary',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedIdentityLifecycleRoute =
+  AuthenticatedIdentityLifecycleRouteImport.update({
+    id: '/identity-lifecycle',
+    path: '/identity-lifecycle',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedImplementationSimulatorRoute =
   AuthenticatedImplementationSimulatorRouteImport.update({
     id: '/implementation-simulator',
@@ -215,12 +236,15 @@ export interface FileRoutesByFullPath {
   '/access-review': typeof AuthenticatedAccessReviewRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/api-practice': typeof AuthenticatedApiPracticeRoute
   '/career': typeof AuthenticatedCareerRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/certification': typeof AuthenticatedCertificationRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/email-templates': typeof AuthenticatedEmailTemplatesRoute
   '/glossary': typeof AuthenticatedGlossaryRoute
+  '/identity-lifecycle': typeof AuthenticatedIdentityLifecycleRoute
   '/implementation-simulator': typeof AuthenticatedImplementationSimulatorRoute
   '/interview': typeof AuthenticatedInterviewRoute
   '/interview-prep': typeof AuthenticatedInterviewPrepRoute
@@ -247,12 +271,15 @@ export interface FileRoutesByTo {
   '/access-review': typeof AuthenticatedAccessReviewRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/api-practice': typeof AuthenticatedApiPracticeRoute
   '/career': typeof AuthenticatedCareerRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/certification': typeof AuthenticatedCertificationRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/email-templates': typeof AuthenticatedEmailTemplatesRoute
   '/glossary': typeof AuthenticatedGlossaryRoute
+  '/identity-lifecycle': typeof AuthenticatedIdentityLifecycleRoute
   '/implementation-simulator': typeof AuthenticatedImplementationSimulatorRoute
   '/interview': typeof AuthenticatedInterviewRoute
   '/interview-prep': typeof AuthenticatedInterviewPrepRoute
@@ -281,12 +308,15 @@ export interface FileRoutesById {
   '/_authenticated/access-review': typeof AuthenticatedAccessReviewRoute
   '/_authenticated/activity': typeof AuthenticatedActivityRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/api-practice': typeof AuthenticatedApiPracticeRoute
   '/_authenticated/career': typeof AuthenticatedCareerRoute
   '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
   '/_authenticated/certification': typeof AuthenticatedCertificationRoute
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/email-templates': typeof AuthenticatedEmailTemplatesRoute
   '/_authenticated/glossary': typeof AuthenticatedGlossaryRoute
+  '/_authenticated/identity-lifecycle': typeof AuthenticatedIdentityLifecycleRoute
   '/_authenticated/implementation-simulator': typeof AuthenticatedImplementationSimulatorRoute
   '/_authenticated/interview': typeof AuthenticatedInterviewRoute
   '/_authenticated/interview-prep': typeof AuthenticatedInterviewPrepRoute
@@ -315,12 +345,15 @@ export interface FileRouteTypes {
     | '/access-review'
     | '/activity'
     | '/admin'
+    | '/api-practice'
     | '/career'
     | '/certificates'
     | '/certification'
     | '/community'
     | '/dashboard'
+    | '/email-templates'
     | '/glossary'
+    | '/identity-lifecycle'
     | '/implementation-simulator'
     | '/interview'
     | '/interview-prep'
@@ -347,12 +380,15 @@ export interface FileRouteTypes {
     | '/access-review'
     | '/activity'
     | '/admin'
+    | '/api-practice'
     | '/career'
     | '/certificates'
     | '/certification'
     | '/community'
     | '/dashboard'
+    | '/email-templates'
     | '/glossary'
+    | '/identity-lifecycle'
     | '/implementation-simulator'
     | '/interview'
     | '/interview-prep'
@@ -380,12 +416,15 @@ export interface FileRouteTypes {
     | '/_authenticated/access-review'
     | '/_authenticated/activity'
     | '/_authenticated/admin'
+    | '/_authenticated/api-practice'
     | '/_authenticated/career'
     | '/_authenticated/certificates'
     | '/_authenticated/certification'
     | '/_authenticated/community'
     | '/_authenticated/dashboard'
+    | '/_authenticated/email-templates'
     | '/_authenticated/glossary'
+    | '/_authenticated/identity-lifecycle'
     | '/_authenticated/implementation-simulator'
     | '/_authenticated/interview'
     | '/_authenticated/interview-prep'
@@ -464,6 +503,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/api-practice': {
+      id: '/_authenticated/api-practice'
+      path: '/api-practice'
+      fullPath: '/api-practice'
+      preLoaderRoute: typeof AuthenticatedApiPracticeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/career': {
       id: '/_authenticated/career'
       path: '/career'
@@ -499,11 +545,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/email-templates': {
+      id: '/_authenticated/email-templates'
+      path: '/email-templates'
+      fullPath: '/email-templates'
+      preLoaderRoute: typeof AuthenticatedEmailTemplatesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/glossary': {
       id: '/_authenticated/glossary'
       path: '/glossary'
       fullPath: '/glossary'
       preLoaderRoute: typeof AuthenticatedGlossaryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/identity-lifecycle': {
+      id: '/_authenticated/identity-lifecycle'
+      path: '/identity-lifecycle'
+      fullPath: '/identity-lifecycle'
+      preLoaderRoute: typeof AuthenticatedIdentityLifecycleRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/implementation-simulator': {
@@ -639,12 +699,15 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccessReviewRoute: typeof AuthenticatedAccessReviewRoute
   AuthenticatedActivityRoute: typeof AuthenticatedActivityRoute
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedApiPracticeRoute: typeof AuthenticatedApiPracticeRoute
   AuthenticatedCareerRoute: typeof AuthenticatedCareerRoute
   AuthenticatedCertificatesRoute: typeof AuthenticatedCertificatesRoute
   AuthenticatedCertificationRoute: typeof AuthenticatedCertificationRoute
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEmailTemplatesRoute: typeof AuthenticatedEmailTemplatesRoute
   AuthenticatedGlossaryRoute: typeof AuthenticatedGlossaryRoute
+  AuthenticatedIdentityLifecycleRoute: typeof AuthenticatedIdentityLifecycleRoute
   AuthenticatedImplementationSimulatorRoute: typeof AuthenticatedImplementationSimulatorRoute
   AuthenticatedInterviewRoute: typeof AuthenticatedInterviewRoute
   AuthenticatedInterviewPrepRoute: typeof AuthenticatedInterviewPrepRoute
@@ -669,12 +732,15 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccessReviewRoute: AuthenticatedAccessReviewRoute,
   AuthenticatedActivityRoute: AuthenticatedActivityRoute,
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedApiPracticeRoute: AuthenticatedApiPracticeRoute,
   AuthenticatedCareerRoute: AuthenticatedCareerRoute,
   AuthenticatedCertificatesRoute: AuthenticatedCertificatesRoute,
   AuthenticatedCertificationRoute: AuthenticatedCertificationRoute,
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEmailTemplatesRoute: AuthenticatedEmailTemplatesRoute,
   AuthenticatedGlossaryRoute: AuthenticatedGlossaryRoute,
+  AuthenticatedIdentityLifecycleRoute: AuthenticatedIdentityLifecycleRoute,
   AuthenticatedImplementationSimulatorRoute:
     AuthenticatedImplementationSimulatorRoute,
   AuthenticatedInterviewRoute: AuthenticatedInterviewRoute,
