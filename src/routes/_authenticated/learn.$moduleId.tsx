@@ -1,4 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useUser } from "@/hooks/use-auth";
 import { CheckCircle2, Circle, ClipboardCheck, Network } from "lucide-react";
 import { useCurriculum } from "@/lib/curriculum";
 import { useActivity } from "@/lib/stats";
@@ -11,10 +14,29 @@ export const Route = createFileRoute("/_authenticated/learn/$moduleId")({
 
 function ModulePage() {
   const { moduleId } = Route.useParams();
+  const { user } = useUser();
   const { data: cur, isLoading } = useCurriculum();
   const { data } = useActivity();
+  const loggedView = useRef<string | null>(null);
+  const m = cur?.modules.find((x) => x.id === moduleId);
+
+  useEffect(() => {
+    if (!user || !m) return;
+    const viewKey = `${user.id}:${m.id}`;
+    if (loggedView.current === viewKey) return;
+    loggedView.current = viewKey;
+    void supabase.from("module_views").insert({
+      user_id: user.id,
+      module_id: m.id,
+      module_title: m.title,
+    }).then(({ error }) => {
+      if (error) {
+        loggedView.current = null;
+        console.error("Unable to record module view", error.message);
+      }
+    });
+  }, [user?.id, m?.id, m?.title]);
   if (isLoading || !cur) return <p className="text-muted-foreground">Loading…</p>;
-  const m = cur.modules.find((x) => x.id === moduleId);
   if (!m) return <p className="text-muted-foreground">Module not found.</p>;
   const done = new Set(data?.progress.map((p) => p.lesson_id));
   return (
