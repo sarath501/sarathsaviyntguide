@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 type Rows<T> = { data: T[] | null; error: { message: string } | null };
-async function readAll<T>(fetchPage: (from: number, to: number) => Promise<Rows<T>>): Promise<T[]> {
+async function readAll<T>(fetchPage: (from: number, to: number) => PromiseLike<Rows<T>>): Promise<T[]> {
   const result: T[] = [];
   for (let from = 0; ; from += 1000) {
     const { data, error } = await fetchPage(from, from + 999);
