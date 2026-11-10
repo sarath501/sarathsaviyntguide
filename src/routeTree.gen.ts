@@ -14,14 +14,20 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedCareerRouteImport } from './routes/_authenticated/career'
+import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authenticated/certificates'
 import { Route as AuthenticatedCertificationRouteImport } from './routes/_authenticated/certification'
+import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated/community'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedInterviewRouteImport } from './routes/_authenticated/interview'
+import { Route as AuthenticatedInterviewPrepRouteImport } from './routes/_authenticated/interview-prep'
 import { Route as AuthenticatedLabsRouteImport } from './routes/_authenticated/labs'
 import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/plan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedSkillsRouteImport } from './routes/_authenticated/skills'
 import { Route as AuthenticatedSqlRouteImport } from './routes/_authenticated/sql'
 import { Route as AuthenticatedTutorRouteImport } from './routes/_authenticated/tutor'
+import { Route as AuthenticatedWorkspaceRouteImport } from './routes/_authenticated/workspace'
 import { Route as AuthenticatedConnectorsIndexRouteImport } from './routes/_authenticated/connectors.index'
 import { Route as AuthenticatedConnectorsConnectorIdRouteImport } from './routes/_authenticated/connectors.$connectorId'
 import { Route as AuthenticatedLearnIndexRouteImport } from './routes/_authenticated/learn.index'
@@ -53,12 +59,28 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCareerRoute = AuthenticatedCareerRouteImport.update({
+  id: '/career',
+  path: '/career',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCertificatesRoute =
+  AuthenticatedCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedCertificationRoute =
   AuthenticatedCertificationRouteImport.update({
     id: '/certification',
     path: '/certification',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedCommunityRoute = AuthenticatedCommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -69,6 +91,12 @@ const AuthenticatedInterviewRoute = AuthenticatedInterviewRouteImport.update({
   path: '/interview',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedInterviewPrepRoute =
+  AuthenticatedInterviewPrepRouteImport.update({
+    id: '/interview-prep',
+    path: '/interview-prep',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLabsRoute = AuthenticatedLabsRouteImport.update({
   id: '/labs',
   path: '/labs',
@@ -84,6 +112,11 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSkillsRoute = AuthenticatedSkillsRouteImport.update({
+  id: '/skills',
+  path: '/skills',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSqlRoute = AuthenticatedSqlRouteImport.update({
   id: '/sql',
   path: '/sql',
@@ -92,6 +125,11 @@ const AuthenticatedSqlRoute = AuthenticatedSqlRouteImport.update({
 const AuthenticatedTutorRoute = AuthenticatedTutorRouteImport.update({
   id: '/tutor',
   path: '/tutor',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedWorkspaceRoute = AuthenticatedWorkspaceRouteImport.update({
+  id: '/workspace',
+  path: '/workspace',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedConnectorsIndexRoute =
@@ -135,14 +173,20 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/career': typeof AuthenticatedCareerRoute
+  '/certificates': typeof AuthenticatedCertificatesRoute
   '/certification': typeof AuthenticatedCertificationRoute
+  '/community': typeof AuthenticatedCommunityRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/interview': typeof AuthenticatedInterviewRoute
+  '/interview-prep': typeof AuthenticatedInterviewPrepRoute
   '/labs': typeof AuthenticatedLabsRoute
   '/plan': typeof AuthenticatedPlanRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/skills': typeof AuthenticatedSkillsRoute
   '/sql': typeof AuthenticatedSqlRoute
   '/tutor': typeof AuthenticatedTutorRoute
+  '/workspace': typeof AuthenticatedWorkspaceRoute
   '/connectors/$connectorId': typeof AuthenticatedConnectorsConnectorIdRoute
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
@@ -155,14 +199,20 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/career': typeof AuthenticatedCareerRoute
+  '/certificates': typeof AuthenticatedCertificatesRoute
   '/certification': typeof AuthenticatedCertificationRoute
+  '/community': typeof AuthenticatedCommunityRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/interview': typeof AuthenticatedInterviewRoute
+  '/interview-prep': typeof AuthenticatedInterviewPrepRoute
   '/labs': typeof AuthenticatedLabsRoute
   '/plan': typeof AuthenticatedPlanRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/skills': typeof AuthenticatedSkillsRoute
   '/sql': typeof AuthenticatedSqlRoute
   '/tutor': typeof AuthenticatedTutorRoute
+  '/workspace': typeof AuthenticatedWorkspaceRoute
   '/connectors/$connectorId': typeof AuthenticatedConnectorsConnectorIdRoute
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
@@ -177,14 +227,20 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/career': typeof AuthenticatedCareerRoute
+  '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
   '/_authenticated/certification': typeof AuthenticatedCertificationRoute
+  '/_authenticated/community': typeof AuthenticatedCommunityRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/interview': typeof AuthenticatedInterviewRoute
+  '/_authenticated/interview-prep': typeof AuthenticatedInterviewPrepRoute
   '/_authenticated/labs': typeof AuthenticatedLabsRoute
   '/_authenticated/plan': typeof AuthenticatedPlanRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/skills': typeof AuthenticatedSkillsRoute
   '/_authenticated/sql': typeof AuthenticatedSqlRoute
   '/_authenticated/tutor': typeof AuthenticatedTutorRoute
+  '/_authenticated/workspace': typeof AuthenticatedWorkspaceRoute
   '/_authenticated/connectors/$connectorId': typeof AuthenticatedConnectorsConnectorIdRoute
   '/_authenticated/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
   '/_authenticated/lesson/$lessonId': typeof AuthenticatedLessonLessonIdRoute
@@ -199,14 +255,20 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/admin'
+    | '/career'
+    | '/certificates'
     | '/certification'
+    | '/community'
     | '/dashboard'
     | '/interview'
+    | '/interview-prep'
     | '/labs'
     | '/plan'
     | '/profile'
+    | '/skills'
     | '/sql'
     | '/tutor'
+    | '/workspace'
     | '/connectors/$connectorId'
     | '/learn/$moduleId'
     | '/lesson/$lessonId'
@@ -219,14 +281,20 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/admin'
+    | '/career'
+    | '/certificates'
     | '/certification'
+    | '/community'
     | '/dashboard'
     | '/interview'
+    | '/interview-prep'
     | '/labs'
     | '/plan'
     | '/profile'
+    | '/skills'
     | '/sql'
     | '/tutor'
+    | '/workspace'
     | '/connectors/$connectorId'
     | '/learn/$moduleId'
     | '/lesson/$lessonId'
@@ -240,14 +308,20 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/_authenticated/admin'
+    | '/_authenticated/career'
+    | '/_authenticated/certificates'
     | '/_authenticated/certification'
+    | '/_authenticated/community'
     | '/_authenticated/dashboard'
     | '/_authenticated/interview'
+    | '/_authenticated/interview-prep'
     | '/_authenticated/labs'
     | '/_authenticated/plan'
     | '/_authenticated/profile'
+    | '/_authenticated/skills'
     | '/_authenticated/sql'
     | '/_authenticated/tutor'
+    | '/_authenticated/workspace'
     | '/_authenticated/connectors/$connectorId'
     | '/_authenticated/learn/$moduleId'
     | '/_authenticated/lesson/$lessonId'
@@ -300,11 +374,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/career': {
+      id: '/_authenticated/career'
+      path: '/career'
+      fullPath: '/career'
+      preLoaderRoute: typeof AuthenticatedCareerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/certificates': {
+      id: '/_authenticated/certificates'
+      path: '/certificates'
+      fullPath: '/certificates'
+      preLoaderRoute: typeof AuthenticatedCertificatesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/certification': {
       id: '/_authenticated/certification'
       path: '/certification'
       fullPath: '/certification'
       preLoaderRoute: typeof AuthenticatedCertificationRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/community': {
+      id: '/_authenticated/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof AuthenticatedCommunityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -319,6 +414,13 @@ declare module '@tanstack/react-router' {
       path: '/interview'
       fullPath: '/interview'
       preLoaderRoute: typeof AuthenticatedInterviewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/interview-prep': {
+      id: '/_authenticated/interview-prep'
+      path: '/interview-prep'
+      fullPath: '/interview-prep'
+      preLoaderRoute: typeof AuthenticatedInterviewPrepRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/labs': {
@@ -342,6 +444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/skills': {
+      id: '/_authenticated/skills'
+      path: '/skills'
+      fullPath: '/skills'
+      preLoaderRoute: typeof AuthenticatedSkillsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/sql': {
       id: '/_authenticated/sql'
       path: '/sql'
@@ -354,6 +463,13 @@ declare module '@tanstack/react-router' {
       path: '/tutor'
       fullPath: '/tutor'
       preLoaderRoute: typeof AuthenticatedTutorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/workspace': {
+      id: '/_authenticated/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof AuthenticatedWorkspaceRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/connectors/': {
@@ -403,14 +519,20 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedCareerRoute: typeof AuthenticatedCareerRoute
+  AuthenticatedCertificatesRoute: typeof AuthenticatedCertificatesRoute
   AuthenticatedCertificationRoute: typeof AuthenticatedCertificationRoute
+  AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedInterviewRoute: typeof AuthenticatedInterviewRoute
+  AuthenticatedInterviewPrepRoute: typeof AuthenticatedInterviewPrepRoute
   AuthenticatedLabsRoute: typeof AuthenticatedLabsRoute
   AuthenticatedPlanRoute: typeof AuthenticatedPlanRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedSkillsRoute: typeof AuthenticatedSkillsRoute
   AuthenticatedSqlRoute: typeof AuthenticatedSqlRoute
   AuthenticatedTutorRoute: typeof AuthenticatedTutorRoute
+  AuthenticatedWorkspaceRoute: typeof AuthenticatedWorkspaceRoute
   AuthenticatedConnectorsConnectorIdRoute: typeof AuthenticatedConnectorsConnectorIdRoute
   AuthenticatedLearnModuleIdRoute: typeof AuthenticatedLearnModuleIdRoute
   AuthenticatedLessonLessonIdRoute: typeof AuthenticatedLessonLessonIdRoute
@@ -421,14 +543,20 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedCareerRoute: AuthenticatedCareerRoute,
+  AuthenticatedCertificatesRoute: AuthenticatedCertificatesRoute,
   AuthenticatedCertificationRoute: AuthenticatedCertificationRoute,
+  AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedInterviewRoute: AuthenticatedInterviewRoute,
+  AuthenticatedInterviewPrepRoute: AuthenticatedInterviewPrepRoute,
   AuthenticatedLabsRoute: AuthenticatedLabsRoute,
   AuthenticatedPlanRoute: AuthenticatedPlanRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedSkillsRoute: AuthenticatedSkillsRoute,
   AuthenticatedSqlRoute: AuthenticatedSqlRoute,
   AuthenticatedTutorRoute: AuthenticatedTutorRoute,
+  AuthenticatedWorkspaceRoute: AuthenticatedWorkspaceRoute,
   AuthenticatedConnectorsConnectorIdRoute:
     AuthenticatedConnectorsConnectorIdRoute,
   AuthenticatedLearnModuleIdRoute: AuthenticatedLearnModuleIdRoute,
