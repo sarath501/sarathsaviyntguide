@@ -96,7 +96,7 @@ export const getAdminPlatformAnalytics = createServerFn({ method: "GET" })
 
     return {
       generatedAt: now.toISOString(),
-      recentModuleViews: moduleViews.slice(-250).reverse().map((view) => ({
+      recentModuleViews: moduleViews.slice(0, 250).map((view) => ({
         id: view.id,
         userId: view.user_id,
         learnerName: profileById.get(view.user_id)?.full_name || authById.get(view.user_id)?.email || "Learner",
