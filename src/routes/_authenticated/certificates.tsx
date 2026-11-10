@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useActivity } from "@/lib/stats";
 import { useCurriculum } from "@/lib/curriculum";
 import { PageHeader } from "@/components/AppShell";
 import { Award, LockKeyhole } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-export const Route = createFileRoute("/_authenticated/certificates")({ component: Certificates });
+export const Route = createFileRoute("/_authenticated/certificates")({
+  beforeLoad: () => { throw redirect({ to: "/dashboard" }); }, component: Certificates });
 function Certificates(){
  const {data:a,isLoading}=useActivity();const {data:c}=useCurriculum();
  if(isLoading||!a||!c)return <p className="text-muted-foreground">Loading achievements…</p>;
