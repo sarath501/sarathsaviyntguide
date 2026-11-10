@@ -1,10 +1,7 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState, type ReactNode } from "react";
-import {
-
-  Plug, NotebookPen, ChartNoAxesCombined, Medal, Users, BriefcaseBusiness, GraduationCap, Search, ArrowRight, Command,
-} from "lucide-react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { LayoutDashboard, BookOpen, Award, Wrench, Database, MessagesSquare, Route as RouteIcon, User, Shield, LogOut, Menu, X, Plug, NotebookPen, ChartNoAxesCombined, Medal, Users, BriefcaseBusiness, GraduationCap, Search, ArrowRight, Command, CalendarDays, BookText, ClipboardCheck, ChevronDown, ChevronRight, } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin, useProfile } from "@/hooks/use-auth";
 import { useCurriculum } from "@/lib/curriculum";
@@ -134,24 +131,56 @@ export function AppShell({ children }: { children: ReactNode }) {
     navigate({ to: "/auth", replace: true });
   }
 
-  const linkCls = "flex items-center gap-3 rounded-md px-3 py-2 text-sm text-navy-muted transition-colors hover:bg-sidebar-accent hover:text-navy-foreground";
-  const activeCls = "bg-sidebar-accent text-navy-foreground";
+  const linkCls = "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-navy-muted transition-all duration-200 hover:bg-sidebar-accent hover:text-navy-foreground";
+  const activeCls = "bg-sidebar-accent text-navy-foreground shadow-sm ring-1 ring-white/10";
+  const location = useLocation();
+  const groups = [
+    { title: "Overview", hint: "Your home", icon: LayoutDashboard, items: NAV.filter(n => ["/dashboard", "/activity"].includes(n.to)) },
+    { title: "Learn & Explore", hint: "Build your knowledge", icon: BookOpen, items: NAV.filter(n => ["/learn", "/glossary", "/connectors", "/labs", "/sql"].includes(n.to)) },
+    { title: "Practice & Assess", hint: "Test your skills", icon: ClipboardCheck, items: NAV.filter(n => ["/certification", "/access-review", "/interview", "/interview-prep"].includes(n.to)) },
+    { title: "Growth & Career", hint: "Track your progress", icon: Award, items: NAV.filter(n => ["/plan", "/skills", "/certificates", "/career"].includes(n.to)) },
+    { title: "My Space", hint: "Your personal area", icon: Users, items: NAV.filter(n => ["/workspace", "/community", "/profile"].includes(n.to)) },
+  ];
+  const activeGroup = groups.find(g => g.items.some(item => location.pathname === item.to || (item.to !== "/dashboard" && location.pathname.startsWith(item.to + "/"))))?.title ?? "Overview";
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
+    Overview: true, "Learn & Explore": true, "Practice & Assess": false, "Growth & Career": false, "My Space": false,
+  });
+  useEffect(() => {
+    setExpandedGroups(previous => previous[activeGroup] ? previous : { ...previous, [activeGroup]: true });
+  }, [activeGroup]);
 
   const nav = (
-    <nav className="flex flex-1 flex-col gap-1">
-      {NAV.map((n) => (
-        <Link key={n.to} to={n.to} className={linkCls} activeProps={{ className: activeCls }} onClick={() => setOpen(false)}>
-          <n.icon className="h-4 w-4" /> {n.label}
-        </Link>
-      ))}
-      {isAdmin && <Link to="/admin" className={linkCls} activeProps={{ className: activeCls }} onClick={() => setOpen(false)}><Shield className="h-4 w-4" /> Admin</Link>}
+    <nav aria-label="Main navigation" className="flex flex-1 flex-col gap-2">
+      <div className="px-3 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-navy-muted/70">Workspace navigation</div>
+      {groups.map(group => {
+        const expanded = !!expandedGroups[group.title];
+        const GroupIcon = group.icon;
+        return (
+          <section key={group.title} className="rounded-2xl border border-white/[0.06] bg-white/[0.025] p-1.5">
+            <button type="button" onClick={() => setExpandedGroups(previous => ({ ...previous, [group.title]: !previous[group.title] }))} aria-expanded={expanded} className="flex w-full items-center gap-3 rounded-xl px-2.5 py-2.5 text-left transition-colors hover:bg-white/[0.06]">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/[0.07] text-navy-foreground/80"><GroupIcon className="h-4 w-4"/></span>
+              <span className="min-w-0 flex-1"><span className="block text-xs font-semibold text-navy-foreground">{group.title}</span><span className="mt-0.5 block text-[10px] text-navy-muted">{group.hint}</span></span>
+              <span className="mr-1 rounded-full bg-white/[0.07] px-2 py-0.5 text-[10px] tabular-nums text-navy-muted">{group.items.length}</span>
+              {expanded ? <ChevronDown className="h-4 w-4 text-navy-muted"/> : <ChevronRight className="h-4 w-4 text-navy-muted"/>}
+            </button>
+            {expanded && <div className="mt-1 space-y-0.5 pb-1 pl-2">
+              {group.items.map(n => (
+                <Link key={n.to} to={n.to} className={linkCls} activeProps={{ className: activeCls }} onClick={() => setOpen(false)}>
+                  <n.icon className="h-4 w-4 shrink-0 opacity-80 group-hover:opacity-100"/> <span className="min-w-0 truncate">{n.label}</span>
+                </Link>
+              ))}
+            </div>}
+          </section>
+        );
+      })}
+      {isAdmin && <div className="mt-1 border-t border-navy-line pt-2"><Link to="/admin" className={linkCls} activeProps={{ className: activeCls }} onClick={() => setOpen(false)}><Shield className="h-4 w-4"/> Admin</Link></div>}
     </nav>
   );
 
   return (
     <div className="learning-shell min-h-screen lg:flex">
-      <aside className={`fixed inset-y-0 left-0 z-40 flex h-dvh w-64 shrink-0 flex-col gap-6 overflow-y-auto bg-navy p-4 transition-transform lg:sticky lg:top-0 lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}>
-        <div className="flex items-center justify-between px-2 pt-2">
+      <aside className={`fixed inset-y-0 left-0 z-40 flex h-dvh w-64 shrink-0 flex-col gap-4 overflow-y-auto bg-gradient-to-b from-navy via-navy to-[#101d36] p-3 transition-transform lg:sticky lg:top-0 lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className="flex items-center justify-between rounded-2xl px-2 pb-1 pt-2">
           <Logo light />
           <Button variant="ghost" size="icon" className="shrink-0 text-navy-muted hover:bg-sidebar-accent hover:text-navy-foreground lg:hidden" onClick={() => setOpen(false)} aria-label="Close menu"><X className="h-5 w-5" /></Button>
         </div>
