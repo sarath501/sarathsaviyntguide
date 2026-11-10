@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-export const Route=createFileRoute("/_authenticated/community")({component:Community});
+export const Route=createFileRoute("/_authenticated/community")({
+  beforeLoad: () => { throw redirect({ to: "/dashboard" }); },component:Community});
 type Topic={id:string;user_id:string;title:string;body:string;category:string;status:string;created_at:string};
 type Reply={id:string;topic_id:string;body:string;created_at:string;user_id:string};
 function Community(){
