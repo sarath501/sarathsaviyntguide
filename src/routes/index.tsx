@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Logo";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/avala-sarath-782241263/";
-const PROFILE_IMAGE = "/sarath-profile.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,8 +56,8 @@ function Landing() {
       <main>
         <section className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_15%_20%,hsl(var(--primary)/0.10),transparent_42%),radial-gradient(ellipse_at_85%_70%,hsl(var(--primary)/0.07),transparent_38%)]" />
-          <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 md:grid-cols-[1.1fr_0.9fr] md:px-8 md:py-24">
-            <div className="max-w-2xl">
+          <div className="relative mx-auto max-w-4xl px-5 py-20 text-center md:px-8 md:py-28">
+            <div className="mx-auto max-w-3xl">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground shadow-sm">
                 <span className="h-2 w-2 rounded-full bg-primary" />
                 IAM · IGA · SAVIYNT EIC
@@ -81,28 +80,6 @@ function Landing() {
               </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[420px]">
-              <div className="absolute -inset-4 rounded-[2rem] bg-primary/10 blur-2xl" />
-              <div className="relative overflow-hidden rounded-[1.75rem] border bg-card p-2 shadow-2xl">
-                <img
-                  src={PROFILE_IMAGE}
-                  alt="Portrait of Sarath Avala"
-                  className="aspect-[4/5] w-full rounded-[1.35rem] object-cover object-center"
-                  fetchPriority="high"
-                />
-                <div className="absolute inset-x-2 bottom-2 rounded-b-[1.3rem] bg-gradient-to-t from-black/85 via-black/45 to-transparent px-6 pb-6 pt-20 text-white">
-                  <p className="text-xl font-semibold tracking-tight">Sarath Avala</p>
-                  <p className="mt-1 text-sm text-white/80">Saviynt IGA Certified Professional</p>
-                  <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-white hover:underline">
-                    <Linkedin className="h-4 w-4" /> Connect on LinkedIn <ExternalLink className="h-3.5 w-3.5" />
-                  </a>
-                </div>
-              </div>
-              <div className="absolute -left-5 top-10 hidden rounded-xl border bg-card/95 px-4 py-3 shadow-lg sm:block">
-                <p className="text-xs text-muted-foreground">Learning focus</p>
-                <p className="mt-1 text-sm font-semibold">Saviynt · IAM · IGA</p>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -131,13 +108,13 @@ function Landing() {
 
         <section id="about" className="border-y bg-muted/25">
           <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-[0.85fr_1.15fr] md:px-8 md:py-20">
-            <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-              <img src={PROFILE_IMAGE} alt="Sarath Avala" className="aspect-[5/4] w-full object-cover object-center" loading="lazy" />
-              <div className="p-5">
-                <h2 className="text-xl font-semibold">Sarath Avala</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Creator · Saviynt IGA Certified Professional</p>
-                <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"><Linkedin className="h-4 w-4" /> LinkedIn profile <ExternalLink className="h-3.5 w-3.5" /></a>
-              </div>
+            <div className="flex flex-col justify-center rounded-2xl border bg-card p-7 shadow-sm">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-lg font-semibold text-primary">SA</div>
+              <h2 className="mt-5 text-xl font-semibold">Sarath Avala</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Creator · Saviynt IGA Certified Professional</p>
+              <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"><Linkedin className="h-4 w-4" /> LinkedIn profile <ExternalLink className="h-3.5 w-3.5" /></a>
+              <a href="mailto:avalasarath01@gmail.com" className="mt-3 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"><Mail className="h-4 w-4" /> avalasarath01@gmail.com</a>
+              <a href="tel:+919606032995" className="mt-2 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">+91 9606032995</a>
             </div>
             <div className="self-center">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">About the creator</p>
