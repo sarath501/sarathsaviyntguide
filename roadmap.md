@@ -1,5 +1,8 @@
 # SQL Learning Center enhancement
 
+## Publishing build repair
+- [x] Repair reported syntax and type errors and verify the portal compiles again; build OK, 11 existing tests passed, signed-in pages and mobile menu checked.
+
 ## One-time visual redesign
 - [ ] Apply shared blue/navy styling, homepage architecture visual, learning-card icons, sticky navigation and independent-resource footer; preserve all data and features.
 - [ ] Verify desktop/mobile navigation and existing authenticated learning pages; official vendor logos require verified reuse permission.

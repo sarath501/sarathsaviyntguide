@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { ArrowRight, Award, BookOpen, BookText, BriefcaseBusiness, CalendarDays, ChartNoAxesCombined, ChevronDown, ChevronRight, ClipboardCheck, Command, Database, GitBranch, GraduationCap, LayoutDashboard, LogOut, Medal, Menu, MessagesSquare, NotebookPen, Plug, Route as RouteIcon, ScrollText, Search, Shield, User, Users, Workflow, Wrench, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin, useProfile } from "@/hooks/use-auth";
 import { useCurriculum } from "@/lib/curriculum";
@@ -34,8 +35,7 @@ const NAV = [
   { to: "/profile", label: "Profile", icon: User, description: "Your account and preferences" },
 ] as const;
 
-type SearchResult = { key: string; title: string; detail: string; group: string; to: "/dashboard" | "/learn" | "/certification" | "/implementation-simulator" | "/rules-center" | "/connectors" | "/labs" | "/sql" | "/interview" | "/interview-prep" | "/plan" | "/skills" | "/certificates" | "/workspace" | "/community" | "/career" | "/profile" | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
-type SearchResult = { key: string; title: string; detail: string; group: string; to: "/dashboard" | "/learn" | "/certification" | "/implementation-simulator" | "/workflow-designer" | "/connectors" | "/labs" | "/sql" | "/interview" | "/interview-prep" | "/plan" | "/skills" | "/certificates" | "/workspace" | "/community" | "/career" | "/profile" | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
+type SearchResult = { key: string; title: string; detail: string; group: string; to: (typeof NAV)[number]["to"] | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
 
 function GlobalSearch({ onNavigate }: { onNavigate: () => void }) {
   const [query, setQuery] = useState("");
@@ -140,8 +140,6 @@ export function AppShell({ children }: { children: ReactNode }) {
   const groups = [
     { title: "Overview", hint: "Your home", icon: LayoutDashboard, items: NAV.filter(n => ["/dashboard", "/activity"].includes(n.to)) },
     { title: "Learn & Explore", hint: "Build your knowledge", icon: BookOpen, items: NAV.filter(n => ["/learn", "/glossary", "/rules-center", "/connectors", "/labs", "/sql"].includes(n.to)) },
-    { title: "Practice & Assess", hint: "Test your skills", icon: ClipboardCheck, items: NAV.filter(n => ["/certification", "/access-review", "/implementation-simulator", "/interview", "/interview-prep"].includes(n.to)) },
-    { title: "Learn & Explore", hint: "Build your knowledge", icon: BookOpen, items: NAV.filter(n => ["/learn", "/glossary", "/connectors", "/labs", "/sql"].includes(n.to)) },
     { title: "Practice & Assess", hint: "Test your skills", icon: ClipboardCheck, items: NAV.filter(n => ["/certification", "/access-review", "/implementation-simulator", "/workflow-designer", "/interview", "/interview-prep"].includes(n.to)) },
     { title: "Growth & Career", hint: "Track your progress", icon: Award, items: NAV.filter(n => ["/plan", "/skills", "/certificates", "/career"].includes(n.to)) },
     { title: "My Space", hint: "Your personal area", icon: Users, items: NAV.filter(n => ["/workspace", "/community", "/profile"].includes(n.to)) },
