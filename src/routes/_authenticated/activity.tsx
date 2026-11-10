@@ -91,7 +91,7 @@ function LearningActivity() {
         <div className="min-w-[620px]">
           <div className="mb-2 grid grid-cols-12 gap-1 text-[10px] text-muted-foreground">{monthLabels.map(m=><span key={m.key} style={{gridColumn: `span ${Math.max(1, Math.ceil((calendarDays.findIndex(x=>x.key===m.key) - (monthLabels[monthLabels.indexOf(m)-1] ? calendarDays.findIndex(x=>x.key===monthLabels[monthLabels.indexOf(m)-1].key) : 0))/7))}`}}>{new Date(`${m.key}T00:00:00`).toLocaleDateString(undefined,{month:"short"})}</span>)}</div>
           <div className="grid grid-flow-col grid-rows-7 gap-1">{calendarDays.map(d=><div key={d.key} title={`${d.key}: ${d.count} recorded activities`} className={`h-4 w-4 rounded-[3px] ${d.future ? "bg-muted/30" : d.count===0 ? "bg-muted" : d.count===1 ? "bg-emerald-200 dark:bg-emerald-900" : d.count<=3 ? "bg-emerald-400 dark:bg-emerald-700" : "bg-emerald-600 dark:bg-emerald-500"}`} />)}</div>
-          <div className="mt-3 flex items-center justify-end gap-2 text-[10px] text-muted-foreground"><span>Less</span>{["bg-muted","bg-emerald-200 dark:bg-emerald-900","bg-emerald-400 dark:bg-emerald-700","bg-emerald-600 dark:bg-emerald-500"].map(c=><span key={c} className={`h-3 w-3 rounded-[2px] ${c}`}/ >)}<span>More</span></div>
+          <div className="mt-3 flex items-center justify-end gap-2 text-[10px] text-muted-foreground"><span>Less</span>{["bg-muted","bg-emerald-200 dark:bg-emerald-900","bg-emerald-400 dark:bg-emerald-700","bg-emerald-600 dark:bg-emerald-500"].map(c=><span key={c} className={`h-3 w-3 rounded-[2px] ${c}`}/>)}<span>More</span></div>
         </div>
       </div>
     </section>

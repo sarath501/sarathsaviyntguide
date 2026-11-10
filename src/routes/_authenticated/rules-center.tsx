@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { CheckCircle2, CircleHelp, Code2, Filter, GitBranch, Search, ShieldCheck } from "lucide-react";
+import { CheckCircle2, CircleHelp, Code2, Filter, GitBranch, Search, ShieldCheck, Workflow } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/rules-center")({ component: RulesCenter });
 
@@ -74,6 +74,8 @@ function RulesCenter() {
   const [selected, setSelected] = useState("technical");
   const guide = GUIDES.find(item => item.id === selected) ?? GUIDES[0];
   const filtered = useMemo(() => GUIDES.filter(item => (family === "All" || item.family === family) && (query.trim().length === 0 || (item.title + " " + item.purpose + " " + item.example + " " + item.family).toLowerCase().includes(query.toLowerCase()))), [family, query]);
+
+  if (!guide) return null;
 
   return <div className="space-y-6">
     <PageHeader title="Saviynt Rules Learning Center" subtitle="Understand rule families, when to use them, how to configure them, and how they behave in common IGA scenarios." />
