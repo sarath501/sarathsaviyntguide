@@ -35,6 +35,68 @@ export type Database = {
         }
         Relationships: []
       }
+      community_replies: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          topic_id: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          topic_id: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          topic_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_replies_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "community_topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_topics: {
+        Row: {
+          body: string
+          category: string
+          created_at: string
+          id: string
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          category?: string
+          created_at?: string
+          id?: string
+          status?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          category?: string
+          created_at?: string
+          id?: string
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       connector_bookmarks: {
         Row: {
           connector_id: string
@@ -170,6 +232,39 @@ export type Database = {
           score?: number | null
           topic?: string
           transcript?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
+      lab_progress: {
+        Row: {
+          completed: boolean
+          completed_steps: string[]
+          diagnosis: string
+          id: string
+          lab_id: string
+          score: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_steps?: string[]
+          diagnosis?: string
+          id?: string
+          lab_id: string
+          score?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          completed_steps?: string[]
+          diagnosis?: string
+          id?: string
+          lab_id?: string
+          score?: number
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
