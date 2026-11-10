@@ -29,12 +29,11 @@ const DECISIONS: { value: Decision; label: string }[] = [
 function AccessReviewSimulator() {
   const [answers, setAnswers] = useState<Record<number, Decision>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [showAll, setShowAll] = useState(false);
   const score = useMemo(() => CASES.filter(c => answers[c.id] === c.expected).length, [answers]);
   const complete = CASES.every(c => answers[c.id]);
   const answered = Object.keys(answers).length;
 
-  function reset() { setAnswers({}); setSubmitted(false); setShowAll(false); }
+  function reset() { setAnswers({}); setSubmitted(false); }
 
   return <div className="space-y-6">
     <PageHeader title="Access Review Simulator" subtitle="Practice certification decisions using realistic identity governance scenarios. This is a learning simulation, not a live access review." action={<Button variant="outline" onClick={reset}><RotateCcw className="mr-2 h-4 w-4"/>Reset practice</Button>} />
