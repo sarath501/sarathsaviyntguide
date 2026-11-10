@@ -1,4 +1,4 @@
-import { LayoutDashboard, CalendarDays, BookOpen, BookText, ScrollText, Award, ClipboardCheck, Workflow, GitBranch, Plug, Wrench, Database, MessagesSquare, GraduationCap, Route as RouteIcon, ChartNoAxesCombined, Medal, NotebookPen, Users, BriefcaseBusiness, User, GitCompareArrows, Mail } from "lucide-react";
+import { LayoutDashboard, CalendarDays, BookOpen, BookText, ScrollText, Award, ClipboardCheck, Workflow, GitBranch, Plug, Wrench, Database, MessagesSquare, GraduationCap, Route as RouteIcon, ChartNoAxesCombined, Medal, NotebookPen, Users, BriefcaseBusiness, User, GitCompareArrows, Mail, Code2 } from "lucide-react";
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
@@ -20,6 +20,7 @@ const NAV = [
   { to: "/rules-center", label: "Saviynt Rules Center", icon: ScrollText, description: "Technical rules, birthright, user update rules, policies and SoD" },
   { to: "/identity-lifecycle", label: "Identity Lifecycle Simulator", icon: GitCompareArrows, description: "Simulate joiner, mover, leaver and rehire access changes" },
   { to: "/email-templates", label: "Email Template Center", icon: Mail, description: "IGA notifications, email examples, triggers and variables" },
+  { to: "/api-practice", label: "API & Postman Practice Lab", icon: Code2, description: "Build API requests, practise REST scenarios and diagnose HTTP errors" },
   { to: "/certification", label: "Certification Prep", icon: Award, description: "Professional and Advanced practice exams" },
   { to: "/access-review", label: "Access Review Simulator", icon: ClipboardCheck, description: "Practice access certification and reviewer decisions" },
   { to: "/implementation-simulator", label: "Implementation Simulator", icon: Workflow, description: "Practise an end-to-end Saviynt EIC implementation project" },
