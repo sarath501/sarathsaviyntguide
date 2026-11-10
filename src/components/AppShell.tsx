@@ -20,6 +20,7 @@ const NAV = [
   { to: "/learn", label: "Learning Center", icon: BookOpen, description: "Saviynt modules, lessons and IGA concepts" },
   { to: "/glossary", label: "IGA Glossary", icon: BookText, description: "Search IAM, IGA, Saviynt and integration terminology" },
   { to: "/certification", label: "Certification Prep", icon: Award, description: "Professional and Advanced practice exams" },
+  { to: "/access-review", label: "Access Review Simulator", icon: ClipboardCheck, description: "Practice access certification and reviewer decisions" },
   { to: "/connectors", label: "Connectors Learning Center", icon: Plug, description: "Connector guides, integrations and comparison" },
   { to: "/labs", label: "Troubleshooting Center", icon: Wrench, description: "Connector error library, diagnostic guides and hands-on labs" },
   { to: "/sql", label: "SQL Practice", icon: Database, description: "SQL exercises and analytics practice" },
