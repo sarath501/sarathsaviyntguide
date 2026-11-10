@@ -135,7 +135,8 @@ const TROUBLESHOOTING_GUIDE: KnowledgeEntry[] = [
   }
 ];
 
-\nfunction Labs() {
+
+function Labs() {
   const [open, setOpen] = useState<string | null>(null);
   const [showHint, setShowHint] = useState<Record<string, boolean>>({});
   const [showSolution, setShowSolution] = useState<Record<string, boolean>>({});
