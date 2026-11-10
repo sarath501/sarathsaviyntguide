@@ -24,7 +24,6 @@ export function AdminAnalytics() {
     { label: "Quiz pass rate (70%+)", value: `${totals?.quizPassRate ?? 0}%`, icon: ClipboardCheck },
     { label: "Interview sessions", value: totals?.interviews ?? 0, icon: MessageSquare },
     { label: "Connector progress records", value: totals?.connectorProgressRecords ?? 0, icon: Plug },
-    { label: "Module opens recorded", value: data?.recentModuleViews?.length ?? 0, icon: BookOpen },
   ];
   return (
     <div className="space-y-6">
@@ -49,41 +48,6 @@ export function AdminAnalytics() {
               <div className="h-72"><ResponsiveContainer width="100%" height="100%"><LineChart data={data?.monthly ?? []}><CartesianGrid strokeDasharray="3 3" vertical={false} /><XAxis dataKey="month" tick={{ fontSize: 11 }} /><YAxis allowDecimals={false} tick={{ fontSize: 11 }} /><Tooltip /><Line type="monotone" dataKey="lessonCompletions" name="Lesson completions" stroke="hsl(var(--primary))" strokeWidth={2} /><Line type="monotone" dataKey="quizAttempts" name="Quiz attempts" stroke="hsl(var(--chart-2))" strokeWidth={2} /></LineChart></ResponsiveContainer></div>
             </section>
           </div>
-          <section className={card}>
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h3 className="font-semibold">Which learner opened which module?</h3>
-                <p className="mt-1 text-xs text-muted-foreground">Most recent 250 module-opening events, with learner identity and timestamp.</p>
-              </div>
-              <span className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">{data?.recentModuleViews?.length ?? 0} records</span>
-            </div>
-            {data?.recentModuleViews?.length ? (
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[680px] text-sm">
-                  <thead><tr className="border-b text-left text-xs text-muted-foreground">
-                    <th className="px-3 py-3 font-medium">Learner</th>
-                    <th className="px-3 py-3 font-medium">Email</th>
-                    <th className="px-3 py-3 font-medium">Module opened</th>
-                    <th className="px-3 py-3 font-medium">Opened at</th>
-                  </tr></thead>
-                  <tbody>{data.recentModuleViews.map((view) => (
-                    <tr key={view.id} className="border-b last:border-0">
-                      <td className="px-3 py-3 font-medium">{view.learnerName}</td>
-                      <td className="px-3 py-3 text-muted-foreground">{view.email}</td>
-                      <td className="px-3 py-3">{view.moduleTitle}</td>
-                      <td className="whitespace-nowrap px-3 py-3 text-muted-foreground">{new Date(view.openedAt).toLocaleString()}</td>
-                    </tr>
-                  ))}</tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="rounded-lg border border-dashed p-6 text-center">
-                <BookOpen className="mx-auto h-6 w-6 text-muted-foreground" />
-                <p className="mt-2 text-sm font-medium">No module views recorded yet</p>
-                <p className="mt-1 text-xs text-muted-foreground">New module openings will appear here after this tracking feature is deployed.</p>
-              </div>
-            )}
-          </section>
           <section className={card}>
             <h3 className="mb-3 font-semibold">Learning content inventory</h3>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">{[
