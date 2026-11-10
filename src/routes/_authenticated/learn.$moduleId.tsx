@@ -46,6 +46,7 @@ function ModulePage() {
         <div>
           <h1 className="text-2xl font-semibold md:text-3xl">Module {m.num}: {m.title}</h1>
           <p className="text-muted-foreground">{m.summary}</p>
+          <p className="mt-2 text-xs text-muted-foreground">Module visits are recorded for learning usage analytics.</p>
         </div>
         <Button asChild variant="outline"><Link to="/quiz/$moduleId" params={{ moduleId: m.id }}><ClipboardCheck className="mr-1 h-4 w-4" />Module quiz</Link></Button>
       </div>
