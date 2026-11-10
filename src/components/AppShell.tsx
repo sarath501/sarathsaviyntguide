@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
 import {
-  LayoutDashboard, BookOpen, Award, Wrench, Database, MessagesSquare, Route as RouteIcon, User, Shield, LogOut, Menu, X, CalendarDays,
+
   Plug, NotebookPen, ChartNoAxesCombined, Medal, Users, BriefcaseBusiness, GraduationCap, Search, ArrowRight, Command,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +18,7 @@ const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, description: "Your learning progress and recent activity" },
   { to: "/activity", label: "Activity & Achievements", icon: CalendarDays, description: "Learning calendar, streaks and achievement badges" },
   { to: "/learn", label: "Learning Center", icon: BookOpen, description: "Saviynt modules, lessons and IGA concepts" },
+  { to: "/glossary", label: "IGA Glossary", icon: BookText, description: "Search IAM, IGA, Saviynt and integration terminology" },
   { to: "/certification", label: "Certification Prep", icon: Award, description: "Professional and Advanced practice exams" },
   { to: "/connectors", label: "Connectors Learning Center", icon: Plug, description: "Connector guides, integrations and comparison" },
   { to: "/labs", label: "Troubleshooting Center", icon: Wrench, description: "Connector error library, diagnostic guides and hands-on labs" },
