@@ -25,6 +25,7 @@ const NAV = [
   { to: "/implementation-simulator", label: "Implementation Simulator", icon: Workflow, description: "Practise an end-to-end Saviynt EIC implementation project" },
   { to: "/workflow-designer", label: "Workflow Design Simulator", icon: GitBranch, description: "Design IGA triggers, policy checks, approvals and fulfillment flows" },
   { to: "/connectors", label: "Connectors Learning Center", icon: Plug, description: "Connector guides, integrations and comparison" },
+  { to: "/connector-studio", label: "Connector Configuration Studio", icon: Plug, description: "Practise connector setup, attribute mapping and aggregation validation" },
   { to: "/labs", label: "Troubleshooting Center", icon: Wrench, description: "Connector error library, diagnostic guides and hands-on labs" },
   { to: "/sql", label: "SQL Practice", icon: Database, description: "SQL exercises and analytics practice" },
   { to: "/interview", label: "AI Mock Interviews", icon: MessagesSquare, description: "Mock interview practice" },
@@ -39,6 +40,7 @@ const NAV = [
 ] as const;
 
 type SearchResult = { key: string; title: string; detail: string; group: string; to: (typeof NAV)[number]["to"] | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
+type SearchResult = { key: string; title: string; detail: string; group: string; to: "/dashboard" | "/learn" | "/certification" | "/implementation-simulator" | "/rules-center" | "/identity-lifecycle" | "/email-templates" | "/workflow-designer" | "/connectors" | "/connector-studio" | "/labs" | "/sql" | "/interview" | "/interview-prep" | "/plan" | "/skills" | "/certificates" | "/workspace" | "/community" | "/career" | "/profile" | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
 
 
 function GlobalSearch({ onNavigate }: { onNavigate: () => void }) {
@@ -143,7 +145,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const location = useLocation();
   const groups = [
     { title: "Overview", hint: "Your home", icon: LayoutDashboard, items: NAV.filter(n => ["/dashboard", "/activity"].includes(n.to)) },
-    { title: "Learn & Explore", hint: "Build your knowledge", icon: BookOpen, items: NAV.filter(n => ["/learn", "/glossary", "/rules-center", "/connectors", "/labs", "/sql"].includes(n.to)) },
+    { title: "Learn & Explore", hint: "Build your knowledge", icon: BookOpen, items: NAV.filter(n => ["/learn", "/glossary", "/rules-center", "/connectors", "/connector-studio", "/labs", "/sql"].includes(n.to)) },
     { title: "Practice & Assess", hint: "Test your skills", icon: ClipboardCheck, items: NAV.filter(n => ["/certification", "/access-review", "/implementation-simulator", "/workflow-designer", "/interview", "/interview-prep"].includes(n.to)) },
     { title: "Growth & Career", hint: "Track your progress", icon: Award, items: NAV.filter(n => ["/plan", "/skills", "/certificates", "/career"].includes(n.to)) },
     { title: "My Space", hint: "Your personal area", icon: Users, items: NAV.filter(n => ["/workspace", "/community", "/profile"].includes(n.to)) },
