@@ -1,7 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { ArrowRight, Award, BookOpen, BookText, CalendarDays, ChevronDown, ChevronRight, ClipboardCheck, Code2, Command, Database, GitCompareArrows, GraduationCap, LayoutDashboard, LogOut, Mail, MessagesSquare, Plug, ScrollText, Search, Shield, User, Workflow, Wrench, X } from "lucide-react";
+import { ArrowRight, Award, BookOpen, BookText, CalendarDays, ChevronDown, ChevronRight, ClipboardCheck, Code2, Command, Database, GitCompareArrows, GraduationCap, LayoutDashboard, LogOut, Mail, Menu, MessagesSquare, Plug, ScrollText, Search, Shield, User, Workflow, Wrench, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin, useProfile } from "@/hooks/use-auth";
 import { useCurriculum } from "@/lib/curriculum";
