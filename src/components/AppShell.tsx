@@ -1,7 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { ArrowRight, Award, BookOpen, BookText, BriefcaseBusiness, CalendarDays, ChartNoAxesCombined, ChevronDown, ChevronRight, ClipboardCheck, Code2, Command, Database, GitBranch, GitCompareArrows, GraduationCap, LayoutDashboard, LogOut, Mail, Medal, Menu, MessagesSquare, NotebookPen, Plug, Route as RouteIcon, ScrollText, Search, Shield, User, Users, Workflow, Wrench, X } from "lucide-react";
+import { ArrowRight, Award, BookOpen, BookText, CalendarDays, ChevronDown, ChevronRight, ClipboardCheck, Code2, Command, Database, GitCompareArrows, GraduationCap, LayoutDashboard, LogOut, Mail, MessagesSquare, Plug, ScrollText, Search, Shield, User, Workflow, Wrench, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin, useProfile } from "@/hooks/use-auth";
 import { useCurriculum } from "@/lib/curriculum";
@@ -16,31 +16,23 @@ const NAV = [
   { to: "/activity", label: "Activity & Achievements", icon: CalendarDays, description: "Learning calendar, streaks and achievement badges" },
   { to: "/learn", label: "Learning Center", icon: BookOpen, description: "Saviynt modules, lessons and IGA concepts" },
   { to: "/glossary", label: "IGA Glossary", icon: BookText, description: "Search IAM, IGA, Saviynt and integration terminology" },
+  { to: "/connectors", label: "Connectors Learning Center", icon: Plug, description: "Connector guides, integrations and comparison" },
+  { to: "/connector-studio", label: "Connector Configuration Studio", icon: Plug, description: "Practise connector setup, attribute mapping and aggregation validation" },
   { to: "/rules-center", label: "Saviynt Rules Center", icon: ScrollText, description: "Technical rules, birthright, user update rules, policies and SoD" },
-  { to: "/identity-lifecycle", label: "Identity Lifecycle Simulator", icon: GitCompareArrows, description: "Simulate joiner, mover, leaver and rehire access changes" },
+  { to: "/labs", label: "Troubleshooting Center", icon: Wrench, description: "Connector error library, diagnostic guides and hands-on labs" },
+  { to: "/sql", label: "SQL Practice", icon: Database, description: "SQL exercises and analytics practice" },
   { to: "/email-templates", label: "Email Template Center", icon: Mail, description: "IGA notifications, email examples, triggers and variables" },
   { to: "/api-practice", label: "API & Postman Practice Lab", icon: Code2, description: "Build API requests, practise REST scenarios and diagnose HTTP errors" },
+  { to: "/identity-lifecycle", label: "Identity Lifecycle Simulator", icon: GitCompareArrows, description: "Simulate joiner, mover, leaver and rehire access changes" },
   { to: "/certification", label: "Certification Prep", icon: Award, description: "Professional and Advanced practice exams" },
   { to: "/access-review", label: "Access Review Simulator", icon: ClipboardCheck, description: "Practice access certification and reviewer decisions" },
   { to: "/implementation-simulator", label: "Implementation Simulator", icon: Workflow, description: "Practise an end-to-end Saviynt EIC implementation project" },
-  { to: "/workflow-designer", label: "Workflow Design Simulator", icon: GitBranch, description: "Design IGA triggers, policy checks, approvals and fulfillment flows" },
-  { to: "/connectors", label: "Connectors Learning Center", icon: Plug, description: "Connector guides, integrations and comparison" },
-  { to: "/connector-studio", label: "Connector Configuration Studio", icon: Plug, description: "Practise connector setup, attribute mapping and aggregation validation" },
-  { to: "/labs", label: "Troubleshooting Center", icon: Wrench, description: "Connector error library, diagnostic guides and hands-on labs" },
-  { to: "/sql", label: "SQL Practice", icon: Database, description: "SQL exercises and analytics practice" },
-  { to: "/interview", label: "AI Mock Interviews", icon: MessagesSquare, description: "Mock interview practice" },
   { to: "/interview-prep", label: "Interview Question Bank", icon: GraduationCap, description: "Technical, scenario and managerial questions" },
-  { to: "/plan", label: "Learning Path", icon: RouteIcon, description: "Plan your learning goals and schedule" },
-  { to: "/skills", label: "My Skills", icon: ChartNoAxesCombined, description: "Track your skills" },
-  { to: "/certificates", label: "Certificates", icon: Medal, description: "Your learning achievements" },
-  { to: "/workspace", label: "My Workspace", icon: NotebookPen, description: "Your personal learning workspace" },
-  { to: "/community", label: "Community", icon: Users, description: "Connect with other learners" },
-  { to: "/career", label: "Career Center", icon: BriefcaseBusiness, description: "Career resources and opportunities" },
+  { to: "/interview", label: "AI Mock Interviews", icon: MessagesSquare, description: "Mock interview practice" },
   { to: "/profile", label: "Profile", icon: User, description: "Your account and preferences" },
 ] as const;
 
 type SearchResult = { key: string; title: string; detail: string; group: string; to: (typeof NAV)[number]["to"] | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
-type SearchResult = { key: string; title: string; detail: string; group: string; to: "/dashboard" | "/learn" | "/certification" | "/implementation-simulator" | "/rules-center" | "/identity-lifecycle" | "/email-templates" | "/workflow-designer" | "/connectors" | "/connector-studio" | "/labs" | "/sql" | "/interview" | "/interview-prep" | "/plan" | "/skills" | "/certificates" | "/workspace" | "/community" | "/career" | "/profile" | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
 
 
 function GlobalSearch({ onNavigate }: { onNavigate: () => void }) {
@@ -144,15 +136,14 @@ export function AppShell({ children }: { children: ReactNode }) {
   const activeCls = "bg-sidebar-accent text-navy-foreground shadow-sm ring-1 ring-white/10";
   const location = useLocation();
   const groups = [
-    { title: "Overview", hint: "Your home", icon: LayoutDashboard, items: NAV.filter(n => ["/dashboard", "/activity"].includes(n.to)) },
-    { title: "Learn & Explore", hint: "Build your knowledge", icon: BookOpen, items: NAV.filter(n => ["/learn", "/glossary", "/rules-center", "/connectors", "/connector-studio", "/labs", "/sql"].includes(n.to)) },
-    { title: "Practice & Assess", hint: "Test your skills", icon: ClipboardCheck, items: NAV.filter(n => ["/certification", "/access-review", "/implementation-simulator", "/workflow-designer", "/interview", "/interview-prep"].includes(n.to)) },
-    { title: "Growth & Career", hint: "Track your progress", icon: Award, items: NAV.filter(n => ["/plan", "/skills", "/certificates", "/career"].includes(n.to)) },
-    { title: "My Space", hint: "Your personal area", icon: Users, items: NAV.filter(n => ["/workspace", "/community", "/profile"].includes(n.to)) },
+    { title: "Overview", hint: "Your home and progress", icon: LayoutDashboard, items: NAV.filter(n => ["/dashboard", "/activity"].includes(n.to)) },
+    { title: "Learn & Explore", hint: "Guides, concepts and tools", icon: BookOpen, items: NAV.filter(n => ["/learn", "/glossary", "/connectors", "/connector-studio", "/rules-center", "/labs", "/sql", "/email-templates"].includes(n.to)) },
+    { title: "Practice & Assess", hint: "Hands-on learning and assessment", icon: ClipboardCheck, items: NAV.filter(n => ["/api-practice", "/identity-lifecycle", "/certification", "/access-review", "/implementation-simulator", "/interview-prep", "/interview"].includes(n.to)) },
+    { title: "Account", hint: "Your account settings", icon: User, items: NAV.filter(n => ["/profile"].includes(n.to)) },
   ];
   const activeGroup = groups.find(g => g.items.some(item => location.pathname === item.to || (item.to !== "/dashboard" && location.pathname.startsWith(item.to + "/"))))?.title ?? "Overview";
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
-    Overview: true, "Learn & Explore": true, "Practice & Assess": false, "Growth & Career": false, "My Space": false,
+    Overview: true, "Learn & Explore": true, "Practice & Assess": false, Account: false,
   });
   useEffect(() => {
     setExpandedGroups(previous => previous[activeGroup] ? previous : { ...previous, [activeGroup]: true });
