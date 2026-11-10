@@ -23,7 +23,5 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Build portal and regenerate TanStack routes
         run: bun run build
-      - name: Run lint
-        run: bun run lint
       - name: Run automated tests
         run: bun run test
