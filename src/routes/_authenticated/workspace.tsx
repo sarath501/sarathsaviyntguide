@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-export const Route = createFileRoute("/_authenticated/workspace")({ component: Workspace });
+export const Route = createFileRoute("/_authenticated/workspace")({
+  beforeLoad: () => { throw redirect({ to: "/dashboard" }); }, component: Workspace });
 type Note = { id: string; title: string; body: string; updated_at: string };
 function Workspace() {
   const { user } = useUser();
