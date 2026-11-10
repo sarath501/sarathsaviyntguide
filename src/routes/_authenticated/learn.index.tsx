@@ -56,18 +56,18 @@ function Learn() {
   const resultCount = filteredModules.reduce((count, module) => count + (module.moduleMatches ? module.lessons.length : module.matchingLessons.length), 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7 animate-in fade-in-50 duration-500">
       <PageHeader title="Saviynt Learning Center" subtitle={`${cur.modules.length} modules · ${cur.lessons.length} lessons. Learn concepts, follow implementation steps and practise with examples.`} />
       {(resume || bm.length > 0) && (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-5 md:grid-cols-2">
           {resume && (
-            <div className="flex items-center justify-between gap-3 rounded-xl border bg-hero p-5 text-navy-foreground">
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-hero p-6 text-navy-foreground shadow-lg">
               <div><p className="text-xs uppercase tracking-wider text-navy-muted">Continue where you left off</p><p className="mt-1 font-semibold">{resume.title}</p></div>
               <Button asChild><Link to="/lesson/$lessonId" params={{ lessonId: resume.id }}><PlayCircle className="mr-1 h-4 w-4" />Continue</Link></Button>
             </div>
           )}
           {bm.length > 0 && (
-            <div className="rounded-xl border bg-card p-5 shadow-card">
+            <div className="rounded-2xl border bg-gradient-to-br from-card to-muted/30 p-5 shadow-sm">
               <p className="mb-2 flex items-center gap-1 text-sm font-semibold"><Bookmark className="h-4 w-4 text-primary" />Your saved lessons</p>
               <ul className="space-y-1">{bm.slice(0, 5).map((l) => <li key={l!.id}><Link to="/lesson/$lessonId" params={{ lessonId: l!.id }} className="text-sm text-primary hover:underline">{l!.title}</Link></li>)}</ul>
             </div>
@@ -75,7 +75,7 @@ function Learn() {
         </div>
       )}
 
-      <section className="rounded-xl border bg-card p-4 shadow-card" aria-label="Search and filter learning content">
+      <section className="rounded-2xl border bg-card p-5 shadow-sm ring-1 ring-border/40" aria-label="Search and filter learning content">
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="relative min-w-0 flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -101,14 +101,14 @@ function Learn() {
           const pct = s?.completion.find((c) => c.module === `M${m.num}`)?.pct ?? 0;
           const visibleLessons = search.trim() && !m.moduleMatches ? m.matchingLessons : m.lessons;
           return (
-            <article key={m.id} className="rounded-xl border bg-card p-5 shadow-card transition hover:border-primary/40">
+            <article key={m.id} className="group relative overflow-hidden rounded-2xl border bg-gradient-to-br from-card via-card to-muted/40 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl">
               <div className="flex items-center justify-between gap-2">
-                <span className="font-mono text-xs text-muted-foreground">MODULE {m.num}</span>
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 font-mono text-[10px] font-semibold tracking-wider text-primary">MODULE {m.num}</span>
                 <Badge variant="secondary">{m.level}</Badge>
               </div>
-              <h2 className="mt-2 text-lg font-semibold">{m.title}</h2>
+              <h2 className="mt-3 text-xl font-semibold tracking-tight transition-colors group-hover:text-primary">{m.title}</h2>
               <p className="mt-1 text-sm text-muted-foreground">{m.summary}</p>
-              <div className="mt-4 flex items-center gap-3"><Progress value={pct} /><span className="text-xs tabular-nums text-muted-foreground">{pct}% complete</span></div>
+              <div className="mt-5 flex items-center gap-3"><Progress value={pct} className="h-2" /><span className="min-w-20 text-right text-xs font-semibold tabular-nums text-muted-foreground">{pct}% complete</span></div>
               <p className="mt-2 text-xs text-muted-foreground">{m.lessons.length} lessons · module quiz</p>
               {visibleLessons.length > 0 && (
                 <div className="mt-4 border-t pt-3">
@@ -121,7 +121,7 @@ function Learn() {
                   {visibleLessons.length > 3 && !(search.trim() && !m.moduleMatches) && <p className="mt-2 text-xs text-muted-foreground">And {visibleLessons.length - 3} more lessons</p>}
                 </div>
               )}
-              <div className="mt-4"><Button asChild variant="outline" size="sm"><Link to="/learn/$moduleId" params={{ moduleId: m.id }}>Open module <PlayCircle className="ml-2 h-4 w-4" /></Link></Button></div>
+              <div className="mt-5 flex items-center justify-between border-t pt-4"><span className="text-xs text-muted-foreground">{m.lessons.length} lessons · module quiz</span><Button asChild size="sm" className="shadow-sm transition-transform group-hover:translate-x-0.5"><Link to="/learn/$moduleId" params={{ moduleId: m.id }}>Explore module <PlayCircle className="ml-2 h-4 w-4" /></Link></Button></div>
             </article>
           );
         })}

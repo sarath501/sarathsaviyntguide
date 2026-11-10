@@ -29,7 +29,7 @@ function StatCard({ to, icon: Icon, label, value, hint }: {
   icon: typeof Flame; label: string; value: string | number; hint: string;
 }) {
   return (
-    <Link to={to} className="group rounded-2xl border bg-card p-4 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+    <Link to={to} className="group relative overflow-hidden rounded-2xl border bg-gradient-to-br from-card to-muted/30 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
       <div className="flex items-center justify-between gap-2">
         <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon className="h-4 w-4" /></span>
         <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
@@ -43,7 +43,7 @@ function StatCard({ to, icon: Icon, label, value, hint }: {
 
 function ChartCard({ title, subtitle, children, empty }: { title: string; subtitle: string; children: React.ReactNode; empty?: boolean }) {
   return (
-    <div className="rounded-2xl border bg-card p-5 shadow-sm">
+    <div className="rounded-2xl border bg-card p-6 shadow-sm transition-shadow hover:shadow-md">
       <div className="mb-4"><h3 className="font-semibold">{title}</h3><p className="mt-1 text-xs text-muted-foreground">{subtitle}</p></div>
       {empty ? <div className="flex h-48 flex-col items-center justify-center text-center"><TrendingUp className="h-7 w-7 text-muted-foreground/50" /><p className="mt-2 text-sm text-muted-foreground">No data yet</p><p className="text-xs text-muted-foreground">Complete a lesson or assessment to see your progress here.</p></div> : <div className="h-48">{children}</div>}
     </div>
@@ -71,10 +71,10 @@ function Dashboard() {
   const progressValue = Math.round(s.pct * 0.5 + s.bestCert * 0.5);
 
   return (
-    <div className="space-y-8">
-      <section className="relative overflow-hidden rounded-3xl bg-hero p-6 text-navy-foreground shadow-lg md:p-9">
-        <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full border-[30px] border-white/5" />
-        <div className="pointer-events-none absolute -bottom-24 right-1/3 h-48 w-48 rounded-full bg-primary/10 blur-2xl" />
+    <div className="space-y-9 animate-in fade-in-50 duration-500">
+      <section className="relative overflow-hidden rounded-[2rem] bg-hero p-6 text-navy-foreground shadow-xl ring-1 ring-white/10 md:p-10">
+        <div className="pointer-events-none absolute -right-16 -top-20 h-72 w-72 rounded-full border-[34px] border-white/[0.06]" />
+        <div className="pointer-events-none absolute -bottom-24 right-1/3 h-56 w-56 rounded-full bg-primary/20 blur-3xl" />
         <div className="relative grid gap-7 md:grid-cols-[1.35fr_0.65fr] md:items-center">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-navy-muted"><Sparkles className="h-3.5 w-3.5" /> YOUR LEARNING SPACE</div>
@@ -85,7 +85,7 @@ function Dashboard() {
               <Link to="/plan" className="inline-flex items-center rounded-lg border border-white/20 px-4 py-2.5 text-sm font-medium text-navy-foreground transition hover:bg-white/10">View learning path</Link>
             </div>
           </div>
-          <div className="rounded-2xl border border-white/15 bg-black/10 p-5 backdrop-blur-sm">
+          <div className="rounded-3xl border border-white/15 bg-white/[0.08] p-6 shadow-inner backdrop-blur-md">
             <div className="flex items-center justify-between"><span className="text-sm font-medium">Your learning progress</span><Target className="h-5 w-5 text-navy-muted" /></div>
             <p className="mt-3 text-4xl font-bold tabular-nums">{s.pct}%</p>
             <p className="mt-1 text-xs text-navy-muted">{s.doneCount} of {s.total} lessons completed</p>
@@ -110,7 +110,7 @@ function Dashboard() {
         <div className="mb-4"><h2 className="text-xl font-bold">Explore your learning tools</h2><p className="mt-1 text-sm text-muted-foreground">Choose an activity to continue. Every card opens that section.</p></div>
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {QUICK_LINKS.map((item) => (
-            <Link key={item.to} to={item.to} className="group flex min-h-28 items-center gap-4 rounded-2xl border bg-card p-4 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <Link key={item.to} to={item.to} className="group flex min-h-32 items-center gap-4 rounded-2xl border bg-gradient-to-br from-card to-muted/30 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${item.tone}`}><item.icon className="h-5 w-5" /></span>
               <span className="min-w-0 flex-1"><span className="block text-[10px] font-bold tracking-[0.14em] text-muted-foreground">{item.tag}</span><span className="mt-1 block font-semibold">{item.title}</span><span className="mt-0.5 block text-xs text-muted-foreground">{item.description}</span></span>
               <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
