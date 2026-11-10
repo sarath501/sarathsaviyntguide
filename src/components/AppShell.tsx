@@ -1,7 +1,6 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { LayoutDashboard, BookOpen, Award, Wrench, Database, MessagesSquare, Route as RouteIcon, User, Shield, LogOut, Menu, X, Plug, NotebookPen, ChartNoAxesCombined, Medal, Users, BriefcaseBusiness, GraduationCap, Search, ArrowRight, Command, CalendarDays, BookText, ClipboardCheck, ChevronDown, ChevronRight, Workflow, GitBranch, } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin, useProfile } from "@/hooks/use-auth";
 import { useCurriculum } from "@/lib/curriculum";
@@ -16,6 +15,7 @@ const NAV = [
   { to: "/activity", label: "Activity & Achievements", icon: CalendarDays, description: "Learning calendar, streaks and achievement badges" },
   { to: "/learn", label: "Learning Center", icon: BookOpen, description: "Saviynt modules, lessons and IGA concepts" },
   { to: "/glossary", label: "IGA Glossary", icon: BookText, description: "Search IAM, IGA, Saviynt and integration terminology" },
+  { to: "/rules-center", label: "Saviynt Rules Center", icon: ScrollText, description: "Technical rules, birthright, user update rules, policies and SoD" },
   { to: "/certification", label: "Certification Prep", icon: Award, description: "Professional and Advanced practice exams" },
   { to: "/access-review", label: "Access Review Simulator", icon: ClipboardCheck, description: "Practice access certification and reviewer decisions" },
   { to: "/implementation-simulator", label: "Implementation Simulator", icon: Workflow, description: "Practise an end-to-end Saviynt EIC implementation project" },
@@ -34,6 +34,7 @@ const NAV = [
   { to: "/profile", label: "Profile", icon: User, description: "Your account and preferences" },
 ] as const;
 
+type SearchResult = { key: string; title: string; detail: string; group: string; to: "/dashboard" | "/learn" | "/certification" | "/implementation-simulator" | "/rules-center" | "/connectors" | "/labs" | "/sql" | "/interview" | "/interview-prep" | "/plan" | "/skills" | "/certificates" | "/workspace" | "/community" | "/career" | "/profile" | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
 type SearchResult = { key: string; title: string; detail: string; group: string; to: "/dashboard" | "/learn" | "/certification" | "/implementation-simulator" | "/workflow-designer" | "/connectors" | "/labs" | "/sql" | "/interview" | "/interview-prep" | "/plan" | "/skills" | "/certificates" | "/workspace" | "/community" | "/career" | "/profile" | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
 
 function GlobalSearch({ onNavigate }: { onNavigate: () => void }) {
@@ -138,6 +139,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   const location = useLocation();
   const groups = [
     { title: "Overview", hint: "Your home", icon: LayoutDashboard, items: NAV.filter(n => ["/dashboard", "/activity"].includes(n.to)) },
+    { title: "Learn & Explore", hint: "Build your knowledge", icon: BookOpen, items: NAV.filter(n => ["/learn", "/glossary", "/rules-center", "/connectors", "/labs", "/sql"].includes(n.to)) },
+    { title: "Practice & Assess", hint: "Test your skills", icon: ClipboardCheck, items: NAV.filter(n => ["/certification", "/access-review", "/implementation-simulator", "/interview", "/interview-prep"].includes(n.to)) },
     { title: "Learn & Explore", hint: "Build your knowledge", icon: BookOpen, items: NAV.filter(n => ["/learn", "/glossary", "/connectors", "/labs", "/sql"].includes(n.to)) },
     { title: "Practice & Assess", hint: "Test your skills", icon: ClipboardCheck, items: NAV.filter(n => ["/certification", "/access-review", "/implementation-simulator", "/workflow-designer", "/interview", "/interview-prep"].includes(n.to)) },
     { title: "Growth & Career", hint: "Track your progress", icon: Award, items: NAV.filter(n => ["/plan", "/skills", "/certificates", "/career"].includes(n.to)) },
