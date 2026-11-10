@@ -13,20 +13,26 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedAccessReviewRouteImport } from './routes/_authenticated/access-review'
+import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCareerRouteImport } from './routes/_authenticated/career'
 import { Route as AuthenticatedCertificatesRouteImport } from './routes/_authenticated/certificates'
 import { Route as AuthenticatedCertificationRouteImport } from './routes/_authenticated/certification'
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated/community'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedGlossaryRouteImport } from './routes/_authenticated/glossary'
+import { Route as AuthenticatedImplementationSimulatorRouteImport } from './routes/_authenticated/implementation-simulator'
 import { Route as AuthenticatedInterviewRouteImport } from './routes/_authenticated/interview'
 import { Route as AuthenticatedInterviewPrepRouteImport } from './routes/_authenticated/interview-prep'
 import { Route as AuthenticatedLabsRouteImport } from './routes/_authenticated/labs'
 import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/plan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedRulesCenterRouteImport } from './routes/_authenticated/rules-center'
 import { Route as AuthenticatedSkillsRouteImport } from './routes/_authenticated/skills'
 import { Route as AuthenticatedSqlRouteImport } from './routes/_authenticated/sql'
 import { Route as AuthenticatedTutorRouteImport } from './routes/_authenticated/tutor'
+import { Route as AuthenticatedWorkflowDesignerRouteImport } from './routes/_authenticated/workflow-designer'
 import { Route as AuthenticatedWorkspaceRouteImport } from './routes/_authenticated/workspace'
 import { Route as AuthenticatedConnectorsIndexRouteImport } from './routes/_authenticated/connectors.index'
 import { Route as AuthenticatedConnectorsConnectorIdRouteImport } from './routes/_authenticated/connectors.$connectorId'
@@ -53,6 +59,17 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAccessReviewRoute =
+  AuthenticatedAccessReviewRouteImport.update({
+    id: '/access-review',
+    path: '/access-review',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedActivityRoute = AuthenticatedActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
@@ -86,6 +103,17 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedGlossaryRoute = AuthenticatedGlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedImplementationSimulatorRoute =
+  AuthenticatedImplementationSimulatorRouteImport.update({
+    id: '/implementation-simulator',
+    path: '/implementation-simulator',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedInterviewRoute = AuthenticatedInterviewRouteImport.update({
   id: '/interview',
   path: '/interview',
@@ -112,6 +140,12 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRulesCenterRoute =
+  AuthenticatedRulesCenterRouteImport.update({
+    id: '/rules-center',
+    path: '/rules-center',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSkillsRoute = AuthenticatedSkillsRouteImport.update({
   id: '/skills',
   path: '/skills',
@@ -127,6 +161,12 @@ const AuthenticatedTutorRoute = AuthenticatedTutorRouteImport.update({
   path: '/tutor',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedWorkflowDesignerRoute =
+  AuthenticatedWorkflowDesignerRouteImport.update({
+    id: '/workflow-designer',
+    path: '/workflow-designer',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedWorkspaceRoute = AuthenticatedWorkspaceRouteImport.update({
   id: '/workspace',
   path: '/workspace',
@@ -172,20 +212,26 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/access-review': typeof AuthenticatedAccessReviewRoute
+  '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/career': typeof AuthenticatedCareerRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/certification': typeof AuthenticatedCertificationRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/glossary': typeof AuthenticatedGlossaryRoute
+  '/implementation-simulator': typeof AuthenticatedImplementationSimulatorRoute
   '/interview': typeof AuthenticatedInterviewRoute
   '/interview-prep': typeof AuthenticatedInterviewPrepRoute
   '/labs': typeof AuthenticatedLabsRoute
   '/plan': typeof AuthenticatedPlanRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/rules-center': typeof AuthenticatedRulesCenterRoute
   '/skills': typeof AuthenticatedSkillsRoute
   '/sql': typeof AuthenticatedSqlRoute
   '/tutor': typeof AuthenticatedTutorRoute
+  '/workflow-designer': typeof AuthenticatedWorkflowDesignerRoute
   '/workspace': typeof AuthenticatedWorkspaceRoute
   '/connectors/$connectorId': typeof AuthenticatedConnectorsConnectorIdRoute
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
@@ -198,20 +244,26 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/access-review': typeof AuthenticatedAccessReviewRoute
+  '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/career': typeof AuthenticatedCareerRoute
   '/certificates': typeof AuthenticatedCertificatesRoute
   '/certification': typeof AuthenticatedCertificationRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/glossary': typeof AuthenticatedGlossaryRoute
+  '/implementation-simulator': typeof AuthenticatedImplementationSimulatorRoute
   '/interview': typeof AuthenticatedInterviewRoute
   '/interview-prep': typeof AuthenticatedInterviewPrepRoute
   '/labs': typeof AuthenticatedLabsRoute
   '/plan': typeof AuthenticatedPlanRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/rules-center': typeof AuthenticatedRulesCenterRoute
   '/skills': typeof AuthenticatedSkillsRoute
   '/sql': typeof AuthenticatedSqlRoute
   '/tutor': typeof AuthenticatedTutorRoute
+  '/workflow-designer': typeof AuthenticatedWorkflowDesignerRoute
   '/workspace': typeof AuthenticatedWorkspaceRoute
   '/connectors/$connectorId': typeof AuthenticatedConnectorsConnectorIdRoute
   '/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
@@ -226,20 +278,26 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/access-review': typeof AuthenticatedAccessReviewRoute
+  '/_authenticated/activity': typeof AuthenticatedActivityRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/career': typeof AuthenticatedCareerRoute
   '/_authenticated/certificates': typeof AuthenticatedCertificatesRoute
   '/_authenticated/certification': typeof AuthenticatedCertificationRoute
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/glossary': typeof AuthenticatedGlossaryRoute
+  '/_authenticated/implementation-simulator': typeof AuthenticatedImplementationSimulatorRoute
   '/_authenticated/interview': typeof AuthenticatedInterviewRoute
   '/_authenticated/interview-prep': typeof AuthenticatedInterviewPrepRoute
   '/_authenticated/labs': typeof AuthenticatedLabsRoute
   '/_authenticated/plan': typeof AuthenticatedPlanRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/rules-center': typeof AuthenticatedRulesCenterRoute
   '/_authenticated/skills': typeof AuthenticatedSkillsRoute
   '/_authenticated/sql': typeof AuthenticatedSqlRoute
   '/_authenticated/tutor': typeof AuthenticatedTutorRoute
+  '/_authenticated/workflow-designer': typeof AuthenticatedWorkflowDesignerRoute
   '/_authenticated/workspace': typeof AuthenticatedWorkspaceRoute
   '/_authenticated/connectors/$connectorId': typeof AuthenticatedConnectorsConnectorIdRoute
   '/_authenticated/learn/$moduleId': typeof AuthenticatedLearnModuleIdRoute
@@ -254,20 +312,26 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
+    | '/access-review'
+    | '/activity'
     | '/admin'
     | '/career'
     | '/certificates'
     | '/certification'
     | '/community'
     | '/dashboard'
+    | '/glossary'
+    | '/implementation-simulator'
     | '/interview'
     | '/interview-prep'
     | '/labs'
     | '/plan'
     | '/profile'
+    | '/rules-center'
     | '/skills'
     | '/sql'
     | '/tutor'
+    | '/workflow-designer'
     | '/workspace'
     | '/connectors/$connectorId'
     | '/learn/$moduleId'
@@ -280,20 +344,26 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
+    | '/access-review'
+    | '/activity'
     | '/admin'
     | '/career'
     | '/certificates'
     | '/certification'
     | '/community'
     | '/dashboard'
+    | '/glossary'
+    | '/implementation-simulator'
     | '/interview'
     | '/interview-prep'
     | '/labs'
     | '/plan'
     | '/profile'
+    | '/rules-center'
     | '/skills'
     | '/sql'
     | '/tutor'
+    | '/workflow-designer'
     | '/workspace'
     | '/connectors/$connectorId'
     | '/learn/$moduleId'
@@ -307,20 +377,26 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/reset-password'
+    | '/_authenticated/access-review'
+    | '/_authenticated/activity'
     | '/_authenticated/admin'
     | '/_authenticated/career'
     | '/_authenticated/certificates'
     | '/_authenticated/certification'
     | '/_authenticated/community'
     | '/_authenticated/dashboard'
+    | '/_authenticated/glossary'
+    | '/_authenticated/implementation-simulator'
     | '/_authenticated/interview'
     | '/_authenticated/interview-prep'
     | '/_authenticated/labs'
     | '/_authenticated/plan'
     | '/_authenticated/profile'
+    | '/_authenticated/rules-center'
     | '/_authenticated/skills'
     | '/_authenticated/sql'
     | '/_authenticated/tutor'
+    | '/_authenticated/workflow-designer'
     | '/_authenticated/workspace'
     | '/_authenticated/connectors/$connectorId'
     | '/_authenticated/learn/$moduleId'
@@ -367,6 +443,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/access-review': {
+      id: '/_authenticated/access-review'
+      path: '/access-review'
+      fullPath: '/access-review'
+      preLoaderRoute: typeof AuthenticatedAccessReviewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/activity': {
+      id: '/_authenticated/activity'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof AuthenticatedActivityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -409,6 +499,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/glossary': {
+      id: '/_authenticated/glossary'
+      path: '/glossary'
+      fullPath: '/glossary'
+      preLoaderRoute: typeof AuthenticatedGlossaryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/implementation-simulator': {
+      id: '/_authenticated/implementation-simulator'
+      path: '/implementation-simulator'
+      fullPath: '/implementation-simulator'
+      preLoaderRoute: typeof AuthenticatedImplementationSimulatorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/interview': {
       id: '/_authenticated/interview'
       path: '/interview'
@@ -444,6 +548,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/rules-center': {
+      id: '/_authenticated/rules-center'
+      path: '/rules-center'
+      fullPath: '/rules-center'
+      preLoaderRoute: typeof AuthenticatedRulesCenterRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/skills': {
       id: '/_authenticated/skills'
       path: '/skills'
@@ -463,6 +574,13 @@ declare module '@tanstack/react-router' {
       path: '/tutor'
       fullPath: '/tutor'
       preLoaderRoute: typeof AuthenticatedTutorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/workflow-designer': {
+      id: '/_authenticated/workflow-designer'
+      path: '/workflow-designer'
+      fullPath: '/workflow-designer'
+      preLoaderRoute: typeof AuthenticatedWorkflowDesignerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/workspace': {
@@ -518,20 +636,26 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAccessReviewRoute: typeof AuthenticatedAccessReviewRoute
+  AuthenticatedActivityRoute: typeof AuthenticatedActivityRoute
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedCareerRoute: typeof AuthenticatedCareerRoute
   AuthenticatedCertificatesRoute: typeof AuthenticatedCertificatesRoute
   AuthenticatedCertificationRoute: typeof AuthenticatedCertificationRoute
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedGlossaryRoute: typeof AuthenticatedGlossaryRoute
+  AuthenticatedImplementationSimulatorRoute: typeof AuthenticatedImplementationSimulatorRoute
   AuthenticatedInterviewRoute: typeof AuthenticatedInterviewRoute
   AuthenticatedInterviewPrepRoute: typeof AuthenticatedInterviewPrepRoute
   AuthenticatedLabsRoute: typeof AuthenticatedLabsRoute
   AuthenticatedPlanRoute: typeof AuthenticatedPlanRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedRulesCenterRoute: typeof AuthenticatedRulesCenterRoute
   AuthenticatedSkillsRoute: typeof AuthenticatedSkillsRoute
   AuthenticatedSqlRoute: typeof AuthenticatedSqlRoute
   AuthenticatedTutorRoute: typeof AuthenticatedTutorRoute
+  AuthenticatedWorkflowDesignerRoute: typeof AuthenticatedWorkflowDesignerRoute
   AuthenticatedWorkspaceRoute: typeof AuthenticatedWorkspaceRoute
   AuthenticatedConnectorsConnectorIdRoute: typeof AuthenticatedConnectorsConnectorIdRoute
   AuthenticatedLearnModuleIdRoute: typeof AuthenticatedLearnModuleIdRoute
@@ -542,20 +666,27 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAccessReviewRoute: AuthenticatedAccessReviewRoute,
+  AuthenticatedActivityRoute: AuthenticatedActivityRoute,
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedCareerRoute: AuthenticatedCareerRoute,
   AuthenticatedCertificatesRoute: AuthenticatedCertificatesRoute,
   AuthenticatedCertificationRoute: AuthenticatedCertificationRoute,
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedGlossaryRoute: AuthenticatedGlossaryRoute,
+  AuthenticatedImplementationSimulatorRoute:
+    AuthenticatedImplementationSimulatorRoute,
   AuthenticatedInterviewRoute: AuthenticatedInterviewRoute,
   AuthenticatedInterviewPrepRoute: AuthenticatedInterviewPrepRoute,
   AuthenticatedLabsRoute: AuthenticatedLabsRoute,
   AuthenticatedPlanRoute: AuthenticatedPlanRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedRulesCenterRoute: AuthenticatedRulesCenterRoute,
   AuthenticatedSkillsRoute: AuthenticatedSkillsRoute,
   AuthenticatedSqlRoute: AuthenticatedSqlRoute,
   AuthenticatedTutorRoute: AuthenticatedTutorRoute,
+  AuthenticatedWorkflowDesignerRoute: AuthenticatedWorkflowDesignerRoute,
   AuthenticatedWorkspaceRoute: AuthenticatedWorkspaceRoute,
   AuthenticatedConnectorsConnectorIdRoute:
     AuthenticatedConnectorsConnectorIdRoute,
