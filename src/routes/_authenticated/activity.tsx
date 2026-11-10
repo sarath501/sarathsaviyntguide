@@ -89,7 +89,12 @@ function LearningActivity() {
       <div className="flex flex-wrap items-start justify-between gap-3"><div><h2 className="font-semibold">Your activity calendar</h2><p className="mt-1 text-sm text-muted-foreground">The last 12 weeks. Darker cells indicate more recorded learning activity.</p></div><span className="text-xs text-muted-foreground">{activeDays.size} active days total</span></div>
       <div className="mt-5 overflow-x-auto pb-2">
         <div className="min-w-[620px]">
-          <div className="mb-2 grid grid-cols-12 gap-1 text-[10px] text-muted-foreground">{monthLabels.map(m=><span key={m.key} style={{gridColumn: `span ${Math.max(1, Math.ceil((calendarDays.findIndex(x=>x.key===m.key) - (monthLabels[monthLabels.indexOf(m)-1] ? calendarDays.findIndex(x=>x.key===monthLabels[monthLabels.indexOf(m)-1].key) : 0))/7))}`}}>{new Date(`${m.key}T00:00:00`).toLocaleDateString(undefined,{month:"short"})}</span>)}</div>
+          <div className="mb-2 grid grid-cols-12 gap-1 text-[10px] text-muted-foreground">{monthLabels.map((m, index) => {
+            const previousMonth = monthLabels[index - 1];
+            const previousIndex = previousMonth ? calendarDays.findIndex(day => day.key === previousMonth.key) : 0;
+            const span = Math.max(1, Math.ceil((calendarDays.findIndex(day => day.key === m.key) - previousIndex) / 7));
+            return <span key={m.key} style={{ gridColumn: `span ${span}` }}>{new Date(`${m.key}T00:00:00`).toLocaleDateString(undefined, { month: "short" })}</span>;
+          })}</div>
           <div className="grid grid-flow-col grid-rows-7 gap-1">{calendarDays.map(d=><div key={d.key} title={`${d.key}: ${d.count} recorded activities`} className={`h-4 w-4 rounded-[3px] ${d.future ? "bg-muted/30" : d.count===0 ? "bg-muted" : d.count===1 ? "bg-emerald-200 dark:bg-emerald-900" : d.count<=3 ? "bg-emerald-400 dark:bg-emerald-700" : "bg-emerald-600 dark:bg-emerald-500"}`} />)}</div>
           <div className="mt-3 flex items-center justify-end gap-2 text-[10px] text-muted-foreground"><span>Less</span>{["bg-muted","bg-emerald-200 dark:bg-emerald-900","bg-emerald-400 dark:bg-emerald-700","bg-emerald-600 dark:bg-emerald-500"].map(c=><span key={c} className={`h-3 w-3 rounded-[2px] ${c}`}/>)}<span>More</span></div>
         </div>

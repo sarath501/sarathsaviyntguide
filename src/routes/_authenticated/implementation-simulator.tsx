@@ -19,7 +19,7 @@ type Stage = {
   checklist: string[];
 };
 
-const STAGES: Stage[] = [
+const STAGES: [Stage, ...Stage[]] = [
   {
     id: 1, title: "Requirements & discovery", objective: "Establish scope, stakeholders, source-of-truth systems and measurable acceptance criteria.",
     deliverable: "Signed requirements matrix and application inventory",
@@ -120,7 +120,7 @@ function ImplementationSimulator() {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [completed, setCompleted] = useState<number[]>([]);
   const [hydrated, setHydrated] = useState(false);
-  const stage = STAGES[activeStage];
+  const stage = STAGES[activeStage] ?? STAGES[0];
   const isComplete = completed.includes(stage.id);
   const selected = answers[stage.id];
   const score = useMemo(() => STAGES.filter(item => completed.includes(item.id) && answers[item.id] === item.correct).length, [answers, completed]);
