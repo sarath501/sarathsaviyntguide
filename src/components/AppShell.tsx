@@ -1,8 +1,7 @@
-import { LayoutDashboard, CalendarDays, BookOpen, BookText, ScrollText, Award, ClipboardCheck, Workflow, GitBranch, Plug, Wrench, Database, MessagesSquare, GraduationCap, Route as RouteIcon, ChartNoAxesCombined, Medal, NotebookPen, Users, BriefcaseBusiness, User, GitCompareArrows, Mail, Code2 } from "lucide-react";
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { ArrowRight, Award, BookOpen, BookText, BriefcaseBusiness, CalendarDays, ChartNoAxesCombined, ChevronDown, ChevronRight, ClipboardCheck, Command, Database, GitBranch, GraduationCap, LayoutDashboard, LogOut, Medal, Menu, MessagesSquare, NotebookPen, Plug, Route as RouteIcon, ScrollText, Search, Shield, User, Users, Workflow, Wrench, X } from "lucide-react";
+import { ArrowRight, Award, BookOpen, BookText, BriefcaseBusiness, CalendarDays, ChartNoAxesCombined, ChevronDown, ChevronRight, ClipboardCheck, Code2, Command, Database, GitBranch, GitCompareArrows, GraduationCap, LayoutDashboard, LogOut, Mail, Medal, Menu, MessagesSquare, NotebookPen, Plug, Route as RouteIcon, ScrollText, Search, Shield, User, Users, Workflow, Wrench, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin, useProfile } from "@/hooks/use-auth";
 import { useCurriculum } from "@/lib/curriculum";
@@ -40,7 +39,6 @@ const NAV = [
   { to: "/profile", label: "Profile", icon: User, description: "Your account and preferences" },
 ] as const;
 
-type SearchResult = { key: string; title: string; detail: string; group: string; to: (typeof NAV)[number]["to"] | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
 type SearchResult = { key: string; title: string; detail: string; group: string; to: "/dashboard" | "/learn" | "/certification" | "/implementation-simulator" | "/rules-center" | "/identity-lifecycle" | "/email-templates" | "/workflow-designer" | "/connectors" | "/connector-studio" | "/labs" | "/sql" | "/interview" | "/interview-prep" | "/plan" | "/skills" | "/certificates" | "/workspace" | "/community" | "/career" | "/profile" | "/lesson/$lessonId" | "/connectors/$connectorId"; params?: { lessonId: string } | { connectorId: string } };
 
 
