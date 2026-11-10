@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ import { computeStats, useActivity } from "@/lib/stats";
 import { useCurriculum } from "@/lib/curriculum";
 
 export const Route = createFileRoute("/_authenticated/plan")({
+  beforeLoad: () => { throw redirect({ to: "/dashboard" }); },
   head: () => ({ meta: [{ title: "Learning Path — Sarath IGA Learning Portal" }] }),
   component: Plan,
 });

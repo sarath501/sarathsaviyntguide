@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useActivity } from "@/lib/stats";
 import { useCurriculum } from "@/lib/curriculum";
 import { PageHeader } from "@/components/AppShell";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-export const Route = createFileRoute("/_authenticated/skills")({ component: Skills });
+export const Route = createFileRoute("/_authenticated/skills")({
+  beforeLoad: () => { throw redirect({ to: "/dashboard" }); }, component: Skills });
 function Skills() {
  const {data:activity,isLoading}=useActivity(); const {data:curriculum}=useCurriculum();
  if(isLoading||!activity||!curriculum) return <p className="text-muted-foreground">Loading skill assessment…</p>;
