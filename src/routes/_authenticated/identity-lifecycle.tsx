@@ -4,7 +4,17 @@ import { PageHeader } from "@/components/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, CircleAlert, GitCompareArrows, Play, RotateCcw, UserRound, XCircle } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/identity-lifecycle")({ component: IdentityLifecycleSimulator });
+export const Route = createFileRoute("/_authenticated/identity-lifecycle")({
+  head: () => ({ meta: [
+    { title: "Identity Lifecycle Simulator | Sarath IGA Learning Portal" },
+    { name: "description", content: "Practise joiner, mover, leaver and rehire access comparisons with fictional identities." },
+    { property: "og:title", content: "Identity Lifecycle Simulator | Sarath IGA Learning Portal" },
+    { property: "og:description", content: "Practise joiner, mover, leaver and rehire access comparisons with fictional identities." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
+  component: IdentityLifecycleSimulator,
+});
 
 type EventType = "Joiner" | "Mover" | "Leaver" | "Rehire";
 type Identity = { name: string; department: string; location: string; employeeType: string; status: string; manager: string };
@@ -95,7 +105,7 @@ function IdentityLifecycleSimulator() {
       <div className="rounded-2xl border bg-card p-4 sm:p-5">
         <div className="flex items-center justify-between gap-2"><h3 className="font-semibold">Before the event</h3><Badge variant="outline">Source state</Badge></div>
         <p className="mt-1 text-xs text-muted-foreground">Identity attributes before the lifecycle change</p>
-        <div className="mt-4 space-y-3">{(["name","department","location","employeeType","status","manager"] as (keyof Identity)[]).map(field=><div key={field} className="flex items-center justify-between gap-3 border-b pb-2 text-sm"><span className="text-muted-foreground">{field === "employeeType" ? "Worker type" : field[0].toUpperCase()+field.slice(1)}</span><span className="font-medium text-right">{before[field]}</span></div>)}</div>
+        <div className="mt-4 space-y-3">{(["name","department","location","employeeType","status","manager"] as (keyof Identity)[]).map(field=><div key={field} className="flex items-center justify-between gap-3 border-b pb-2 text-sm"><span className="text-muted-foreground">{field === "employeeType" ? "Worker type" : field.charAt(0).toUpperCase()+field.slice(1)}</span><span className="font-medium text-right">{before[field]}</span></div>)}</div>
       </div>
       <div className="rounded-2xl border bg-card p-4 sm:p-5">
         <div className="flex items-center justify-between gap-2"><h3 className="font-semibold">After the event</h3><Badge>Target state</Badge></div>

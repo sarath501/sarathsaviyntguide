@@ -4,7 +4,17 @@ import { PageHeader } from "@/components/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Check, Copy, Mail, Search } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/email-templates")({ component: EmailTemplateCenter });
+export const Route = createFileRoute("/_authenticated/email-templates")({
+  head: () => ({ meta: [
+    { title: "Email Template Center | Sarath IGA Learning Portal" },
+    { name: "description", content: "Explore IGA email notification templates, triggers and variables." },
+    { property: "og:title", content: "Email Template Center | Sarath IGA Learning Portal" },
+    { property: "og:description", content: "Explore IGA email notification templates, triggers and variables." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
+  component: EmailTemplateCenter,
+});
 
 type EmailTemplate = {
   id: string; title: string; category: string; purpose: string; trigger: string;
@@ -118,7 +128,7 @@ const CATEGORIES = ["All", ...Array.from(new Set(TEMPLATES.map(item => item.cate
 function EmailTemplateCenter() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
-  const [selectedId, setSelectedId] = useState(TEMPLATES[0].id);
+  const [selectedId, setSelectedId] = useState(TEMPLATES[0]?.id ?? "");
   const [copied, setCopied] = useState("");
   const [sampleValues, setSampleValues] = useState<Record<string,string>>({});
   const selected = TEMPLATES.find(item => item.id === selectedId) ?? TEMPLATES[0];
@@ -140,6 +150,8 @@ function EmailTemplateCenter() {
       setCopied("Copy unavailable — select the text manually");
     }
   }
+  if (!selected) return <PageHeader title="Saviynt Email Template Center" subtitle="No templates available." />;
+
   const fullText = `Subject: ${selected.subject}\n\n${selected.body}`;
 
   return <div className="space-y-6">
