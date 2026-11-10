@@ -7,7 +7,7 @@ type PageResult<T> = {
 };
 
 async function readAll<T>(
-  fetchPage: (from: number, to: number) => Promise<PageResult<T>>,
+  fetchPage: (from: number, to: number) => PromiseLike<PageResult<T>>,
 ): Promise<T[]> {
   const rows: T[] = [];
   for (let from = 0; ; from += 1000) {
@@ -144,7 +144,7 @@ export const getAdminUserAnalytics = createServerFn({ method: "GET" })
           email: authUser.email ?? "",
           fullName:
             profile?.full_name ||
-            String(authUser.user_metadata?.full_name ?? "") ||
+            String(authUser.user_metadata?.["full_name"] ?? "") ||
             authUser.email ||
             "Unnamed user",
           experienceLevel: profile?.experience_level ?? "Not specified",

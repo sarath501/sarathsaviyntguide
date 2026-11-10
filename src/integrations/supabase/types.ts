@@ -35,6 +35,68 @@ export type Database = {
         }
         Relationships: []
       }
+      community_replies: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          topic_id: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          topic_id: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          topic_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_replies_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "community_topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_topics: {
+        Row: {
+          body: string
+          category: string
+          created_at: string
+          id: string
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          category?: string
+          created_at?: string
+          id?: string
+          status?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          category?: string
+          created_at?: string
+          id?: string
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       connector_bookmarks: {
         Row: {
           connector_id: string
@@ -174,6 +236,39 @@ export type Database = {
         }
         Relationships: []
       }
+      lab_progress: {
+        Row: {
+          completed: boolean
+          completed_steps: string[]
+          diagnosis: string
+          id: string
+          lab_id: string
+          score: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_steps?: string[]
+          diagnosis?: string
+          id?: string
+          lab_id: string
+          score?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          completed_steps?: string[]
+          diagnosis?: string
+          id?: string
+          lab_id?: string
+          score?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       labs: {
         Row: {
           area: string
@@ -213,6 +308,33 @@ export type Database = {
         }
         Relationships: []
       }
+      learner_notes: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           completed_at: string
@@ -235,12 +357,6 @@ export type Database = {
           module_id?: string
           user_id?: string
         }
-        Relationships: []
-      }
-      lab_progress: {
-        Row: { completed: boolean; completed_steps: Json; diagnosis: string; id: string; lab_id: string; score: number; updated_at: string; user_id: string }
-        Insert: { completed?: boolean; completed_steps?: Json; diagnosis?: string; id?: string; lab_id: string; score?: number; updated_at?: string; user_id: string }
-        Update: { completed?: boolean; completed_steps?: Json; diagnosis?: string; id?: string; lab_id?: string; score?: number; updated_at?: string; user_id?: string }
         Relationships: []
       }
       lessons: {
@@ -323,6 +439,42 @@ export type Database = {
           published?: boolean
           summary?: string
           title?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          message: string
+          read_at: string | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          message: string
+          read_at?: string | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          message?: string
+          read_at?: string | null
+          title?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -415,6 +567,7 @@ export type Database = {
           correct_index?: number
           created_at?: string
           difficulty?: string
+          exam_track?: string
           explanation?: string
           id?: string
           is_certification?: boolean
