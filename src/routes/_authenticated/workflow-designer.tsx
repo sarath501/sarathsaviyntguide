@@ -1,11 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, ArrowRight, CheckCircle2, ClipboardList, GitBranch, Plus, RotateCcw, ShieldCheck, Workflow, X } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/workflow-designer")({ component: WorkflowDesigner });
+export const Route = createFileRoute("/_authenticated/workflow-designer")({
+  beforeLoad: () => { throw redirect({ to: "/dashboard" }); }, component: WorkflowDesigner });
 
 type Trigger = "access-request" | "hire" | "mover" | "termination";
 type Approval = "manager" | "app-owner" | "data-owner" | "security";
