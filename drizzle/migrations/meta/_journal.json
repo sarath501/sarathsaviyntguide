@@ -29,6 +29,13 @@
       "when": 1794290463976,
       "tag": "0003_community_and_lab_progress",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794290486948,
+      "tag": "0004_learner_notes",
+      "breakpoints": true
     }
   ]
 }
