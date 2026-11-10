@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { BookOpen, CheckCircle2, ChevronDown, CircleHelp, Code2, Filter, GitBranch, Search, ShieldCheck, Workflow } from "lucide-react";
+import { CheckCircle2, CircleHelp, Code2, Filter, GitBranch, Search, ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/rules-center")({ component: RulesCenter });
 
